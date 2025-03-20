@@ -1,5 +1,32 @@
-<mat-tab-group>
-  <mat-tab label="Header 1">Content 1</mat-tab>
-  <mat-tab label="Header 2">Content 2</mat-tab>
-  <mat-tab label="Header 3">Content 3</mat-tab>
-</mat-tab-group>
+<div class="container">
+  <div class="mat-grid">
+    <div class="mat-grid-item">
+      <h1>Lançamentos</h1>
+    </div>
+
+    <div class="mat-grid-item">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descrição</mat-label>
+        <input matInput type="text">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="mat-grid">
+    <div class="mat-grid-item">
+      <mat-form-field appearance="outline">
+        <mat-label>Vencimento</mat-label>
+        <input matInput type="text">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>até</mat-label>
+        <input matInput type="text">
+      </mat-form-field>
+    </div>
+
+    <div class="mat-grid-item">
+      <button mat-raised-button color="primary" type="submit">Pesquisar</button>
+    </div>
+  </div>
+</div>

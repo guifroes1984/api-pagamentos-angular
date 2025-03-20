@@ -1,0 +1,31 @@
+.mat-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+}
+
+.mat-grid-item {
+    width: 100%;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.mat-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+}
+
+.mat-grid-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.label-ate {
+    margin: 0 8px;
+}

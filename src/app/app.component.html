@@ -3,30 +3,68 @@
     <div class="mat-grid-item">
       <h1>Lançamentos</h1>
     </div>
+  </div>
 
-    <div class="mat-grid-item">
+  <div class="mat-grid" style="display: flex; justify-content: space-between; align-items: center;">
+    <div class="mat-grid-item" style="flex-grow: 1; margin-right: 10px;">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Descrição</mat-label>
         <input matInput type="text">
       </mat-form-field>
     </div>
+
+    <div class="mat-grid-item" style="flex-grow: 1;">
+      <div class="input-group">
+        <mat-form-field appearance="outline">
+          <mat-label>Vencimento</mat-label>
+          <input matInput type="text">
+        </mat-form-field>
+    
+        <mat-form-field appearance="outline">
+          <mat-label>até</mat-label>
+          <input matInput type="text">
+        </mat-form-field>
+      </div>
+    </div>    
+
+    <div class="mat-grid-item" style="flex-shrink: 0;">
+      <button mat-raised-button color="primary" type="submit">Pesquisar</button>
+    </div>
   </div>
 
-  <div class="mat-grid">
+  <div class="mat-grid" style="margin-top: 20px;">
     <div class="mat-grid-item">
-      <mat-form-field appearance="outline">
-        <mat-label>Vencimento</mat-label>
-        <input matInput type="text">
-      </mat-form-field>
+      <table mat-table [dataSource]="lancamentos" class="mat-elevation-z8" matSort>
+        <ng-container matColumnDef="pessoa">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Pessoa </th>
+          <td mat-cell *matCellDef="let element"> {{ element.pessoa }} </td>
+        </ng-container>
 
-      <mat-form-field appearance="outline">
-        <mat-label>até</mat-label>
-        <input matInput type="text">
-      </mat-form-field>
-    </div>
+        <ng-container matColumnDef="descricao">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </th>
+          <td mat-cell *matCellDef="let element"> {{ element.descricao }} </td>
+        </ng-container>
 
-    <div class="mat-grid-item">
-      <button mat-raised-button color="primary" type="submit">Pesquisar</button>
+        <ng-container matColumnDef="dataVencimento">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-data"> Vencimento </th>
+          <td mat-cell *matCellDef="let element"> {{ element.dataVencimento }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataPagamento">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-data"> Pagamento </th>
+          <td mat-cell *matCellDef="let element"> 
+            {{ element.dataPagamento ? element.dataPagamento : '-' }} 
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="valor">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-valor"> Valor </th>
+          <td mat-cell *matCellDef="let element" class="col-valor"> {{ element.valor }} </td>
+        </ng-container>
+        
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="mat-header"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="mat-row"></tr>
+      </table>
     </div>
   </div>
 </div>

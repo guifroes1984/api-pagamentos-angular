@@ -33,12 +33,10 @@
     justify-content: flex-start;
 }
 
-.full-width {
-    width: 100%;
-}
-
 .mat-table {
     display: block;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .mat-header th, .mat-row td {
@@ -52,6 +50,14 @@
 .mat-header th,
 .mat-row td {
     text-align: center;
+    padding: 12px 16px;
+}
+
+.mat-header th {
+    background-color: #f2f7fc;
+    color: #404C51;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 .mat-row td:nth-child(5) {

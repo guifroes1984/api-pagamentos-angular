@@ -100,9 +100,14 @@
     margin-right: 0;
   }
   
-  /* AÇÕES */
+  .acoes-container {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  
   .col-acoes {
-    width: 80px;
+    width: 100px;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
@@ -122,6 +127,5 @@
   .botao-acao mat-icon {
     font-size: 18px;
     line-height: 18px;
-  }
-      
+  }     
   

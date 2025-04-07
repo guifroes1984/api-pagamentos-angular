@@ -12,15 +12,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatToolbarModule } from '@angular/material/toolbar';
+
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { getPaginatorIntl } from './shared/mat-paginator-intl';
 import { LancamentosPesquisaComponent } from './lancamentos-pesquisa/lancamentos-pesquisa.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    LancamentosPesquisaComponent
+    LancamentosPesquisaComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +37,8 @@ import { LancamentosPesquisaComponent } from './lancamentos-pesquisa/lancamentos
     MatTableModule,
     MatIconModule, 
     MatTooltipModule, 
-    MatPaginatorModule
+    MatPaginatorModule, 
+    MatToolbarModule
   ],
   providers: [
     { provide: MatPaginatorIntl, useValue: getPaginatorIntl() }

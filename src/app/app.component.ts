@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-root',
@@ -6,7 +9,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  displayedColumns: string[] = ['pessoa', 'descricao', 'dataVencimento', 'dataPagamento', 'valor', 'acoes'];
+  colunasExibidas: string[] = ['pessoa', 'descricao', 'dataVencimento', 'dataPagamento', 'valor', 'acoes'];
 
   lancamentos = [
     { tipo: 'DESPESA', descricao: 'Compra de pão', dataVencimento: '30/06/2025', dataPagamento: null, valor: 4.55, pessoa: 'Padaria do José' },
@@ -17,5 +20,14 @@ export class AppComponent {
     { tipo: 'DESPESA', descricao: 'Aluguel', dataVencimento: '18/07/2024', dataPagamento: '09/07/2024', valor: 1750, pessoa: 'Casa Nova Imóveis' },
     { tipo: 'DESPESA', descricao: 'Mensalidade musculação', dataVencimento: '13/07/2024', dataPagamento: null, valor: 180, pessoa: 'Academia Top' }
   ];
+
+  fonteDados = new MatTableDataSource(this.lancamentos);
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  ngAfterViewInit() {
+    this.fonteDados.paginator = this.paginator;
+  }
+
 }
 

@@ -12,6 +12,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { getPaginatorIntl } from './shared/mat-paginator-intl';
+
 
 @NgModule({
   declarations: [
@@ -27,9 +30,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatButtonModule, 
     MatTableModule,
     MatIconModule, 
-    MatTooltipModule
+    MatTooltipModule, 
+    MatPaginatorModule
   ],
-  providers: [],
+  providers: [
+    { provide: MatPaginatorIntl, useValue: getPaginatorIntl() }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -19,13 +19,15 @@ import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginato
 import { getPaginatorIntl } from './shared/mat-paginator-intl';
 import { LancamentosPesquisaComponent } from './lancamentos-pesquisa/lancamentos-pesquisa.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { PessoasPesquisaComponent } from './pessoas-pesquisa/pessoas-pesquisa.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LancamentosPesquisaComponent,
-    NavbarComponent
+    NavbarComponent,
+    PessoasPesquisaComponent
   ],
   imports: [
     BrowserModule,

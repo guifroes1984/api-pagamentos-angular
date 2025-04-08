@@ -23,7 +23,6 @@
     width: 100%;
   }
   
-  /* ✅ Alteração aqui para remover scroll */
   .mat-table {
     width: 100%;
     border-radius: 8px;

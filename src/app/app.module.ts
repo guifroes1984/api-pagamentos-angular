@@ -13,6 +13,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatListModule } from '@angular/material/list';
 
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { getPaginatorIntl } from './shared/mat-paginator-intl';
@@ -38,7 +39,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     MatIconModule, 
     MatTooltipModule, 
     MatPaginatorModule, 
-    MatToolbarModule
+    MatToolbarModule, 
+    MatListModule
   ],
   providers: [
     { provide: MatPaginatorIntl, useValue: getPaginatorIntl() }

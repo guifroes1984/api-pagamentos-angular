@@ -1,7 +1,23 @@
 <mat-toolbar class="navbar">
     <div class="container">
-        <button mat-icon-button class="navbar-toggle" aria-label="Menu">
-            <mat-icon>menu</mat-icon>
-        </button>
+      <button mat-icon-button class="navbar-toggle" (click)="alternarMenu()" aria-label="Menu">
+        <mat-icon>menu</mat-icon>
+      </button>
     </div>
-</mat-toolbar>  
+  
+    <mat-nav-list class="navbar-menu" *ngIf="exibindoMenu">
+      <mat-list-item>
+        <span class="navbar-usuario">José da Silva</span>
+      </mat-list-item>
+      <mat-list-item class="navbar-menuitem">
+        <a href="#">Lançamentos</a>
+      </mat-list-item>
+      <mat-list-item class="navbar-menuitem">
+        <a href="#">Pessoas</a>
+      </mat-list-item>
+      <mat-list-item class="navbar-menuitem">
+        <a href="#">Logout</a>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-toolbar>
+  

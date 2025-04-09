@@ -7,11 +7,10 @@ import { Component } from '@angular/core';
 })
 export class NavbarComponent {
 
-  exibindoMenu: boolean = true;
+  exibindoMenu: boolean = false;
   
   alternarMenu() {
     this.exibindoMenu = !this.exibindoMenu;
-    console.log('Menu exibido:', this.exibindoMenu); // debug
   }
 
 }

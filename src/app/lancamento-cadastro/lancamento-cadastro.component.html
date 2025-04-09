@@ -1,70 +1,115 @@
 <div class="container">
+  <form>
+    <div class="mat-grid">
+        <div class="mat-grid-item">
+            <h1>Novo Lançamento</h1>
+        </div>
+    </div>
+
+    <div class="linha" style="display: flex; gap: 16px;">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Vencimento</mat-label>
+        <input matInput [matDatepicker]="pickerVencimento" placeholder="dd/mm/aaaa" mask="d0/M0/0000"/>
+        <mat-datepicker-toggle matSuffix [for]="pickerVencimento"></mat-datepicker-toggle>
+        <mat-datepicker #pickerVencimento></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Recebimento</mat-label>
+        <input matInput [matDatepicker]="pickerRecebimento" placeholder="dd/mm/aaaa" mask="d0/M0/0000"/>
+        <mat-datepicker-toggle matSuffix [for]="pickerRecebimento"></mat-datepicker-toggle>
+        <mat-datepicker #pickerRecebimento></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="linha" style="display: flex; gap: 16px;">
+      <mat-form-field appearance="outline" class="campo-grande">
+        <mat-label>Descrição</mat-label>
+        <input matInput type="text">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="campo-pequeno">
+        <mat-label>Valor</mat-label>
+        <input matInput type="text" placeholder="0,00">
+      </mat-form-field>
+    </div>
+
+    <div class="linha" style="display: flex; gap: 16px;">
+      <mat-form-field appearance="outline" class="campo-medio">
+        <mat-label>Categoria</mat-label>
+        <mat-select>
+          <mat-option value="">Selecione</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="campo-medio">
+        <mat-label>Pessoa</mat-label>
+        <mat-select>
+          <mat-option value="">Selecione</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+      <div class="linha">
+          <mat-form-field appearance="outline" style="width: 100%;">
+          <mat-label>Observação</mat-label>
+          <textarea matInput rows="3"></textarea>
+          </mat-form-field>
+      </div>
+
+    <div class="linha" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
+      <button mat-raised-button color="primary">Salvar</button>
+      <button mat-raised-button color="accent">Novo</button>
+      <a href="#">Voltar para a pesquisa</a>
+    </div>
+
+  </form>
+</div>
+
+<!-- <div class="container">
     <form>
-        <div class="mat-grid">
-            <div class="mat-grid-item">
+        <div class="ui-g">
+            <div class="ui-g-12">
                 <h1>Novo Lançamento</h1>
             </div>
+
+            <div class="ui-g-6 ui-md-3 ui-fluid">
+                <label>Vencimento</label>
+                <p-calendar dateFormat="dd/mm/yy"
+                  [inline]="false" [readonlyInput]="false" [showIcon]="false">
+                </p-calendar>
+            </div>
+            <div class="ui-g-6 ui-md-3 ui-fluid">
+                <label>Recebimento</label>
+                <input pInputText type="text">
+            </div>
+            <div class="ui-g-12 ui-md-9 ui-fluid">
+                <label>Descrição</label>
+                <input pInputText type="text">
+            </div>
+            <div class="ui-g-12 ui-md-3 ui-fluid">
+                <label>Valor</label>
+                <input pInputText type="text" placeholder="0,00">
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-fluid">
+                <label>Categoria</label>
+                <input pInputText type="text">
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-fluid">
+                <label>Pessoa</label>
+                <input pInputText type="text">
+            </div>
+            <div class="ui-g-12 ui-fluid">
+                <label>Observação</label>
+                <textarea pInputTextarea rows="3" type="text"></textarea>
+            </div>
+
+            <div class="ui-g-12">
+                <button pButton type="submit" label="Salvar"></button>
+                <button pButton type="button" label="Novo" class="ui-button-info"></button>
+                <a href="javascript:;">Voltar para pesquisa</a>
+            </div>
+
         </div>
-  
-      <!-- Vencimento e Recebimento -->
-      <div class="linha" style="display: flex; gap: 16px;">
-        <mat-form-field appearance="outline" class="campo-pequeno">
-          <mat-label>Vencimento</mat-label>
-          <input matInput type="text">
-        </mat-form-field>
-  
-        <mat-form-field appearance="outline" class="campo-pequeno">
-          <mat-label>Recebimento</mat-label>
-          <input matInput type="text">
-        </mat-form-field>
-      </div>
-  
-      <!-- Descrição e Valor na mesma linha -->
-      <div class="linha" style="display: flex; gap: 16px;">
-        <mat-form-field appearance="outline" class="campo-grande">
-          <mat-label>Descrição</mat-label>
-          <input matInput type="text">
-        </mat-form-field>
-  
-        <mat-form-field appearance="outline" class="campo-pequeno">
-          <mat-label>Valor</mat-label>
-          <input matInput type="text" placeholder="0,00">
-        </mat-form-field>
-      </div>
-  
-      <!-- Categoria e Pessoa -->
-      <div class="linha" style="display: flex; gap: 16px;">
-        <mat-form-field appearance="outline" class="campo-medio">
-          <mat-label>Categoria</mat-label>
-          <mat-select>
-            <mat-option value="">Selecione</mat-option>
-          </mat-select>
-        </mat-form-field>
-  
-        <mat-form-field appearance="outline" class="campo-medio">
-          <mat-label>Pessoa</mat-label>
-          <mat-select>
-            <mat-option value="">Selecione</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-  
-      <!-- Observação ocupando toda a linha -->
-        <div class="linha">
-            <mat-form-field appearance="outline" style="width: 100%;">
-            <mat-label>Observação</mat-label>
-            <textarea matInput rows="3"></textarea>
-            </mat-form-field>
-        </div>
-  
-  
-      <!-- Botões -->
-      <div class="linha" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
-        <button mat-raised-button color="primary">Salvar</button>
-        <button mat-raised-button color="accent">Novo</button>
-        <a href="#">Voltar para a pesquisa</a>
-      </div>
-  
     </form>
-  </div>
-  
+</div> -->

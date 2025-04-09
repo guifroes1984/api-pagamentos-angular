@@ -15,7 +15,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { getPaginatorIntl } from './shared/mat-paginator-intl';
@@ -23,6 +24,14 @@ import { LancamentosPesquisaComponent } from './lancamentos-pesquisa/lancamentos
 import { NavbarComponent } from './navbar/navbar.component';
 import { PessoasPesquisaComponent } from './pessoas-pesquisa/pessoas-pesquisa.component';
 import { LancamentoCadastroComponent } from './lancamento-cadastro/lancamento-cadastro.component';
+
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+
+registerLocaleData(localePt);
 
 
 @NgModule({
@@ -47,11 +56,19 @@ import { LancamentoCadastroComponent } from './lancamento-cadastro/lancamento-ca
     MatPaginatorModule, 
     MatToolbarModule, 
     MatListModule, 
-    MatSelectModule
+    MatSelectModule, 
+    MatDatepickerModule, 
+    MatNativeDateModule, 
+    NgxMaskDirective, 
+    NgxMaskPipe
   ],
   providers: [
-    { provide: MatPaginatorIntl, useValue: getPaginatorIntl() }
-  ],
+    provideNgxMask(),
+  { provide: LOCALE_ID, useValue: 'pt' },
+  { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+  { provide: MatPaginatorIntl, useValue: getPaginatorIntl() }
+],
+  
   bootstrap: [AppComponent]
 })
 export class AppModule { }

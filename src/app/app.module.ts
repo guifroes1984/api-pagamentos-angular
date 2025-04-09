@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +17,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
@@ -46,6 +48,7 @@ registerLocaleData(localePt);
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule, 
+    FormsModule, 
     MatTabsModule, 
     MatFormFieldModule,
     MatInputModule, 
@@ -58,7 +61,8 @@ registerLocaleData(localePt);
     MatListModule, 
     MatSelectModule, 
     MatDatepickerModule, 
-    MatNativeDateModule, 
+    MatNativeDateModule,
+    MatButtonToggleModule, 
     NgxMaskDirective, 
     NgxMaskPipe
   ],

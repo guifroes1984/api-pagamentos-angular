@@ -6,6 +6,14 @@
         </div>
     </div>
 
+    <div class="mat-elevation-z2" style="padding: 8px; border-radius: 4px; display: inline-block; margin-bottom: 16px;">
+      <mat-button-toggle-group name="tipo" [(ngModel)]="tipoSelecionado" exclusive class="tipo-toggle">
+        <mat-button-toggle *ngFor="let tipo of tipos" [value]="tipo.value">
+          {{ tipo.label }}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
     <div class="linha" style="display: flex; gap: 16px;">
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Vencimento</mat-label>
@@ -15,7 +23,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Recebimento</mat-label>
+        <mat-label>{{ tipoSelecionado === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</mat-label>
         <input matInput [matDatepicker]="pickerRecebimento" placeholder="dd/mm/aaaa" mask="d0/M0/0000"/>
         <mat-datepicker-toggle matSuffix [for]="pickerRecebimento"></mat-datepicker-toggle>
         <mat-datepicker #pickerRecebimento></mat-datepicker>
@@ -65,3 +73,55 @@
 
   </form>
 </div>
+
+<!-- <div class="container">
+    <form>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <h1>Novo Lançamento</h1>
+            </div>
+
+            <div class="ui-g-12">
+              <p-selectButton name="tipo" [options]="tipos" #tipo></p-selectButton>
+            </div>
+
+            <div class="ui-g-6 ui-md-3 ui-fluid">
+                <label>Vencimento</label>
+                <p-calendar dateFormat="dd/mm/yy"
+                  [inline]="false" [readonlyInput]="false" [showIcon]="false">
+                </p-calendar>
+            </div>
+            <div class="ui-g-6 ui-md-3 ui-fluid">
+                <label>{{ tipo.value === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</label>
+                <input pInputText type="text">
+            </div>
+            <div class="ui-g-12 ui-md-9 ui-fluid">
+                <label>Descrição</label>
+                <input pInputText type="text">
+            </div>
+            <div class="ui-g-12 ui-md-3 ui-fluid">
+                <label>Valor</label>
+                <input pInputText type="text" placeholder="0,00">
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-fluid">
+                <label>Categoria</label>
+                <input pInputText type="text">
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-fluid">
+                <label>Pessoa</label>
+                <input pInputText type="text">
+            </div>
+            <div class="ui-g-12 ui-fluid">
+                <label>Observação</label>
+                <textarea pInputTextarea rows="3" type="text"></textarea>
+            </div>
+
+            <div class="ui-g-12">
+                <button pButton type="submit" label="Salvar"></button>
+                <button pButton type="button" label="Novo" class="ui-button-info"></button>
+                <a href="javascript:;">Voltar para pesquisa</a>
+            </div>
+
+        </div>
+    </form>
+</div> -->

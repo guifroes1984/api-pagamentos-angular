@@ -32,6 +32,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
+import { FilterPessoasPipe } from './pipe/filter-pessoas.pipe';
 
 registerLocaleData(localePt);
 
@@ -42,7 +43,8 @@ registerLocaleData(localePt);
     LancamentosPesquisaComponent,
     NavbarComponent,
     PessoasPesquisaComponent,
-    LancamentoCadastroComponent
+    LancamentoCadastroComponent, 
+    FilterPessoasPipe
   ],
   imports: [
     BrowserModule,
@@ -64,7 +66,7 @@ registerLocaleData(localePt);
     MatNativeDateModule,
     MatButtonToggleModule, 
     NgxMaskDirective, 
-    NgxMaskPipe
+    NgxMaskPipe,
   ],
   providers: [
     provideNgxMask(),

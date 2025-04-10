@@ -46,5 +46,51 @@
 ::ng-deep .tipo-toggle .mat-button-toggle-checked:hover {
     background-color: #286090 !important;
   }
-    
+
+.filtros-container {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+  
+.pessoa-field {
+  width: 100%;
+}
+  
+.pessoa-option-filtro {
+  pointer-events: none;
+  padding: 0;
+}
+  
+.filtro-container {
+  padding: 6px 8px;
+  pointer-events: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+  
+.filtro-box {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  width: 220%;
+  background-color: white;
+  gap: 8px;
+}
+  
+.filtro-icon {
+  color: #757575;
+}
+  
+.filtro-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 14px;
+  min-width: 0;
+}
+  
   

@@ -29,6 +29,8 @@ import { LancamentoCadastroComponent } from './lancamento-cadastro/lancamento-ca
 
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
+import { CurrencyMaskModule } from "ng2-currency-mask";
+
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
@@ -66,7 +68,8 @@ registerLocaleData(localePt);
     MatNativeDateModule,
     MatButtonToggleModule, 
     NgxMaskDirective, 
-    NgxMaskPipe,
+    NgxMaskPipe, 
+    CurrencyMaskModule
   ],
   providers: [
     provideNgxMask(),

@@ -38,8 +38,11 @@
 
       <mat-form-field appearance="outline" class="campo-pequeno">
         <mat-label>Valor</mat-label>
-        <input matInput type="text" placeholder="0,00">
-      </mat-form-field>
+        <input matInput currencyMask
+          [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', 
+          allowNegative: false, align: 'right', max: 10000 }"
+          placeholder="0,00" />
+      </mat-form-field>           
     </div>
 
     <div class="filtros-container">
@@ -94,3 +97,58 @@
 
   </form>
 </div>
+
+<!-- <div class="container">
+    <form>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <h1>Novo Lançamento</h1>
+            </div>
+
+            <div class="ui-g-12">
+              <p-selectButton name="tipo" [options]="tipos" #tipo></p-selectButton>
+            </div>
+
+            <div class="ui-g-6 ui-md-3 ui-fluid">
+                <label>Vencimento</label>
+                <p-calendar dateFormat="dd/mm/yy"
+                  [inline]="false" [readonlyInput]="false" [showIcon]="false">
+                </p-calendar>
+            </div>
+            <div class="ui-g-6 ui-md-3 ui-fluid">
+                <label>{{ tipo.value === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</label>
+                <input pInputText type="text">
+            </div>
+            <div class="ui-g-12 ui-md-9 ui-fluid">
+                <label>Descrição</label>
+                <input pInputText type="text">
+            </div>
+            <div class="ui-g-12 ui-md-3 ui-fluid">
+                <label>Valor</label>
+                <input pInputText type="text" placeholder="0,00" currencyMask 
+                  [options]="{ prefix: '', thousands: '.', decimal: ',', allowNegative: false }">
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-fluid">
+                <label>Categoria</label>
+                <p-dropdown [options]="categorias"
+                  placeholder="Selecione" [autoWidth]="false"></p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-fluid">
+                <label>Pessoa</label>
+                <p-dropdown [options]="pessoas"
+                  placeholder="Selecione" [autoWidth]="false" [filter]="true"></p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-fluid">
+                <label>Observação</label>
+                <textarea pInputTextarea rows="3" type="text"></textarea>
+            </div>
+
+            <div class="ui-g-12">
+                <button pButton type="submit" label="Salvar"></button>
+                <button pButton type="button" label="Novo" class="ui-button-info"></button>
+                <a href="javascript:;">Voltar para pesquisa</a>
+            </div>
+
+        </div>
+    </form>
+</div> -->

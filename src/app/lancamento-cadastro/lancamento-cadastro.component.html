@@ -30,18 +30,29 @@
       </mat-form-field>
     </div>
 
-    <div class="linha" style="display: flex; gap: 16px;">
+    <div class="linha" style="display: flex; gap: 16px; margin-top: 20px;">
       <mat-form-field appearance="outline" class="campo-grande">
         <mat-label>Descrição</mat-label>
-        <input matInput type="text">
+        <input matInput type="text" name="descricao" [(ngModel)]="descricaoModel"
+               #descricao="ngModel" required minlength="5">
+        
+        <mat-error *ngIf="descricao.hasError('required') && descricao.dirty">
+          Informe uma descrição
+        </mat-error>
+        
+        <mat-error *ngIf="descricao.hasError('minlength') && descricao.dirty">
+          Mínimo de {{ descricao.errors?.['minlength']?.requiredLength }} caracteres
+        </mat-error>
       </mat-form-field>
+      
+      
 
       <mat-form-field appearance="outline" class="campo-pequeno">
         <mat-label>Valor</mat-label>
         <input matInput currencyMask
           [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', 
           allowNegative: false, align: 'right', max: 10000 }"
-          placeholder="0,00" />
+          [(ngModel)]="valor" name="valor" placeholder="0,00" />
       </mat-form-field>           
     </div>
 
@@ -83,7 +94,7 @@
     </div>    
 
     <div class="linha">
-        <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-form-field appearance="outline" style="width: 100%; margin-top: 20px;">
         <mat-label>Observação</mat-label>
         <textarea matInput rows="3"></textarea>
         </mat-form-field>
@@ -97,4 +108,3 @@
 
   </form>
 </div>
-

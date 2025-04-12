@@ -7,6 +7,10 @@ import { Component } from '@angular/core';
 })
 export class LancamentoCadastroComponent {
 
+  descricaoModel: string = '';
+
+  valor: number = 0;
+
   categoriaSelecionada: string = '';
   pessoaSelecionada: string = '';
   filtroPessoa: string = '';

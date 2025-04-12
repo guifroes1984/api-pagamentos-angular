@@ -1,0 +1,119 @@
+[33mcommit 643bce221d4828d1da8fbc07af9af7eed2709705[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Fri Apr 11 23:08:19 2025 -0300
+
+    Ajusta responsividade dos inputs e botões para telas menores que 640px.
+
+[33mcommit f0d237145090b152ac7858e62a15788f07ed5df9[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Fri Apr 11 17:51:30 2025 -0300
+
+    Refatoração: centralização dos estilos repetidos.
+
+[33mcommit 48c26ca79c5b7093e634815155129f9d11d48bf6[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Fri Apr 11 00:00:04 2025 -0300
+
+    Adicionando máscara de dinheiro com ng2-currency-mask.
+
+[33mcommit 495f4aebfad7ca13b76589a64fb837445bbf25f1[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Wed Apr 9 23:32:33 2025 -0300
+
+    Adicionando caixa de seleção e filter-pessoas-pipe personalizado.
+
+[33mcommit 56cb649436526f44017939587f649ba8c3cf4df0[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Wed Apr 9 20:31:36 2025 -0300
+
+    Adicionando botão de seleção.
+
+[33mcommit a588cd0b059d1134387e9aff8a48899c5b0cc0a2[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Wed Apr 9 16:05:44 2025 -0300
+
+    Retiranto comentários.
+
+[33mcommit 0d490dbad97344ad80d846a98a12da32f1ff7424[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Wed Apr 9 16:04:28 2025 -0300
+
+     Adicionado seletor de data, mask e deixando a data formato BR.
+
+[33mcommit f9c48479271fb9ad9a40d42aab2e66e4b84a40fc[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Wed Apr 9 11:48:20 2025 -0300
+
+    Criando o protótipo do formulário de cadastro de lançamentos.
+
+[33mcommit 6a5d5e0c3b76233937908f0864bb766f393a0b01[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Tue Apr 8 01:20:57 2025 -0300
+
+    Criando componente de pesquisa de pessoas e retirada de comentários do código.
+
+[33mcommit c7f906f91f5d03a2466c6fbc5aa5af506e54f2cf[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Mon Apr 7 22:18:16 2025 -0300
+
+    Adicionando menu intercambiável.
+
+[33mcommit c05cc25f1fdce8d07d981c7fb6f161f6a4c6696a[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Mon Apr 7 01:33:52 2025 -0300
+
+    Criando o component navbar.
+
+[33mcommit 83143080237a4acb1e0fd7ed7022dcead13245b5[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Mon Apr 7 01:01:03 2025 -0300
+
+    Criado o componente lancamentos-pesquisa.
+
+[33mcommit cfea60be61283a9b4f2d71cb3110a5ec5f64b979[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Sun Apr 6 23:47:51 2025 -0300
+
+    Fazendo paginação e adicionado Tooltip.
+
+[33mcommit 7c7ea83292010965ce07ea499dc3817a0106130d[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Sat Apr 5 18:04:02 2025 -0300
+
+    Melhorando CSS dos botões e apagando comentários.
+
+[33mcommit 2e10bae38cd73a9fbf7191d1f688717cd8b809b1[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Sat Apr 5 17:55:27 2025 -0300
+
+    Customizando as colunas com Material.
+
+[33mcommit c8e659978ad46ee854d0c5e3832e4526cd16bcf7[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Fri Apr 4 10:49:13 2025 -0300
+
+    Ajustes no CSS.
+
+[33mcommit d7eb1da50e249714a06099f3ca6625c5b1001d9c[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Thu Mar 20 01:50:29 2025 -0300
+
+    Adicionando uma tabela de dados.
+
+[33mcommit 2fc4f3cac798e6ba84ccfbd308efa620aed3c1a9[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Wed Mar 19 23:50:53 2025 -0300
+
+    Adicionando o formulário de pesquisa de Lançamentos.
+
+[33mcommit d8085d9c883aaac94c8c0fc746cf82b3377dc087[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Tue Mar 18 01:25:52 2025 -0300
+
+    Start na API, e instalação do Angular Material.
+
+[33mcommit c5d6b346956dcc33fb60b1ed3ec4cb9bf5fce131[m
+Author: guifroes1984 <guilhermefroes26@gmail.com>
+Date:   Tue Mar 18 00:48:53 2025 -0300
+
+    initial commit

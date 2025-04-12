@@ -35,6 +35,7 @@ import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { FilterPessoasPipe } from './pipe/filter-pessoas.pipe';
+import { PessoasCadastroComponent } from './pessoas-cadastro/pessoas-cadastro.component';
 
 registerLocaleData(localePt);
 
@@ -46,7 +47,7 @@ registerLocaleData(localePt);
     NavbarComponent,
     PessoasPesquisaComponent,
     LancamentoCadastroComponent, 
-    FilterPessoasPipe
+    FilterPessoasPipe, PessoasCadastroComponent
   ],
   imports: [
     BrowserModule,

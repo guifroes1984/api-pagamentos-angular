@@ -1,70 +1,70 @@
 .mat-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 8px;
-    margin-bottom: 10px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
 .mat-grid-item h1 {
-    font-weight: bold;
-    font-size: 36px;
-    color: #404C51;
-  }
-  
+  font-weight: bold;
+  font-size: 36px;
+  color: #404C51;
+}
+
 .mat-grid-item {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-  }
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
 
 .campo-pequeno {
-    flex: 1;
-    min-width: 150px;
-  }
-  
+  flex: 1;
+  min-width: 150px;
+}
+
 .campo-medio {
-    flex: 1;
-    min-width: 200px;
-  }
-  
+  flex: 1;
+  min-width: 200px;
+}
+
 .campo-grande {
-    width: 100%;
-  }
+  width: 100%;
+}
 
 ::ng-deep .tipo-toggle .mat-button-toggle-checked {
-    background-color: #286090 !important;
-    color: white !important;
-    border-color: #2e6da4 !important;
-  }
-  
+  background-color: #286090 !important;
+  color: white !important;
+  border-color: #2e6da4 !important;
+}
+
 ::ng-deep .tipo-toggle .mat-button-toggle-checked:hover {
-    background-color: #286090 !important;
-  }
+  background-color: #286090 !important;
+}
 
 .filtros-container {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
 }
-  
+
 .pessoa-field {
   width: 100%;
 }
-  
+
 .pessoa-option-filtro {
   pointer-events: none;
   padding: 0;
 }
-  
+
 .filtro-container {
   padding: 6px 8px;
   pointer-events: auto;
   width: 100%;
   box-sizing: border-box;
 }
-  
+
 .filtro-box {
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -75,11 +75,11 @@
   background-color: white;
   gap: 8px;
 }
-  
+
 .filtro-icon {
   color: #757575;
 }
-  
+
 .filtro-input {
   border: none;
   outline: none;
@@ -88,4 +88,45 @@
   font-size: 14px;
   min-width: 0;
 }
-  
+
+@media (max-width: 640px) {
+  .linha {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .linha .campo-grande,
+  .linha .campo-pequeno,
+  .linha .campo-medio,
+  .linha .pessoa-field,
+  .linha .mat-form-field {
+    width: 100% !important;
+    margin-bottom: 16px;
+  }
+
+  .filtros-container {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .mat-elevation-z2 {
+    display: block !important;
+  }
+
+  .linha button {
+    margin-top: 8px;
+    width: auto;
+  }
+
+  .linha {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    justify-content: flex-start;
+  }
+
+  .linha a {
+    display: block;
+    margin-top: 8px;
+  }
+}

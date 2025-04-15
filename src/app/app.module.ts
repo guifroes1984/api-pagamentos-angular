@@ -36,6 +36,7 @@ import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { FilterPessoasPipe } from './pipe/filter-pessoas.pipe';
 import { PessoasCadastroComponent } from './pessoas-cadastro/pessoas-cadastro.component';
+import { MensagemComponent } from './shared/mensagem/mensagem.component';
 
 registerLocaleData(localePt);
 
@@ -47,7 +48,7 @@ registerLocaleData(localePt);
     NavbarComponent,
     PessoasPesquisaComponent,
     LancamentoCadastroComponent, 
-    FilterPessoasPipe, PessoasCadastroComponent
+    FilterPessoasPipe, PessoasCadastroComponent,
   ],
   imports: [
     BrowserModule,
@@ -70,7 +71,8 @@ registerLocaleData(localePt);
     MatButtonToggleModule, 
     NgxMaskDirective, 
     NgxMaskPipe, 
-    CurrencyMaskModule
+    CurrencyMaskModule, 
+    MensagemComponent
   ],
   providers: [
     provideNgxMask(),

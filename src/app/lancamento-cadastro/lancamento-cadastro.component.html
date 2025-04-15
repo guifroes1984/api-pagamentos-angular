@@ -31,29 +31,31 @@
     </div>
 
     <div class="linha" style="display: flex; gap: 16px; margin-top: 20px;">
-      <mat-form-field appearance="outline" class="campo-grande">
-        <mat-label>Descrição</mat-label>
-        <input matInput type="text" name="descricao" [(ngModel)]="descricaoModel"
-               #descricao="ngModel" required minlength="5">
-        
-        <mat-error *ngIf="descricao.hasError('required') && descricao.dirty">
-          Informe uma descrição
-        </mat-error>
-        
-        <mat-error *ngIf="descricao.hasError('minlength') && descricao.dirty">
-          Mínimo de {{ descricao.errors?.['minlength']?.requiredLength }} caracteres
-        </mat-error>
-      </mat-form-field>
+      <div style="width: 100%;">
+        <mat-form-field appearance="outline" class="campo-grande">
+          <mat-label>Descrição</mat-label>
+          <input matInput type="text" name="descricao"
+            [(ngModel)]="descricaoModel" #descricao="ngModel" required minlength="5"/>
+        </mat-form-field>
       
-      
+        <app-mensagem [control]="descricao" [error]="'required'"
+          [text]="'Informe uma descrição'">
+        </app-mensagem>
 
-      <mat-form-field appearance="outline" class="campo-pequeno">
-        <mat-label>Valor</mat-label>
-        <input matInput currencyMask
-          [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', 
-          allowNegative: false, align: 'right', max: 10000 }"
-          [(ngModel)]="valor" name="valor" placeholder="0,00" />
-      </mat-form-field>           
+        <app-mensagem [control]="descricao" [error]="'minlength'"
+          [text]="'Mínimo de ' + descricao.errors?.['minlength']?.requiredLength + ' caracteres'">
+        </app-mensagem>
+      </div>
+
+      <div>
+        <mat-form-field appearance="outline" class="campo-pequeno">
+          <mat-label>Valor</mat-label>
+          <input matInput currencyMask
+            [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', 
+            allowNegative: false, align: 'right', max: 10000 }"
+            [(ngModel)]="valor" name="valor" placeholder="0,00" />
+        </mat-form-field>
+      </div>           
     </div>
 
     <div class="filtros-container">
@@ -108,3 +110,66 @@
 
   </form>
 </div>
+
+<!-- <div class="container">
+    <form>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <h1>Novo Lançamento</h1>
+            </div>
+
+            <div class="ui-g-12">
+              <p-selectButton name="tipo" [options]="tipos" #tipo></p-selectButton>
+            </div>
+
+            <div class="ui-g-6 ui-md-3 ui-fluid">
+                <label>Vencimento</label>
+                <p-calendar dateFormat="dd/mm/yy"
+                  [inline]="false" [readonlyInput]="false" [showIcon]="false">
+                </p-calendar>
+            </div>
+            <div class="ui-g-6 ui-md-3 ui-fluid">
+                <label>{{ tipo.value === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</label>
+                <input pInputText type="text">
+            </div>
+            <div class="ui-g-12 ui-md-9 ui-fluid">
+                <label>Descrição</label>
+                <input pInputText type="text" name="descricao" 
+                  ngModel #descricao="ngModel" required minlength="5">
+
+                  <app-message [control]="descricao" error="required"
+                    text="Informe uma descrição"></app-message>
+
+                <div *ngIf="descricao.hasError('minlength') && descricao.dirty"
+                  class="ui-message ui-messages-error">
+                  Minimo de {{descricao.errors.requiredLength }} caracteres
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-3 ui-fluid">
+                <label>Valor</label>
+                <input pInputText type="text" placeholder="0,00">
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-fluid">
+                <label>Categoria</label>
+                <p-dropdown [options]="categorias"
+                  placeholder="Selecione" [autoWidth]="false"></p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-fluid">
+                <label>Pessoa</label>
+                <p-dropdown [options]="pessoas"
+                  placeholder="Selecione" [autoWidth]="false" [filter]="true"></p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-fluid">
+                <label>Observação</label>
+                <textarea pInputTextarea rows="3" type="text"></textarea>
+            </div>
+
+            <div class="ui-g-12">
+                <button pButton type="submit" label="Salvar"></button>
+                <button pButton type="button" label="Novo" class="ui-button-info"></button>
+                <a href="javascript:;">Voltar para pesquisa</a>
+            </div>
+
+        </div>
+    </form>
+</div> -->

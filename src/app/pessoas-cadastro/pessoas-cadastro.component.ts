@@ -7,4 +7,17 @@ import { Component } from '@angular/core';
 })
 export class PessoasCadastroComponent {
 
+  nomeModel: string = '';
+  logradouroModel: string = '';
+  numeroModel: string = '';
+  bairroModel: string = '';
+  cepModel: string = '';
+  cidadeModel: string = '';
+  estadoModel: string = '';
+  complementoModel: string = '';
+
+  salvar() {
+    
+  }
+
 }

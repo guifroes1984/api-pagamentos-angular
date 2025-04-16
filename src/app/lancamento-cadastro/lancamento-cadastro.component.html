@@ -62,7 +62,7 @@
       <mat-form-field appearance="outline" class="campo-medio">
         <mat-label>Categoria</mat-label>
         <mat-select [(ngModel)]="categoriaSelecionada" name="categoriaSelecionada">
-          <mat-option value="">Selecione</mat-option>
+          <mat-option *ngIf="!categoriaSelecionada" value="">Selecione</mat-option>
           <mat-option *ngFor="let categoria of categorias" [value]="categoria.value">
             {{ categoria.label }}
           </mat-option>

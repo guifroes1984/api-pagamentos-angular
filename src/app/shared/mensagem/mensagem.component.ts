@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   imports: [CommonModule, MatFormFieldModule],
   template: `
     <div *ngIf="temErro()" class="mensagem-erro">
-      {{ textoErro() }}
+      {{ textoErroCustomizado() }}
     </div>
   `,
   styles: [`
@@ -31,9 +31,9 @@ export class MensagemComponent {
   @Input() text!: string;
 
   temErro(): boolean {
-    return this.control?.hasError(this.error) && this.control?.dirty || false;
+    return this.control?.hasError(this.error) && (this.control?.touched || this.control?.dirty) || false;
   }
-  
+
   textoErro(): string {
     if (this.error === 'required') {
       return 'Informe uma descrição';
@@ -42,5 +42,9 @@ export class MensagemComponent {
       return `Mínimo de ${minlength} caracteres`;
     }
     return '';
+  }
+
+  textoErroCustomizado(): string {
+    return this.text || this.textoErro();
   }
 }

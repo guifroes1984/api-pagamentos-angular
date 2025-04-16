@@ -1,64 +1,117 @@
 <div class="container">
-    <form>
-      <div class="mat-grid">
-        <div class="mat-grid-item">
-          <h1>Nova Pessoa</h1>
-        </div>
+  <form #cadastroForm="ngForm" (ngSubmit)="salvar()">
+    <div class="mat-grid">
+      <div class="mat-grid-item">
+        <h1>Nova Pessoa</h1>
       </div>
-  
-      <div class="linha" style="display: flex; gap: 16px;">
+    </div>
+
+    <div class="linha" style="display: flex; gap: 16px;">
+      <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-grande">
           <mat-label>Nome</mat-label>
-          <input matInput />
+          <input matInput type="text" name="nome"
+            [(ngModel)]="nomeModel" #nome="ngModel" required minlength="5" />
         </mat-form-field>
+        
+        <!-- Mensagem para campo obrigatório -->
+        <app-mensagem [control]="nome" [error]="'required'" 
+          [text]="'Informe o nome'">
+        </app-mensagem>
+        
+        <!-- Mensagem para mínimo de caracteres -->
+        <app-mensagem [control]="nome" [error]="'minlength'" 
+          [text]="'Mínimo de 5 caracteres'">
+        </app-mensagem>
       </div>
-  
-      <div class="linha" style="display: flex; gap: 16px;">
+    </div>
+    
+    <div class="linha" style="display: flex; gap: 16px;">
+      <div style="flex: 3; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-grande">
           <mat-label>Logradouro</mat-label>
-          <input matInput />
+          <input matInput type="text" name="logradouro"
+            [(ngModel)]="logradouroModel" #logradouro="ngModel" required />
         </mat-form-field>
-  
+    
+        <app-mensagem [control]="logradouro" [error]="'required'" 
+          [text]="'Informe o logradouro'">
+        </app-mensagem>
+      </div>
+    
+      <div style="flex: 1; min-width: 150px; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-pequeno">
           <mat-label>Número</mat-label>
-          <input matInput />
+          <input matInput type="text" name="numero"
+            [(ngModel)]="numeroModel" #numero="ngModel" required />
         </mat-form-field>
+    
+        <app-mensagem [control]="numero" [error]="'required'" 
+          [text]="'Informe o número'">
+        </app-mensagem>
       </div>
-  
-      <div class="linha" style="display: flex; gap: 16px;">
+    </div>
+
+    <div class="linha" style="display: flex; gap: 16px;">
+      <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Complemento</mat-label>
-          <input matInput />
+          <input matInput name="complemento" [(ngModel)]="complementoModel" #complemento="ngModel" />
         </mat-form-field>
-  
+      </div>
+
+      <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Bairro</mat-label>
-          <input matInput />
+          <input matInput name="bairro" [(ngModel)]="bairroModel" #bairro="ngModel" required />
         </mat-form-field>
-  
+
+        <app-mensagem [control]="bairro" [error]="'required'" 
+          [text]="'Informe o bairro'">
+        </app-mensagem>
+      </div>
+
+      <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>CEP</mat-label>
-          <input matInput mask="00000-000" placeholder="00000-000" />
+          <input matInput mask="00000-000" placeholder="00000-000" 
+          name="cep" [(ngModel)]="cepModel" #cep="ngModel" required />
         </mat-form-field>
+
+        <app-mensagem [control]="cep" [error]="'required'" 
+          [text]="'Informe o CEP'">
+        </app-mensagem>
       </div>
-  
-      <div class="linha" style="display: flex; gap: 16px;">
+    </div>
+
+    <div class="linha" style="display: flex; gap: 16px;">
+      <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Cidade</mat-label>
-          <input matInput />
+          <input matInput name="cidade" [(ngModel)]="cidadeModel" #cidade="ngModel" required />
         </mat-form-field>
-  
+
+        <app-mensagem [control]="cidade" [error]="'required'" 
+          [text]="'Informe a cidade'">
+        </app-mensagem>
+      </div>
+
+      <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-pequeno">
           <mat-label>Estado</mat-label>
-          <input matInput />
+          <input matInput name="estado" [(ngModel)]="estadoModel" #estado="ngModel" required />
         </mat-form-field>
+
+        <app-mensagem [control]="estado" [error]="'required'" 
+          [text]="'Informe o estado'">
+        </app-mensagem>
       </div>
-  
-      <div class="linha linha-botoes" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
-        <button mat-raised-button color="primary">Salvar</button>
-        <button mat-raised-button color="accent">Novo</button>
-        <a href="#">Voltar para a pesquisa</a>
-      </div>
-    </form>
-  </div>
-  
+    </div>
+
+    <div class="linha linha-botoes" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
+      <button mat-raised-button color="primary" [disabled]="!cadastroForm.valid">Salvar</button>
+      <button mat-raised-button color="accent">Novo</button>
+      <a href="#">Voltar para a pesquisa</a>
+    </div>
+  </form>
+</div>

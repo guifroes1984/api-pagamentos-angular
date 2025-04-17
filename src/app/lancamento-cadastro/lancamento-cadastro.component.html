@@ -1,5 +1,5 @@
 <div class="container">
-  <form>
+  <form #cadastroLancamentoForm="ngForm" autocomplete="off" (ngSubmit)="salvar()">
     <div class="mat-grid">
         <div class="mat-grid-item">
             <h1>Novo Lançamento</h1>
@@ -14,22 +14,33 @@
       </mat-button-toggle-group>
     </div>
 
-    <div class="linha" style="display: flex; gap: 16px;">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Vencimento</mat-label>
-        <input matInput [matDatepicker]="pickerVencimento" placeholder="dd/mm/aaaa" mask="d0/M0/0000"/>
-        <mat-datepicker-toggle matSuffix [for]="pickerVencimento"></mat-datepicker-toggle>
-        <mat-datepicker #pickerVencimento></mat-datepicker>
-      </mat-form-field>
+    <div class="linha" style="display: flex; gap: 16px; flex-wrap: wrap;">
 
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>{{ tipoSelecionado === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</mat-label>
-        <input matInput [matDatepicker]="pickerRecebimento" placeholder="dd/mm/aaaa" mask="d0/M0/0000"/>
-        <mat-datepicker-toggle matSuffix [for]="pickerRecebimento"></mat-datepicker-toggle>
-        <mat-datepicker #pickerRecebimento></mat-datepicker>
-      </mat-form-field>
+      <div class="campo-data">
+        <mat-form-field appearance="outline" style="width: 100%;">
+          <mat-label>Vencimento</mat-label>
+          <input matInput [matDatepicker]="pickerVencimento" placeholder="dd/mm/aaaa" name="vencimento"
+            [(ngModel)]="vencimentoModel" #vencimento="ngModel" required />
+          <mat-datepicker-toggle matSuffix [for]="pickerVencimento"></mat-datepicker-toggle>
+          <mat-datepicker #pickerVencimento></mat-datepicker>
+        </mat-form-field>
+
+        <app-mensagem [control]="vencimento" [error]="'required'"
+          [text]="'Informe uma data de vencimento'">
+        </app-mensagem>
+
+      </div>
+    
+      <div class="campo-data">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>{{ tipoSelecionado === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</mat-label>
+          <input matInput [matDatepicker]="pickerRecebimento" placeholder="dd/mm/aaaa" mask="d0/M0/0000"/>
+          <mat-datepicker-toggle matSuffix [for]="pickerRecebimento"></mat-datepicker-toggle>
+          <mat-datepicker #pickerRecebimento></mat-datepicker>
+        </mat-form-field>
+      </div>
     </div>
-
+    
     <div class="linha" style="display: flex; gap: 16px; margin-top: 20px;">
       <div style="width: 100%;">
         <mat-form-field appearance="outline" class="campo-grande">
@@ -51,49 +62,60 @@
         <mat-form-field appearance="outline" class="campo-pequeno">
           <mat-label>Valor</mat-label>
           <input matInput currencyMask
-            [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', 
-            allowNegative: false, align: 'right', max: 10000 }"
-            [(ngModel)]="valor" name="valor" placeholder="0,00" />
+            [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, align: 'right', max: 10000 }"
+            [(ngModel)]="valor" name="valor" #valorModel="ngModel" placeholder="0,00" required />
         </mat-form-field>
-      </div>           
+      
+        <app-mensagem [control]="valorModel" [error]="'required'"
+          [text]="'Informe um valor'">
+        </app-mensagem>
+      </div>
     </div>
 
     <div class="filtros-container">
-      <mat-form-field appearance="outline" class="campo-medio">
-        <mat-label>Categoria</mat-label>
-        <mat-select [(ngModel)]="categoriaSelecionada" name="categoriaSelecionada">
-          <mat-option *ngIf="!categoriaSelecionada" value="">Selecione</mat-option>
-          <mat-option *ngFor="let categoria of categorias" [value]="categoria.value">
-            {{ categoria.label }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    
-      <mat-form-field appearance="outline" class="campo-medio pessoa-field">
-        <mat-label>Pessoa</mat-label>
-        <mat-select [(ngModel)]="pessoaSelecionada" name="pessoaSelecionada">
-          <mat-option [disabled]="true" class="pessoa-option-filtro">
-            <div class="filtro-container" (click)="$event.stopPropagation()">
-              <div class="filtro-box">
-                <mat-icon class="filtro-icon">search</mat-icon>
-                <input
-                  matInput
-                  placeholder="Filtrar..."
-                  [(ngModel)]="filtroPessoa"
-                  [ngModelOptions]="{ standalone: true }"
-                  (click)="$event.stopPropagation()"
-                  (keydown)="$event.stopPropagation()"
-                  class="filtro-input"
-                />
+      <div style="flex: 1; display: flex; flex-direction: column;">
+        <mat-form-field appearance="outline" class="campo-medio">
+          <mat-label>Categoria</mat-label>
+          <mat-select [(ngModel)]="categoriaSelecionada" name="categoriaSelecionada" #categoriaModel="ngModel" required>
+            <mat-option *ngIf="!categoriaSelecionada" value="">Selecione</mat-option>
+            <mat-option *ngFor="let categoria of categorias" [value]="categoria.value">
+              {{ categoria.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <app-mensagem [control]="categoriaModel" [error]="'required'"
+          [text]="'Informe uma categoria'">
+        </app-mensagem>
+      </div>
+      
+      <div style="flex: 1; display: flex; flex-direction: column;">
+        <mat-form-field appearance="outline" class="campo-medio pessoa-field">
+          <mat-label>Pessoa</mat-label>
+          <mat-select [(ngModel)]="pessoaSelecionada" name="pessoaSelecionada" #pessoaModel="ngModel" required>
+            <mat-option [disabled]="true" class="pessoa-option-filtro">
+              <div class="filtro-container" (click)="$event.stopPropagation()">
+                <div class="filtro-box">
+                  <mat-icon class="filtro-icon">search</mat-icon>
+                  <input matInput placeholder="Filtrar..." [(ngModel)]="filtroPessoa" [ngModelOptions]="{ standalone: true }"
+                    (click)="$event.stopPropagation()"
+                    (keydown)="$event.stopPropagation()"
+                    class="filtro-input"/>
+                </div>
               </div>
-            </div>
-          </mat-option>
-          <mat-option *ngFor="let pessoa of pessoas | filterPessoas:filtroPessoa" [value]="pessoa.value">
-            {{ pessoa.label }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>    
+            </mat-option>
+      
+            <mat-option *ngFor="let pessoa of pessoas | filterPessoas:filtroPessoa" [value]="pessoa.value">
+              {{ pessoa.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+    
+        <app-mensagem [control]="pessoaModel" [error]="'required'"
+          [text]="'Informe uma pessoa'">
+        </app-mensagem>
+      </div>
+    </div>        
 
     <div class="linha">
         <mat-form-field appearance="outline" style="width: 100%; margin-top: 20px;">
@@ -103,73 +125,9 @@
     </div>
 
     <div class="linha" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
-      <button mat-raised-button color="primary">Salvar</button>
+      <button mat-raised-button color="primary" [disabled]="!cadastroLancamentoForm.valid">Salvar</button>
       <button mat-raised-button color="accent">Novo</button>
       <a href="#">Voltar para a pesquisa</a>
     </div>
-
   </form>
 </div>
-
-<!-- <div class="container">
-    <form>
-        <div class="ui-g">
-            <div class="ui-g-12">
-                <h1>Novo Lançamento</h1>
-            </div>
-
-            <div class="ui-g-12">
-              <p-selectButton name="tipo" [options]="tipos" #tipo></p-selectButton>
-            </div>
-
-            <div class="ui-g-6 ui-md-3 ui-fluid">
-                <label>Vencimento</label>
-                <p-calendar dateFormat="dd/mm/yy"
-                  [inline]="false" [readonlyInput]="false" [showIcon]="false">
-                </p-calendar>
-            </div>
-            <div class="ui-g-6 ui-md-3 ui-fluid">
-                <label>{{ tipo.value === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</label>
-                <input pInputText type="text">
-            </div>
-            <div class="ui-g-12 ui-md-9 ui-fluid">
-                <label>Descrição</label>
-                <input pInputText type="text" name="descricao" 
-                  ngModel #descricao="ngModel" required minlength="5">
-
-                  <app-message [control]="descricao" error="required"
-                    text="Informe uma descrição"></app-message>
-
-                <div *ngIf="descricao.hasError('minlength') && descricao.dirty"
-                  class="ui-message ui-messages-error">
-                  Minimo de {{descricao.errors.requiredLength }} caracteres
-                </div>
-            </div>
-            <div class="ui-g-12 ui-md-3 ui-fluid">
-                <label>Valor</label>
-                <input pInputText type="text" placeholder="0,00">
-            </div>
-            <div class="ui-g-12 ui-md-6 ui-fluid">
-                <label>Categoria</label>
-                <p-dropdown [options]="categorias"
-                  placeholder="Selecione" [autoWidth]="false"></p-dropdown>
-            </div>
-            <div class="ui-g-12 ui-md-6 ui-fluid">
-                <label>Pessoa</label>
-                <p-dropdown [options]="pessoas"
-                  placeholder="Selecione" [autoWidth]="false" [filter]="true"></p-dropdown>
-            </div>
-            <div class="ui-g-12 ui-fluid">
-                <label>Observação</label>
-                <textarea pInputTextarea rows="3" type="text"></textarea>
-            </div>
-
-            <div class="ui-g-12">
-                <button pButton type="submit" label="Salvar"></button>
-                <button pButton type="button" label="Novo" class="ui-button-info"></button>
-                <a href="javascript:;">Voltar para pesquisa</a>
-            </div>
-
-        </div>
-    </form>
-</div> -->

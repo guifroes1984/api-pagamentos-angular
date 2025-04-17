@@ -131,3 +131,8 @@
     margin-top: 8px;
   }
 }
+
+.campo-data {
+  flex: 0 0 230px;
+  min-width: 150px;
+}

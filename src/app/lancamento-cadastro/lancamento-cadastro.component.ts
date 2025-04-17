@@ -7,7 +7,13 @@ import { Component } from '@angular/core';
 })
 export class LancamentoCadastroComponent {
 
+  recebimentoModel: Date | null = null;
+  vencimentoModel: Date | null = null;
+  tipoSelecionado: string | null = null;
   descricaoModel: string = '';
+  pagamentoModel: string = '';
+
+  vencimento: Date | null = null;
 
   valor: number = 0;
 
@@ -31,6 +37,8 @@ export class LancamentoCadastroComponent {
     { label: 'Maria Abadia', value: 3 }
   ];
 
-  tipoSelecionado: string | null = null;
+  salvar() {
+    
+  }
 
 }

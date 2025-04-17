@@ -1,5 +1,5 @@
 <div class="container">
-  <form #cadastroForm="ngForm" (ngSubmit)="salvar()">
+  <form #cadastroPessoaForm="ngForm" autocomplete="off" (ngSubmit)="salvar()">
     <div class="mat-grid">
       <div class="mat-grid-item">
         <h1>Nova Pessoa</h1>
@@ -13,13 +13,11 @@
           <input matInput type="text" name="nome"
             [(ngModel)]="nomeModel" #nome="ngModel" required minlength="5" />
         </mat-form-field>
-        
-        <!-- Mensagem para campo obrigatório -->
+
         <app-mensagem [control]="nome" [error]="'required'" 
           [text]="'Informe o nome'">
         </app-mensagem>
-        
-        <!-- Mensagem para mínimo de caracteres -->
+
         <app-mensagem [control]="nome" [error]="'minlength'" 
           [text]="'Mínimo de 5 caracteres'">
         </app-mensagem>
@@ -109,7 +107,7 @@
     </div>
 
     <div class="linha linha-botoes" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
-      <button mat-raised-button color="primary" [disabled]="!cadastroForm.valid">Salvar</button>
+      <button mat-raised-button color="primary" [disabled]="!cadastroPessoaForm.valid">Salvar</button>
       <button mat-raised-button color="accent">Novo</button>
       <a href="#">Voltar para a pesquisa</a>
     </div>

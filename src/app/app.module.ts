@@ -37,6 +37,8 @@ import localePt from '@angular/common/locales/pt';
 import { FilterPessoasPipe } from './pipe/filter-pessoas.pipe';
 import { PessoasCadastroComponent } from './pessoas-cadastro/pessoas-cadastro.component';
 import { MensagemComponent } from './shared/mensagem/mensagem.component';
+import { LancamentosGridComponent } from './lancamentos-grid/lancamentos-grid.component';
+import { PessoasGridComponent } from './pessoas-grid/pessoas-grid.component';
 
 registerLocaleData(localePt);
 
@@ -48,7 +50,7 @@ registerLocaleData(localePt);
     NavbarComponent,
     PessoasPesquisaComponent,
     LancamentoCadastroComponent, 
-    FilterPessoasPipe, PessoasCadastroComponent,
+    FilterPessoasPipe, PessoasCadastroComponent, LancamentosGridComponent, PessoasGridComponent,
   ],
   imports: [
     BrowserModule,

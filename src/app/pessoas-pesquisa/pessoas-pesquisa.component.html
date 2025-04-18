@@ -19,7 +19,7 @@
     </div>
   
     <div class="mat-grid" style="margin-top: 20px;">
-      <div class="mat-grid-item">
+      <!-- <div class="mat-grid-item">
         <table mat-table [dataSource]="fonteDados" class="mat-elevation-z8" matSort>
           <ng-container matColumnDef="pessoa">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Nome </th>
@@ -62,13 +62,14 @@
           <tr mat-header-row *matHeaderRowDef="colunasExibidas" class="mat-header"></tr>
           <tr mat-row *matRowDef="let row; columns: colunasExibidas;" class="mat-row"></tr>
         </table>
-      </div>
-  
-      <mat-paginator
+      </div> -->
+      <!-- <mat-paginator
         [pageSize]="5"
         [pageSizeOptions]="[5, 10, 15]"
         showFirstLastButtons>
-      </mat-paginator>
+      </mat-paginator> -->
+      
+      <app-pessoas-grid [pessoas]="pessoas"></app-pessoas-grid>
   
       <div class="mat-grid-item" style="margin-top: 20px;">
         <button mat-raised-button color="primary" type="button">Nova Pessoa</button>

@@ -1,0 +1,56 @@
+<div class="mat-grid-item">
+    <table mat-table [dataSource]="fonteDados" class="mat-elevation-z8" matSort>
+      <ng-container matColumnDef="pessoa">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Pessoa </th>
+        <td mat-cell *matCellDef="let lanc" translate="no"> {{ lanc.pessoa }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="descricao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </th>
+        <td mat-cell *matCellDef="let lanc" translate="no"> {{ lanc.descricao }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataVencimento">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-data"> Vencimento </th>
+        <td mat-cell *matCellDef="let lanc" translate="no"> {{ lanc.dataVencimento }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataPagamento">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-data"> Pagamento </th>
+        <td mat-cell *matCellDef="let lanc" translate="no"> 
+          {{ lanc.dataPagamento ? lanc.dataPagamento : '-' }} 
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="valor">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-valor" translate="no"> Valor </th>
+        <td mat-cell *matCellDef="let lanc" class="col-valor" translate="no">
+          <span [style.color]="lanc.tipo === 'DESPESA' ? 'red' : 'blue'">
+            {{ lanc.valor }}
+          </span>
+        </td>
+      </ng-container>          
+      
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef class="col-acoes"> Ações </th>
+        <td mat-cell *matCellDef="let lanc" translate="no">
+          <div class="acoes-container">
+            <button mat-icon-button color="primary" aria-label="Editar" class="botao-acao" matTooltip="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" aria-label="Excluir" class="botao-acao" matTooltip="Excluir">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>        
+
+      <tr mat-header-row *matHeaderRowDef="colunasExibidas" class="mat-header"></tr>
+      <tr mat-row *matRowDef="let row; columns: colunasExibidas;" class="mat-row"></tr>
+    </table>
+</div>
+<mat-paginator
+    [pageSize]="5" 
+    [pageSizeOptions]="[5, 10, 15]" 
+    showFirstLastButtons>
+</mat-paginator>

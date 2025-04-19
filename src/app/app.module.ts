@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,59 +21,56 @@ import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { getPaginatorIntl } from './shared/mat-paginator-intl';
-import { LancamentosPesquisaComponent } from './lancamentos-pesquisa/lancamentos-pesquisa.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { PessoasPesquisaComponent } from './pessoas-pesquisa/pessoas-pesquisa.component';
-import { LancamentoCadastroComponent } from './lancamento-cadastro/lancamento-cadastro.component';
 
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
-
-import { CurrencyMaskModule } from "ng2-currency-mask";
 
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
-import { FilterPessoasPipe } from './pipe/filter-pessoas.pipe';
-import { PessoasCadastroComponent } from './pessoas-cadastro/pessoas-cadastro.component';
+
+import { LancamentoModule } from './lancamento/lancamento.module';
+import { NavbarComponent } from './navbar/navbar.component';
 import { MensagemComponent } from './shared/mensagem/mensagem.component';
-import { LancamentosGridComponent } from './lancamentos-grid/lancamentos-grid.component';
+import { PessoasPesquisaComponent } from './pessoas-pesquisa/pessoas-pesquisa.component';
 import { PessoasGridComponent } from './pessoas-grid/pessoas-grid.component';
+import { PessoasCadastroComponent } from './pessoas-cadastro/pessoas-cadastro.component';
 
 registerLocaleData(localePt);
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    LancamentosPesquisaComponent,
-    NavbarComponent,
-    PessoasPesquisaComponent,
-    LancamentoCadastroComponent, 
-    FilterPessoasPipe, PessoasCadastroComponent, LancamentosGridComponent, PessoasGridComponent,
+    AppComponent, 
+    NavbarComponent, 
+    PessoasPesquisaComponent, 
+    PessoasGridComponent, 
+    PessoasCadastroComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule, 
     FormsModule, 
+    LancamentoModule, 
+
     MatTabsModule, 
-    MatFormFieldModule,
-    MatInputModule, 
-    MatButtonModule, 
-    MatTableModule,
-    MatIconModule, 
-    MatTooltipModule, 
-    MatPaginatorModule, 
-    MatToolbarModule, 
-    MatListModule, 
-    MatSelectModule, 
-    MatDatepickerModule, 
-    MatNativeDateModule,
-    MatButtonToggleModule, 
-    NgxMaskDirective, 
-    NgxMaskPipe, 
-    CurrencyMaskModule, 
-    MensagemComponent
+        MatFormFieldModule,
+        MatInputModule, 
+        MatButtonModule, 
+        MatTableModule,
+        MatIconModule, 
+        MatTooltipModule, 
+        MatPaginatorModule, 
+        MatToolbarModule, 
+        MatListModule, 
+        MatSelectModule, 
+        MatDatepickerModule, 
+        MatNativeDateModule,
+        MatButtonToggleModule, 
+        NgxMaskDirective, 
+        NgxMaskPipe,
+        MensagemComponent
+
   ],
   providers: [
     provideNgxMask(),

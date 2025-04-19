@@ -31,9 +31,10 @@ import localePt from '@angular/common/locales/pt';
 import { LancamentoModule } from './lancamento/lancamento.module';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MensagemComponent } from './shared/mensagem/mensagem.component';
-import { PessoasPesquisaComponent } from './pessoas-pesquisa/pessoas-pesquisa.component';
-import { PessoasGridComponent } from './pessoas-grid/pessoas-grid.component';
-import { PessoasCadastroComponent } from './pessoas-cadastro/pessoas-cadastro.component';
+import { PessoasPesquisaComponent } from './pessoa/pessoas-pesquisa/pessoas-pesquisa.component';
+import { PessoasGridComponent } from './pessoa/pessoas-grid/pessoas-grid.component';
+import { PessoasCadastroComponent } from './pessoa/pessoas-cadastro/pessoas-cadastro.component';
+import { PessoaModule } from './pessoa/pessoa.module';
 
 registerLocaleData(localePt);
 
@@ -41,10 +42,7 @@ registerLocaleData(localePt);
 @NgModule({
   declarations: [
     AppComponent, 
-    NavbarComponent, 
-    PessoasPesquisaComponent, 
-    PessoasGridComponent, 
-    PessoasCadastroComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,6 +50,7 @@ registerLocaleData(localePt);
     BrowserAnimationsModule, 
     FormsModule, 
     LancamentoModule, 
+    PessoaModule,
 
     MatTabsModule, 
         MatFormFieldModule,
@@ -59,14 +58,9 @@ registerLocaleData(localePt);
         MatButtonModule, 
         MatTableModule,
         MatIconModule, 
-        MatTooltipModule, 
         MatPaginatorModule, 
         MatToolbarModule, 
         MatListModule, 
-        MatSelectModule, 
-        MatDatepickerModule, 
-        MatNativeDateModule,
-        MatButtonToggleModule, 
         NgxMaskDirective, 
         NgxMaskPipe,
         MensagemComponent

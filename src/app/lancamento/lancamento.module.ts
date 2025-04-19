@@ -15,11 +15,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 
-// Módulos de terceiros
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 
-// Componentes - AJUSTE OS PATHS CONFORME SUA ESTRUTURA REAL
 import { LancamentosPesquisaComponent } from './lancamentos-pesquisa/lancamentos-pesquisa.component';
 import { LancamentoCadastroComponent } from './lancamento-cadastro/lancamento-cadastro.component';
 import { LancamentosGridComponent } from './lancamentos-grid/lancamentos-grid.component';

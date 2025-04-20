@@ -12,13 +12,13 @@
 
       <ng-container matColumnDef="dataVencimento">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-data"> Vencimento </th>
-        <td mat-cell *matCellDef="let lanc" translate="no"> {{ lanc.dataVencimento }} </td>
+        <td mat-cell *matCellDef="let lanc" translate="no"> {{ lanc.dataVencimento | date: 'dd/MM/yyyy' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="dataPagamento">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-data"> Pagamento </th>
         <td mat-cell *matCellDef="let lanc" translate="no"> 
-          {{ lanc.dataPagamento ? lanc.dataPagamento : '-' }} 
+          {{ lanc.dataPagamento ? (lanc.dataPagamento | date:'dd/MM/yyyy') : '-' }}
         </td>
       </ng-container>
 

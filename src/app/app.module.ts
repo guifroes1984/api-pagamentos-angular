@@ -28,6 +28,8 @@ import { LancamentoModule } from './lancamento/lancamento.module';
 import { NavbarComponent } from './core/navbar/navbar.component';
 import { PessoaModule } from './pessoa/pessoa.module';
 import { CoreModule } from './core/core.module';
+import { HttpClientModule } from '@angular/common/http';
+import { LancamentoService } from './lancamento/lancamento.service';
 
 registerLocaleData(localePt);
 
@@ -37,7 +39,8 @@ registerLocaleData(localePt);
     AppComponent, 
   ],
   imports: [
-    BrowserModule,
+    BrowserModule, 
+    HttpClientModule , 
     AppRoutingModule,
     BrowserAnimationsModule, 
     FormsModule, 
@@ -58,7 +61,8 @@ registerLocaleData(localePt);
     NgxMaskPipe,
 
   ],
-  providers: [
+  providers: [ 
+    LancamentoService, 
     provideNgxMask(),
   { provide: LOCALE_ID, useValue: 'pt' },
   { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },

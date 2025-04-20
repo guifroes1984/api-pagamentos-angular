@@ -25,8 +25,9 @@ import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 
 import { LancamentoModule } from './lancamento/lancamento.module';
-import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarComponent } from './core/navbar/navbar.component';
 import { PessoaModule } from './pessoa/pessoa.module';
+import { CoreModule } from './core/core.module';
 
 registerLocaleData(localePt);
 
@@ -34,7 +35,6 @@ registerLocaleData(localePt);
 @NgModule({
   declarations: [
     AppComponent, 
-    NavbarComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,19 +42,20 @@ registerLocaleData(localePt);
     BrowserAnimationsModule, 
     FormsModule, 
     LancamentoModule, 
-    PessoaModule,
+    PessoaModule, 
+    CoreModule,
 
     MatTabsModule, 
-        MatFormFieldModule,
-        MatInputModule, 
-        MatButtonModule, 
-        MatTableModule,
-        MatIconModule, 
-        MatPaginatorModule, 
-        MatToolbarModule, 
-        MatListModule, 
-        NgxMaskDirective, 
-        NgxMaskPipe,
+    MatFormFieldModule,
+    MatInputModule, 
+    MatButtonModule, 
+    MatTableModule,
+    MatIconModule, 
+    MatPaginatorModule, 
+    MatToolbarModule, 
+    MatListModule, 
+    NgxMaskDirective, 
+    NgxMaskPipe,
 
   ],
   providers: [

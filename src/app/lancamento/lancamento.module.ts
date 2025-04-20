@@ -26,6 +26,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FilterPessoasPipe } from '../pipe/filter-pessoas.pipe';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,7 @@ import { FilterPessoasPipe } from '../pipe/filter-pessoas.pipe';
     NgxMaskDirective, 
     NgxMaskPipe, 
     CurrencyMaskModule, 
-    MensagemComponent
+    SharedModule
   ],
   exports: [
     LancamentosPesquisaComponent,

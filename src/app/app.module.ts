@@ -26,7 +26,6 @@ import localePt from '@angular/common/locales/pt';
 
 import { LancamentoModule } from './lancamento/lancamento.module';
 import { NavbarComponent } from './navbar/navbar.component';
-import { MensagemComponent } from './shared/mensagem/mensagem.component';
 import { PessoaModule } from './pessoa/pessoa.module';
 
 registerLocaleData(localePt);
@@ -56,7 +55,6 @@ registerLocaleData(localePt);
         MatListModule, 
         NgxMaskDirective, 
         NgxMaskPipe,
-        MensagemComponent
 
   ],
   providers: [

@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { PessoasPesquisaComponent } from './pessoas-pesquisa/pessoas-pesquisa.component';
 import { PessoasGridComponent } from './pessoas-grid/pessoas-grid.component';
-import { MensagemComponent } from '../shared/mensagem/mensagem.component';
+
+import { SharedModule } from '../shared/shared.module';
 
 import { PessoasCadastroComponent } from './pessoas-cadastro/pessoas-cadastro.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -55,7 +56,7 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
     NgxMaskDirective, 
     NgxMaskPipe, 
     CurrencyMaskModule, 
-    MensagemComponent
+    SharedModule
   ], 
   exports: [
     PessoasPesquisaComponent,

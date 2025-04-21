@@ -5,6 +5,7 @@
       </div>
     </div>
   
+  <form (ngSubmit)="pesquisar()" #form="ngForm">
     <div class="mat-grid" style="display: flex; justify-content: space-between; align-items: center;">
       <div class="mat-grid-item" style="flex-grow: 1; margin-right: 10px;">
         <mat-form-field appearance="outline" class="full-width">
@@ -17,18 +18,23 @@
         <div class="input-group">
           <mat-form-field appearance="outline">
             <mat-label translate="no">Vencimento</mat-label>
-            <input matInput type="text">
+            <input matInput [matDatepicker]="picker" [(ngModel)]="dataVencimentoInicio" name="dataVencimentoInicio" type="text">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
       
           <mat-form-field appearance="outline">
             <mat-label translate="no">até</mat-label>
-            <input matInput type="text">
+            <input matInput [matDatepicker]="pickerAt" [(ngModel)]="dataVencimentoFim" name="vencimentoFim">
+            <mat-datepicker-toggle matSuffix [for]="pickerAt"></mat-datepicker-toggle>
+            <mat-datepicker #pickerAt></mat-datepicker>
           </mat-form-field>
         </div>
       </div>    
   
       <div class="mat-grid-item" style="flex-shrink: 0;">
-        <button mat-raised-button color="primary" type="submit">Pesquisar</button>
+        <button mat-raised-button color="primary" type="submit" style="margin-right: 10px;">Pesquisar</button>
+        <button mat-raised-button color="warn" type="button" (click)="limpar()">Limpar</button>
       </div>
     </div>
   
@@ -84,18 +90,26 @@
           <tr mat-row *matRowDef="let row; columns: colunasExibidas;" class="mat-row"></tr>
         </table>
     </div>
+
+    <div *ngIf="fonteDados.data.length === 0" style="margin-top: 10px; text-align: center;">
+      <mat-card>
+        <mat-card-content>
+          <p>Nenhum lançamento encontrado.</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
     <mat-paginator
         [pageSize]="5" 
         [pageSizeOptions]="[5, 10, 15]" 
         showFirstLastButtons>
     </mat-paginator>
-
-      <!-- <app-lancamentos-grid [lancamentos]="lancamentos"></app-lancamentos-grid> -->
   
       <div class="mat-grid-item" style="margin-top: 20px;">
         <button mat-raised-button color="primary" type="button">Novo Lançamento</button>
-      </div>        
+      </div>
   
     </div>
+  </form>
   </div>
   

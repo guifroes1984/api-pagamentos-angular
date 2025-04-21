@@ -14,6 +14,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
 
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
@@ -51,6 +52,7 @@ import { SharedModule } from '../shared/shared.module';
     MatDatepickerModule, 
     MatNativeDateModule,
     MatButtonToggleModule, 
+    MatCardModule, 
     NgxMaskDirective, 
     NgxMaskPipe, 
     CurrencyMaskModule, 

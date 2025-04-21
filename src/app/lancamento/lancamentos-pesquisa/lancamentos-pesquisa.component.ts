@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { LancamentoService } from '../lancamento.service';
+import { LancamentoFiltro, LancamentoService } from '../lancamento.service';
 
 @Component({
   selector: 'app-lancamentos-pesquisa',
@@ -15,6 +15,8 @@ export class LancamentosPesquisaComponent implements OnInit, AfterViewInit {
   colunasExibidas: string[] = ['pessoa', 'descricao', 'dataVencimento', 'dataPagamento', 'valor', 'acoes'];
 
   descricao: string = '';
+  dataVencimentoInicio: Date | null = null; // Inicializado como null
+  dataVencimentoFim: Date | null = null;    // Inicializado como null
   lancamentos = [];
 
   fonteDados = new MatTableDataSource(this.lancamentos);
@@ -30,10 +32,25 @@ export class LancamentosPesquisaComponent implements OnInit, AfterViewInit {
   }
 
   pesquisar(): void {
-    this.lancamentoService.pesquisar({ descricao: this.descricao })
+
+    let filtro: LancamentoFiltro = {
+      descricao: this.descricao, 
+      dataVencimentoInicio: this.dataVencimentoInicio, 
+      dataVencimentoFim: this.dataVencimentoFim
+    }
+
+    this.lancamentoService.pesquisar(filtro)
       .then(lancamentos => {
         this.lancamentos = lancamentos;
-        this.fonteDados.data = this.lancamentos; // ✅ atualiza a tabela com os novos dados
+        this.fonteDados.data = this.lancamentos;
       });
   }
+
+  limpar(): void {
+    this.descricao = '';
+    this.dataVencimentoInicio = null;
+    this.dataVencimentoFim = null;
+    this.pesquisar();
+  }
+
 }

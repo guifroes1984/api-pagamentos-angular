@@ -2,9 +2,12 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { firstValueFrom } from 'rxjs';
+import * as moment from 'moment';
 
 export interface LancamentoFiltro {
   descricao: string;
+  dataVencimentoInicio: Date | null;
+  dataVencimentoFim: Date | null;
 }
 
 @Injectable({
@@ -24,10 +27,17 @@ export class LancamentoService {
     if (filtro.descricao) {
       params = params.set('descricao', filtro.descricao);
     }
-  
-    console.log('Params:', params.toString());  // Mostra os parâmetros enviados
-    console.log('URL:', `${this.lancamentosUrl}?resumo&${params.toString()}`);  // Mostra a URL completa
-  
+
+    if (filtro.dataVencimentoInicio) {
+      params = params.set('dataVencimentoDe', 
+        moment(filtro.dataVencimentoInicio).format('YYYY-MM-DD'));
+    }
+
+    if (filtro.dataVencimentoFim) {
+      params = params.set('dataVencimentoAte', 
+        moment(filtro.dataVencimentoFim).format('YYYY-MM-DD'))
+    }
+
     return firstValueFrom(this.http.get<{ content: any[] }>(
       `${this.lancamentosUrl}?resumo`,
       { headers, params }

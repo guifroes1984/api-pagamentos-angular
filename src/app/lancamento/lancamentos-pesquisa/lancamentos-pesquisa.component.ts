@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { LancamentoService } from '../lancamento.service';
@@ -8,29 +8,32 @@ import { LancamentoService } from '../lancamento.service';
   templateUrl: './lancamentos-pesquisa.component.html',
   styleUrls: ['./lancamentos-pesquisa.component.css']
 })
-export class LancamentosPesquisaComponent implements OnInit {
+export class LancamentosPesquisaComponent implements OnInit, AfterViewInit {
 
   constructor(private lancamentoService: LancamentoService) {}
-  
+
   colunasExibidas: string[] = ['pessoa', 'descricao', 'dataVencimento', 'dataPagamento', 'valor', 'acoes'];
-  
+
+  descricao: string = '';
   lancamentos = [];
-  
+
   fonteDados = new MatTableDataSource(this.lancamentos);
-  
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  
+
   ngOnInit(): void {
     this.pesquisar();
   }
 
-  ngAfterViewInit() {
-      this.fonteDados.paginator = this.paginator;
-    }
+  ngAfterViewInit(): void {
+    this.fonteDados.paginator = this.paginator;
+  }
 
-    pesquisar() {
-      this.lancamentoService.pesquisar()
-        .then(lancamentos => this.lancamentos = lancamentos);
-    }
-
+  pesquisar(): void {
+    this.lancamentoService.pesquisar({ descricao: this.descricao })
+      .then(lancamentos => {
+        this.lancamentos = lancamentos;
+        this.fonteDados.data = this.lancamentos; // ✅ atualiza a tabela com os novos dados
+      });
+  }
 }

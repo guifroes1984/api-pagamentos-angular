@@ -20,8 +20,6 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
 
 import { LancamentosPesquisaComponent } from './lancamentos-pesquisa/lancamentos-pesquisa.component';
 import { LancamentoCadastroComponent } from './lancamento-cadastro/lancamento-cadastro.component';
-import { LancamentosGridComponent } from './lancamentos-grid/lancamentos-grid.component';
-import { MensagemComponent } from '../shared/mensagem/mensagem.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -32,7 +30,6 @@ import { SharedModule } from '../shared/shared.module';
   declarations: [
     LancamentosPesquisaComponent,
     LancamentoCadastroComponent,
-    LancamentosGridComponent, 
     FilterPessoasPipe,
   ],
   imports: [

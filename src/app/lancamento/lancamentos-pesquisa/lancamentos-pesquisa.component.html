@@ -1,68 +1,68 @@
 <div class="container">
-    <div class="mat-grid">
-      <div class="mat-grid-item">
-        <h1>Lançamentos</h1>
-      </div>
+  <div class="mat-grid">
+    <div class="mat-grid-item">
+      <h1>Lançamentos</h1>
     </div>
-  
+  </div>
+
   <form (ngSubmit)="pesquisar()" #form="ngForm">
     <div class="mat-grid" style="display: flex; justify-content: space-between; align-items: center;">
       <div class="mat-grid-item" style="flex-grow: 1; margin-right: 10px;">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Descrição</mat-label>
-          <input matInput type="text" name="descricao" [(ngModel)]="descricao" (keydown.enter)="pesquisar()">
+          <input matInput type="text" name="descricao" [(ngModel)]="filtro.descricao" (keydown.enter)="pesquisar()">
         </mat-form-field>
       </div>
-  
+
       <div class="mat-grid-item" style="flex-grow: 1;">
         <div class="input-group">
           <mat-form-field appearance="outline">
             <mat-label translate="no">Vencimento</mat-label>
-            <input matInput [matDatepicker]="picker" [(ngModel)]="dataVencimentoInicio" name="dataVencimentoInicio" type="text">
+            <input matInput [matDatepicker]="picker" [(ngModel)]="filtro.dataVencimentoInicio" name="dataVencimentoInicio" type="text">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
       
           <mat-form-field appearance="outline">
             <mat-label translate="no">até</mat-label>
-            <input matInput [matDatepicker]="pickerAt" [(ngModel)]="dataVencimentoFim" name="vencimentoFim">
+            <input matInput [matDatepicker]="pickerAt" [(ngModel)]="filtro.dataVencimentoFim" name="vencimentoFim">
             <mat-datepicker-toggle matSuffix [for]="pickerAt"></mat-datepicker-toggle>
             <mat-datepicker #pickerAt></mat-datepicker>
           </mat-form-field>
         </div>
       </div>    
-  
+
       <div class="mat-grid-item" style="flex-shrink: 0;">
         <button mat-raised-button color="primary" type="submit" style="margin-right: 10px;">Pesquisar</button>
         <button mat-raised-button color="warn" type="button" (click)="limpar()">Limpar</button>
       </div>
     </div>
-  
+
     <div class="mat-grid" style="margin-top: 20px;">
       <div class="mat-grid-item">
         <table mat-table [dataSource]="fonteDados" class="mat-elevation-z8" matSort>
           <ng-container matColumnDef="pessoa">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Pessoa </th>
-            <td mat-cell *matCellDef="let lanc" translate="no"> {{ lanc.pessoa }} </td>
+            <td mat-cell *matCellDef="let lanc" translate="no"> {{ lanc.pessoa.nome }} </td>
           </ng-container>
-    
+
           <ng-container matColumnDef="descricao">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </th>
             <td mat-cell *matCellDef="let lanc" translate="no"> {{ lanc.descricao }} </td>
           </ng-container>
-    
+
           <ng-container matColumnDef="dataVencimento">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-data"> Vencimento </th>
             <td mat-cell *matCellDef="let lanc" translate="no"> {{ lanc.dataVencimento | date: 'dd/MM/yyyy' }} </td>
           </ng-container>
-    
+
           <ng-container matColumnDef="dataPagamento">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-data"> Pagamento </th>
-            <td mat-cell *matCellDef="let lanc" translate="no"> 
+            <td mat-cell *matCellDef="let lanc" translate="no">
               {{ lanc.dataPagamento ? (lanc.dataPagamento | date:'dd/MM/yyyy') : '-' }}
             </td>
           </ng-container>
-    
+
           <ng-container matColumnDef="valor">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-valor" translate="no"> Valor </th>
             <td mat-cell *matCellDef="let lanc" class="col-valor" translate="no">
@@ -70,8 +70,8 @@
                 {{ lanc.valor }}
               </span>
             </td>
-          </ng-container>          
-          
+          </ng-container>
+
           <ng-container matColumnDef="acoes">
             <th mat-header-cell *matHeaderCellDef class="col-acoes"> Ações </th>
             <td mat-cell *matCellDef="let lanc" translate="no">
@@ -85,31 +85,33 @@
               </div>
             </td>
           </ng-container>        
-    
+
           <tr mat-header-row *matHeaderRowDef="colunasExibidas" class="mat-header"></tr>
           <tr mat-row *matRowDef="let row; columns: colunasExibidas;" class="mat-row"></tr>
         </table>
-    </div>
+      </div>
 
-    <div *ngIf="fonteDados.data.length === 0" style="margin-top: 10px; text-align: center;">
-      <mat-card>
-        <mat-card-content>
-          <p>Nenhum lançamento encontrado.</p>
-        </mat-card-content>
-      </mat-card>
-    </div>
+      <div class="mensagem-sem-resultados" *ngIf="fonteDados.data.length === 0">
+        <mat-card>
+          <mat-card-content>
+            <p>Nenhum resultado encontrado.</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
 
-    <mat-paginator
-        [pageSize]="5" 
-        [pageSizeOptions]="[5, 10, 15]" 
-        showFirstLastButtons>
-    </mat-paginator>
-  
+      <mat-paginator
+        [length]="totalRegistros"
+        [pageSize]="itensPorPagina"
+        [pageSizeOptions]="[5, 10, 15]"
+        [pageIndex]="paginaAtual"
+        [disabled]="!habilitarPaginacao()"
+        (page)="onPaginar($event)"
+        showFirstLastButtons="true">
+      </mat-paginator>
+
       <div class="mat-grid-item" style="margin-top: 20px;">
         <button mat-raised-button color="primary" type="button">Novo Lançamento</button>
       </div>
-  
     </div>
   </form>
-  </div>
-  
+</div>

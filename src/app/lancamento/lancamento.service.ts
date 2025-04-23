@@ -1,13 +1,14 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import { firstValueFrom } from 'rxjs';
 import * as moment from 'moment';
 
-export interface LancamentoFiltro {
-  descricao: string;
-  dataVencimentoInicio: Date | null;
-  dataVencimentoFim: Date | null;
+export class LancamentoFiltro {
+  descricao?: string;
+  dataVencimentoInicio?: Date;
+  dataVencimentoFim?: Date;
+  pagina: number = 0;
+  itensPorPagina: number = 5;
 }
 
 @Injectable({
@@ -23,7 +24,10 @@ export class LancamentoService {
     let params = new HttpParams();
     const headers = new HttpHeaders()
       .set('Authorization', 'Basic YWRtaW5AYWRtaW4uY29tOmFkbWlu');
-  
+    
+    params = params.set('page', filtro.pagina.toString());
+    params = params.set('size', filtro.itensPorPagina.toString());
+
     if (filtro.descricao) {
       params = params.set('descricao', filtro.descricao);
     }
@@ -35,14 +39,15 @@ export class LancamentoService {
 
     if (filtro.dataVencimentoFim) {
       params = params.set('dataVencimentoAte', 
-        moment(filtro.dataVencimentoFim).format('YYYY-MM-DD'))
+        moment(filtro.dataVencimentoFim).format('YYYY-MM-DD'));
     }
 
-    return firstValueFrom(this.http.get<{ content: any[] }>(
-      `${this.lancamentosUrl}?resumo`,
-      { headers, params }
-    )).then(response => response.content);
+    return firstValueFrom(this.http.get<{content: any[], totalElements: number, totalPages: number, size: number, 
+      number: number, numberOfElements: number, first: boolean, last: boolean}>(`${this.lancamentosUrl}`, { headers, params }
+      )).then(response => {
+      return { lancamentos: response.content, totalElements: response.totalElements, totalPages: response.totalPages, size: response.size,
+        number: response.number, numberOfElements: response.numberOfElements, first: response.first, last: response.last
+      };
+    });
   }
-  
-
 }

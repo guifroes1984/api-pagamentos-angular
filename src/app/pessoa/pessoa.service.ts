@@ -1,9 +1,13 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { firstValueFrom } from 'rxjs';
+import * as moment from 'moment';
 
 export class NomeFiltro {
   nome?: string;
+  pagina: number = 0;
+  itensPorPagina: number = 5;
 }
 
 @Injectable({
@@ -16,10 +20,13 @@ export class PessoaService {
   constructor(private http: HttpClient) { }
 
   pesquisar(filtro: NomeFiltro): Promise<any> {
+    let params = new HttpParams();
     const headers = new HttpHeaders()
       .set('Authorization', 'Basic YWRtaW5AYWRtaW4uY29tOmFkbWlu');
-  
-    let params = new HttpParams();
+
+    params = params.set('page', filtro.pagina.toString());
+    params = params.set('size', filtro.itensPorPagina.toString());
+
     if (filtro.nome) {
       params = params.set('nome', filtro.nome);
     }

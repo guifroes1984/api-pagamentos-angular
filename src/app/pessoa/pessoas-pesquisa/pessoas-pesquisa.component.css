@@ -126,4 +126,11 @@
 .botao-acao mat-icon {
   font-size: 18px;
   line-height: 18px;
-}     
+}   
+
+.mensagem-sem-resultados {
+  text-align: center;
+  font-size: 16px;
+  color: #999;
+  margin-top: 20px;
+}

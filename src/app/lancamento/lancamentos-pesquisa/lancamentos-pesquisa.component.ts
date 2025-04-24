@@ -58,4 +58,11 @@ export class LancamentosPesquisaComponent implements OnInit {
     this.pesquisar();
   }
 
+  excluir(codigo: number) {
+    this.lancamentoService.excluir(codigo)
+      .then(() => {
+        this.pesquisar();
+      })
+  }
+
 }

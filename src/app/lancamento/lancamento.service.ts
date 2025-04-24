@@ -50,4 +50,14 @@ export class LancamentoService {
       };
     });
   }
+
+  excluir(codigo: number): Promise<void> {
+    const headers = new HttpHeaders()
+      .set('Authorization', 'Basic YWRtaW5AYWRtaW4uY29tOmFkbWlu');
+  
+    return firstValueFrom(
+      this.http.delete<void>(`${this.lancamentosUrl}/${codigo}`, { headers })
+    );
+  }
+ 
 }

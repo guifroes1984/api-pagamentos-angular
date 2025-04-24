@@ -79,7 +79,8 @@
                 <button mat-icon-button color="primary" aria-label="Editar" class="botao-acao" matTooltip="Editar">
                   <mat-icon>edit</mat-icon>
                 </button>
-                <button mat-icon-button color="warn" aria-label="Excluir" class="botao-acao" matTooltip="Excluir">
+                <button mat-icon-button color="warn" aria-label="Excluir" class="botao-acao" 
+                  matTooltip="Excluir" (click)="excluir(lanc.codigo)">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>

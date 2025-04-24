@@ -15,6 +15,8 @@ export class PessoasPesquisaComponent implements OnInit {
   colunasExibidas: string[] = ['pessoa', 'cidade', 'estado', 'status', 'acoes'];
   
   pessoas = [];
+
+  filtro: any = {};
   
   fonteDados = new MatTableDataSource(this.pessoas);
   
@@ -29,11 +31,17 @@ export class PessoasPesquisaComponent implements OnInit {
   }
 
   pesquisar() {
-    this.pessoaService.pesquisar()
+    this.pessoaService.pesquisar(this.filtro)
       .then(response => {
         this.pessoas = response.content;
         this.fonteDados.data = response.content;
       });
+  }
+
+  limpar() {
+    this.filtro.nome = '';
+    this.paginator.firstPage();
+    this.pesquisar();
   }
   
 

@@ -9,12 +9,13 @@
         <div class="mat-grid-item" style="flex-grow: 1; margin-right: 10px;">
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Nome</mat-label>
-                <input matInput type="text">
+                <input matInput type="text" name="nome" [(ngModel)]="filtro.nome" (keydown.enter)="pesquisar()">
             </mat-form-field>
         </div>
 
         <div class="mat-grid-item" style="flex-shrink: 0;">
-            <button mat-raised-button color="primary" type="submit">Pesquisar</button>
+            <button mat-raised-button color="primary" style="margin-right: 10px;" (click)="pesquisar()">Pesquisar</button>
+            <button mat-raised-button color="warn" type="button" (click)="limpar()">Limpar</button>
         </div>
     </div>
   

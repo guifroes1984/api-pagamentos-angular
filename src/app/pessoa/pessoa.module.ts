@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { PessoasPesquisaComponent } from './pessoas-pesquisa/pessoas-pesquisa.component';
-import { PessoasGridComponent } from './pessoas-grid/pessoas-grid.component';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -25,13 +24,13 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
+import { MatCardModule } from '@angular/material/card';
 
 
 
 @NgModule({
   declarations: [
     PessoasPesquisaComponent, 
-    PessoasGridComponent, 
     PessoasCadastroComponent,
   ],
   imports: [
@@ -53,6 +52,7 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
     MatDatepickerModule, 
     MatNativeDateModule,
     MatButtonToggleModule, 
+    MatCardModule, 
     NgxMaskDirective, 
     NgxMaskPipe, 
     CurrencyMaskModule, 

@@ -99,7 +99,7 @@
   margin-right: 0;
 }
 
-/* .acoes-container {
+.acoes-container {
   display: flex;
   gap: 12px;
   justify-content: center;
@@ -126,4 +126,4 @@
 .botao-acao mat-icon {
   font-size: 18px;
   line-height: 18px;
-}      */
+}     

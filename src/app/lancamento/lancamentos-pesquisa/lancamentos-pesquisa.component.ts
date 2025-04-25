@@ -3,6 +3,8 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { LancamentoFiltro, LancamentoService } from '../lancamento.service';
 import { MatTableDataSource } from '@angular/material/table';
 
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-lancamentos-pesquisa',
   templateUrl: './lancamentos-pesquisa.component.html',
@@ -21,7 +23,10 @@ export class LancamentosPesquisaComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private lancamentoService: LancamentoService) {}
+  constructor(
+    private lancamentoService: LancamentoService, 
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.pesquisar();
@@ -61,8 +66,9 @@ export class LancamentosPesquisaComponent implements OnInit {
   excluir(codigo: number) {
     this.lancamentoService.excluir(codigo)
       .then(() => {
+        this.toastr.success('Lançamento excluído com sucesso!');
         this.pesquisar();
-      })
+      });
   }
 
 }

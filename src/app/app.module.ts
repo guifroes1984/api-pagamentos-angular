@@ -13,23 +13,22 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
-
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { getPaginatorIntl } from './shared/mat-paginator-intl';
 
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
-
 import { LancamentoModule } from './lancamento/lancamento.module';
-import { NavbarComponent } from './core/navbar/navbar.component';
 import { PessoaModule } from './pessoa/pessoa.module';
 import { CoreModule } from './core/core.module';
 import { HttpClientModule } from '@angular/common/http';
 import { LancamentoService } from './lancamento/lancamento.service';
+
+import { ToastrModule } from 'ngx-toastr';
 
 registerLocaleData(localePt);
 
@@ -47,6 +46,13 @@ registerLocaleData(localePt);
     LancamentoModule, 
     PessoaModule, 
     CoreModule,
+
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-top-right',
+      closeButton: true,
+      progressBar: true, 
+    }),
 
     MatTabsModule, 
     MatFormFieldModule,

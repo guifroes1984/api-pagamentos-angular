@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { LancamentoFiltro, LancamentoService } from '../lancamento.service';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-lancamentos-pesquisa',
@@ -25,7 +27,8 @@ export class LancamentosPesquisaComponent implements OnInit {
 
   constructor(
     private lancamentoService: LancamentoService, 
-    private toastr: ToastrService
+    private toastr: ToastrService, 
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -63,12 +66,27 @@ export class LancamentosPesquisaComponent implements OnInit {
     this.pesquisar();
   }
 
-  excluir(codigo: number) {
-    this.lancamentoService.excluir(codigo)
-      .then(() => {
-        this.toastr.success('Lançamento excluído com sucesso!');
-        this.pesquisar();
-      });
+  excluir(codigo: number): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      disableClose: true,
+      hasBackdrop: true, 
+      data: {
+        titulo: 'Confirmação de Exclusão',
+        mensagem: 'Tem certeza que deseja excluir este item?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.lancamentoService.excluir(codigo)
+          .then(() => {
+            this.toastr.success('Lançamento excluído com sucesso!');
+            this.pesquisar();
+          });
+      }
+    });
+    
   }
 
 }

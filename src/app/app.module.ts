@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dialog';
 import { getPaginatorIntl } from './shared/mat-paginator-intl';
 
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
@@ -29,6 +30,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LancamentoService } from './lancamento/lancamento.service';
 
 import { ToastrModule } from 'ngx-toastr';
+import { SharedModule } from './shared/shared.module';
 
 registerLocaleData(localePt);
 
@@ -45,6 +47,7 @@ registerLocaleData(localePt);
     FormsModule, 
     LancamentoModule, 
     PessoaModule, 
+    SharedModule, 
     CoreModule,
 
     ToastrModule.forRoot({
@@ -63,6 +66,7 @@ registerLocaleData(localePt);
     MatPaginatorModule, 
     MatToolbarModule, 
     MatListModule, 
+    MatDialogModule, 
     NgxMaskDirective, 
     NgxMaskPipe,
 
@@ -72,7 +76,8 @@ registerLocaleData(localePt);
     provideNgxMask(),
   { provide: LOCALE_ID, useValue: 'pt' },
   { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
-  { provide: MatPaginatorIntl, useValue: getPaginatorIntl() }
+  { provide: MatPaginatorIntl, useValue: getPaginatorIntl() }, 
+  { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
 ],
   
   bootstrap: [AppComponent]

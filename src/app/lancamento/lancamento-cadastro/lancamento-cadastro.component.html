@@ -125,8 +125,14 @@
     </div>
 
     <div class="linha" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
-      <button mat-raised-button color="primary" [disabled]="!cadastroLancamentoForm.valid">Salvar</button>
-      <button mat-raised-button color="accent">Novo</button>
+      <button mat-raised-button color="primary" [disabled]="!cadastroLancamentoForm.valid">
+        <mat-icon>save</mat-icon>
+        Salvar
+      </button>
+      <button mat-raised-button color="accent">
+        <mat-icon>add_circle</mat-icon>
+        Novo
+      </button>
       <a href="#">Voltar para a pesquisa</a>
     </div>
   </form>

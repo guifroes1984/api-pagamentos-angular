@@ -33,8 +33,14 @@
       </div>    
 
       <div class="mat-grid-item" style="flex-shrink: 0;">
-        <button mat-raised-button color="primary" type="submit" style="margin-right: 10px;">Pesquisar</button>
-        <button mat-raised-button color="warn" type="button" (click)="limpar()">Limpar</button>
+        <button mat-raised-button color="primary" type="submit" style="margin-right: 10px;">
+          <mat-icon>search</mat-icon>
+          Pesquisar
+        </button>
+        <button mat-raised-button color="warn" type="button" (click)="limpar()">
+          <mat-icon>clear_all</mat-icon>
+          Limpar
+        </button>
       </div>
     </div>
 
@@ -111,7 +117,10 @@
       </mat-paginator>
 
       <div class="mat-grid-item" style="margin-top: 20px;">
-        <button mat-raised-button color="primary" type="button">Novo Lançamento</button>
+        <button mat-raised-button color="primary" type="button">
+          <mat-icon>person_add</mat-icon>
+          Novo Lançamento
+        </button>
       </div>
     </div>
   </form>

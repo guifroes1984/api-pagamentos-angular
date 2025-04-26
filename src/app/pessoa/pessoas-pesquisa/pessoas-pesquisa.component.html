@@ -14,8 +14,14 @@
     </div>
 
     <div class="mat-grid-item" style="flex-shrink: 0;">
-      <button mat-raised-button color="primary" style="margin-right: 10px;" (click)="pesquisar()">Pesquisar</button>
-      <button mat-raised-button color="warn" type="button" (click)="limpar()">Limpar</button>
+      <button mat-raised-button color="primary" style="margin-right: 10px;" (click)="pesquisar()">
+        <mat-icon>search</mat-icon>
+        Pesquisar
+      </button>
+      <button mat-raised-button color="warn" type="button" (click)="limpar()">
+        <mat-icon>clear_all</mat-icon>
+        Limpar
+      </button>
     </div>
   </div>
 
@@ -83,7 +89,10 @@
     </mat-paginator>
   
       <div class="mat-grid-item" style="margin-top: 20px;">
-        <button mat-raised-button color="primary" type="button">Nova Pessoa</button>
+        <button mat-raised-button color="primary" type="button">
+          <mat-icon>person_add</mat-icon>
+          Nova Pessoa
+        </button>
       </div>
     </div>
   </div>

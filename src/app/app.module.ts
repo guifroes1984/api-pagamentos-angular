@@ -74,7 +74,7 @@ registerLocaleData(localePt);
   providers: [ 
     LancamentoService, 
     provideNgxMask(),
-  { provide: LOCALE_ID, useValue: 'pt' },
+  { provide: LOCALE_ID, useValue: 'pt-BR' },
   { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
   { provide: MatPaginatorIntl, useValue: getPaginatorIntl() }, 
   { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}

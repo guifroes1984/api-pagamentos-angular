@@ -73,7 +73,7 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-valor" translate="no"> Valor </th>
             <td mat-cell *matCellDef="let lanc" class="col-valor" translate="no">
               <span [style.color]="lanc.tipo === 'DESPESA' ? 'red' : 'blue'">
-                {{ lanc.valor }}
+                {{ lanc.valor | currency:'BRL':'symbol':'1.2-2' }}
               </span>
             </td>
           </ng-container>

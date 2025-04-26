@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 
 @Component({
   selector: 'app-lancamentos-pesquisa',
@@ -28,7 +29,8 @@ export class LancamentosPesquisaComponent implements OnInit {
   constructor(
     private lancamentoService: LancamentoService, 
     private toastr: ToastrService, 
-    private dialog: MatDialog
+    private dialog: MatDialog, 
+    private errorHandler: ErrorHandlerService
   ) {}
 
   ngOnInit(): void {
@@ -45,7 +47,8 @@ export class LancamentosPesquisaComponent implements OnInit {
       if (this.paginator) {
         this.paginator.pageIndex = this.paginaAtual;
       }
-    });
+    })
+    .catch(erro => this.errorHandler.handle(erro));
   }
 
   habilitarPaginacao() {
@@ -83,7 +86,8 @@ export class LancamentosPesquisaComponent implements OnInit {
           .then(() => {
             this.toastr.success('Lançamento excluído com sucesso!');
             this.pesquisar();
-          });
+          })
+          .catch(erro => this.errorHandler.handle(erro));
       }
     });
     

@@ -34,6 +34,15 @@ export class PessoaService {
     return firstValueFrom(
       this.http.get(this.pessoasUrl, { headers, params })
     );
-  }  
+  }
+
+  excluir(codigo: number): Promise<void> {
+    const headers = new HttpHeaders()
+      .set('Authorization', 'Basic YWRtaW5AYWRtaW4uY29tOmFkbWlu');
+  
+    return firstValueFrom(
+      this.http.delete<void>(`${this.pessoasUrl}/${codigo}`, { headers })
+    );
+  }
 
 }

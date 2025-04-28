@@ -59,4 +59,11 @@ export class PessoasPesquisaComponent implements OnInit {
     this.pesquisar();
   }
 
+  excluir(codigo: number): void {
+    this.pessoaService.excluir(codigo)
+      .then(() => {
+        this.pesquisar();
+      })
+  }
+
 }

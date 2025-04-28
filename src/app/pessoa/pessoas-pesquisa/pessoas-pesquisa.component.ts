@@ -3,6 +3,8 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NomeFiltro, PessoaService } from '../pessoa.service';
 
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-pessoas-pesquisa',
   templateUrl: './pessoas-pesquisa.component.html',
@@ -21,7 +23,10 @@ export class PessoasPesquisaComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private pessoaService: PessoaService) {}
+  constructor(
+    private pessoaService: PessoaService, 
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.pesquisar();
@@ -62,6 +67,7 @@ export class PessoasPesquisaComponent implements OnInit {
   excluir(codigo: number): void {
     this.pessoaService.excluir(codigo)
       .then(() => {
+        this.toastr.success('Pessoa excluída com sucesso!');
         this.pesquisar();
       })
   }

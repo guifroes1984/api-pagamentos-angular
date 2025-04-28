@@ -4,6 +4,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NomeFiltro, PessoaService } from '../pessoa.service';
 
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-pessoas-pesquisa',
@@ -25,7 +27,8 @@ export class PessoasPesquisaComponent implements OnInit {
 
   constructor(
     private pessoaService: PessoaService, 
-    private toastr: ToastrService
+    private toastr: ToastrService, 
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -65,11 +68,26 @@ export class PessoasPesquisaComponent implements OnInit {
   }
 
   excluir(codigo: number): void {
-    this.pessoaService.excluir(codigo)
-      .then(() => {
-        this.toastr.success('Pessoa excluída com sucesso!');
-        this.pesquisar();
-      })
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px', 
+      disableClose: true, 
+      hasBackdrop: true, 
+      data: {
+        titulo: 'Confirmação de exclusão', 
+        mensagem: 'Tem certeza que deseja excluir esse item?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.pessoaService.excluir(codigo)
+          .then(() => {
+            this.toastr.success('Pessoa excluída com sucesso!');
+            this.pesquisar();
+          });
+        
+      }
+    })
   }
 
 }

@@ -45,4 +45,14 @@ export class PessoaService {
     );
   }
 
+  mudarStatus(codigo: number, ativo: boolean): Promise<void> {
+    const headers = new HttpHeaders()
+      .set('Authorization', 'Basic YWRtaW5AYWRtaW4uY29tOmFkbWlu')
+      .set('Content-Type', 'application/json');
+  
+    return firstValueFrom(
+      this.http.put<void>(`${this.pessoasUrl}/${codigo}/ativo`, ativo, { headers })
+    );
+  }
+
 }

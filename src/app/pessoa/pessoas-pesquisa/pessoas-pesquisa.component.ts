@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ErrorHandler, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NomeFiltro, PessoaService } from '../pessoa.service';
@@ -6,6 +6,7 @@ import { NomeFiltro, PessoaService } from '../pessoa.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 
 @Component({
   selector: 'app-pessoas-pesquisa',
@@ -28,7 +29,8 @@ export class PessoasPesquisaComponent implements OnInit {
   constructor(
     private pessoaService: PessoaService, 
     private toastr: ToastrService, 
-    private dialog: MatDialog
+    private dialog: MatDialog, 
+    private errorHandler: ErrorHandlerService
   ) {}
 
   ngOnInit(): void {
@@ -84,8 +86,8 @@ export class PessoasPesquisaComponent implements OnInit {
           .then(() => {
             this.toastr.success('Pessoa excluída com sucesso!');
             this.pesquisar();
-          });
-        
+          })
+        .catch(erro => this.errorHandler.handle(erro));
       }
     })
   }

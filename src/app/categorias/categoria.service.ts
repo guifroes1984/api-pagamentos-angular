@@ -11,7 +11,7 @@ export class CategoriaService {
 
   constructor(private http: HttpClient) { }
 
-  listarTodas(): Promise<any> {
+  listarTodasCategorias(): Promise<any> {
     const headers = new HttpHeaders()
       .set('Authorization', 'Basic YWRtaW5AYWRtaW4uY29tOmFkbWlu');
     

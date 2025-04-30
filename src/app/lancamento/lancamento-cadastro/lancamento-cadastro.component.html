@@ -75,7 +75,7 @@
     <div class="filtros-container">
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
-          <mat-label>Categoria</mat-label>
+          <mat-label>Categorias</mat-label>
           <mat-select [(ngModel)]="categoriaSelecionada" name="categoriaSelecionada" #categoriaModel="ngModel" required>
             <mat-option *ngIf="!categoriaSelecionada" value="">Selecione</mat-option>
             <mat-option *ngFor="let categoria of categorias" [value]="categoria.value">
@@ -91,7 +91,7 @@
       
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio pessoa-field">
-          <mat-label>Pessoa</mat-label>
+          <mat-label>Pessoas</mat-label>
           <mat-select [(ngModel)]="pessoaSelecionada" name="pessoaSelecionada" #pessoaModel="ngModel" required>
             <mat-option [disabled]="true" class="pessoa-option-filtro">
               <div class="filtro-container" (click)="$event.stopPropagation()">

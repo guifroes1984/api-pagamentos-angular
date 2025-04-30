@@ -55,4 +55,12 @@ export class PessoaService {
     );
   }
 
+  listarTodasPessoas(): Promise<any[]> {
+    const headers = new HttpHeaders()
+      .set('Authorization', 'Basic YWRtaW5AYWRtaW4uY29tOmFkbWlu');
+
+    return firstValueFrom(
+      this.http.get<any[]>(this.pessoasUrl, { headers }));
+  }
+
 }

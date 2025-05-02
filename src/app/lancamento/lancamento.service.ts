@@ -1,7 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { firstValueFrom } from 'rxjs';
 import * as moment from 'moment';
+
+import { Lancamento } from '../core/model/lancamento';
 
 export class LancamentoFiltro {
   descricao?: string;
@@ -58,6 +61,16 @@ export class LancamentoService {
     return firstValueFrom(
       this.http.delete<void>(`${this.lancamentosUrl}/${codigo}`, { headers })
     );
+  }
+
+  adicionarLancamento(lancamento: Lancamento): Promise<Lancamento> {
+    const headers = new HttpHeaders()
+      .set('Authorization', 'Basic YWRtaW5AYWRtaW4uY29tOmFkbWlu')
+      .set('Content-Type', 'application/json');
+
+    return firstValueFrom(
+      this.http.post<Lancamento>(this.lancamentosUrl, JSON.stringify(lancamento), { headers })
+    )
   }
  
 }

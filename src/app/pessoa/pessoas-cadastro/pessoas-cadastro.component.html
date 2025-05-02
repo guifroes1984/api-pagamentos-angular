@@ -11,7 +11,7 @@
         <mat-form-field appearance="outline" class="campo-grande">
           <mat-label>Nome</mat-label>
           <input matInput type="text" name="nome"
-            [(ngModel)]="nomeModel" #nome="ngModel" required minlength="5" />
+            [(ngModel)]="pessoa.nome" #nome="ngModel" required minlength="5" />
         </mat-form-field>
 
         <app-mensagem [control]="nome" [error]="'required'" 
@@ -29,7 +29,7 @@
         <mat-form-field appearance="outline" class="campo-grande">
           <mat-label>Logradouro</mat-label>
           <input matInput type="text" name="logradouro"
-            [(ngModel)]="logradouroModel" #logradouro="ngModel" required />
+            [(ngModel)]="pessoa.endereco.logradouro" #logradouro="ngModel" required />
         </mat-form-field>
     
         <app-mensagem [control]="logradouro" [error]="'required'" 
@@ -41,7 +41,7 @@
         <mat-form-field appearance="outline" class="campo-pequeno">
           <mat-label>Número</mat-label>
           <input matInput type="text" name="numero"
-            [(ngModel)]="numeroModel" #numero="ngModel" required />
+            [(ngModel)]="pessoa.endereco.numero" #numero="ngModel" required />
         </mat-form-field>
     
         <app-mensagem [control]="numero" [error]="'required'" 
@@ -54,14 +54,14 @@
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Complemento</mat-label>
-          <input matInput name="complemento" [(ngModel)]="complementoModel" #complemento="ngModel" />
+          <input matInput name="complemento" [(ngModel)]="pessoa.endereco.numero" #complemento="ngModel" />
         </mat-form-field>
       </div>
 
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Bairro</mat-label>
-          <input matInput name="bairro" [(ngModel)]="bairroModel" #bairro="ngModel" required />
+          <input matInput name="bairro" [(ngModel)]="pessoa.endereco.bairro" #bairro="ngModel" required />
         </mat-form-field>
 
         <app-mensagem [control]="bairro" [error]="'required'" 
@@ -73,7 +73,7 @@
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>CEP</mat-label>
           <input matInput mask="00000-000" placeholder="00000-000" 
-          name="cep" [(ngModel)]="cepModel" #cep="ngModel" required />
+          name="cep" [(ngModel)]="pessoa.endereco.cep" #cep="ngModel" required />
         </mat-form-field>
 
         <app-mensagem [control]="cep" [error]="'required'" 
@@ -86,7 +86,7 @@
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Cidade</mat-label>
-          <input matInput name="cidade" [(ngModel)]="cidadeModel" #cidade="ngModel" required />
+          <input matInput name="cidade" [(ngModel)]="pessoa.endereco.cidade" #cidade="ngModel" required />
         </mat-form-field>
 
         <app-mensagem [control]="cidade" [error]="'required'" 
@@ -97,7 +97,7 @@
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-pequeno">
           <mat-label>Estado</mat-label>
-          <input matInput name="estado" [(ngModel)]="estadoModel" #estado="ngModel" required />
+          <input matInput name="estado" [(ngModel)]="pessoa.endereco.estado" #estado="ngModel" required />
         </mat-form-field>
 
         <app-mensagem [control]="estado" [error]="'required'" 

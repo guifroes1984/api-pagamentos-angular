@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Pessoa } from 'src/app/core/model/pessoa';
 
 @Component({
   selector: 'app-pessoas-cadastro',
@@ -7,17 +8,19 @@ import { Component } from '@angular/core';
 })
 export class PessoasCadastroComponent {
 
-  nomeModel: string = '';
-  logradouroModel: string = '';
-  numeroModel: string = '';
-  bairroModel: string = '';
-  cepModel: string = '';
-  cidadeModel: string = '';
-  estadoModel: string = '';
-  complementoModel: string = '';
+  // nomeModel: string = '';
+  // logradouroModel: string = '';
+  // numeroModel: string = '';
+  // bairroModel: string = '';
+  // cepModel: string = '';
+  // cidadeModel: string = '';
+  // estadoModel: string = '';
+  // complementoModel: string = '';
+
+  public pessoa = new Pessoa();
 
   salvar() {
-    
+    console.log(this.pessoa);
   }
 
 }

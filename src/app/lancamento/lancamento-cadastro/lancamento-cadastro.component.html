@@ -1,5 +1,5 @@
 <div class="container">
-  <form #cadastroLancamentoForm="ngForm" autocomplete="off" (ngSubmit)="salvar()">
+  <form #cadastroLancamentoForm="ngForm" autocomplete="off" (ngSubmit)="salvar(cadastroLancamentoForm)">
     <div class="mat-grid">
         <div class="mat-grid-item">
             <h1>Novo Lançamento</h1>
@@ -7,7 +7,7 @@
     </div>
 
     <div class="mat-elevation-z2" style="padding: 8px; border-radius: 4px; display: inline-block; margin-bottom: 16px;">
-      <mat-button-toggle-group name="tipo" [(ngModel)]="tipoSelecionado" exclusive class="tipo-toggle">
+      <mat-button-toggle-group name="tipo" [(ngModel)]="lancamento.tipo" exclusive class="tipo-toggle">
         <mat-button-toggle *ngFor="let tipo of tipos" [value]="tipo.value">
           {{ tipo.label }}
         </mat-button-toggle>
@@ -15,26 +15,27 @@
     </div>
 
     <div class="linha" style="display: flex; gap: 16px; flex-wrap: wrap;">
-
       <div class="campo-data">
         <mat-form-field appearance="outline" style="width: 100%;">
           <mat-label>Vencimento</mat-label>
           <input matInput [matDatepicker]="pickerVencimento" placeholder="dd/mm/aaaa" name="vencimento"
-            [(ngModel)]="vencimentoModel" #vencimento="ngModel" required />
+            [(ngModel)]="lancamento.dataVencimento" #vencimento="ngModel" required />
           <mat-datepicker-toggle matSuffix [for]="pickerVencimento"></mat-datepicker-toggle>
           <mat-datepicker #pickerVencimento></mat-datepicker>
         </mat-form-field>
 
-        <app-mensagem [control]="vencimento" [error]="'required'"
+        <app-mensagem 
+          [control]="vencimento" 
+          [error]="'required'" 
           [text]="'Informe uma data de vencimento'">
         </app-mensagem>
-
       </div>
     
       <div class="campo-data">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>{{ tipoSelecionado === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</mat-label>
-          <input matInput [matDatepicker]="pickerRecebimento" placeholder="dd/mm/aaaa" mask="d0/M0/0000"/>
+          <mat-label>{{ lancamento.tipo === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</mat-label>
+          <input matInput [matDatepicker]="pickerRecebimento" placeholder="dd/mm/aaaa"
+            [(ngModel)]="lancamento.dataPagamento" name="pagamento"/>
           <mat-datepicker-toggle matSuffix [for]="pickerRecebimento"></mat-datepicker-toggle>
           <mat-datepicker #pickerRecebimento></mat-datepicker>
         </mat-form-field>
@@ -46,10 +47,12 @@
         <mat-form-field appearance="outline" class="campo-grande">
           <mat-label>Descrição</mat-label>
           <input matInput type="text" name="descricao"
-            [(ngModel)]="descricaoModel" #descricao="ngModel" required minlength="5"/>
+            [(ngModel)]="lancamento.descricao" #descricao="ngModel" required minlength="5"/>
         </mat-form-field>
       
-        <app-mensagem [control]="descricao" [error]="'required'"
+        <app-mensagem 
+          [control]="descricao" 
+          [error]="'required'" 
           [text]="'Informe uma descrição'">
         </app-mensagem>
 
@@ -63,10 +66,12 @@
           <mat-label>Valor</mat-label>
           <input matInput currencyMask
             [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, align: 'right', max: 10000 }"
-            [(ngModel)]="valor" name="valor" #valorModel="ngModel" placeholder="0,00" required />
+            [(ngModel)]="lancamento.valor" name="valor" #valorModel="ngModel" placeholder="0,00" required />
         </mat-form-field>
       
-        <app-mensagem [control]="valorModel" [error]="'required'"
+        <app-mensagem 
+          [control]="valorModel" 
+          [error]="'required'" 
           [text]="'Informe um valor'">
         </app-mensagem>
       </div>
@@ -76,15 +81,17 @@
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Categorias</mat-label>
-          <mat-select [(ngModel)]="categoriaSelecionada" name="categoriaSelecionada" #categoriaModel="ngModel" required>
-            <mat-option *ngIf="!categoriaSelecionada" value="">Selecione</mat-option>
+          <mat-select [(ngModel)]="lancamento.categoria.codigo" name="categoria" #categoriaModel="ngModel" required>
+            <mat-option *ngIf="!lancamento.categoria.codigo" value="">Selecione</mat-option>
             <mat-option *ngFor="let categoria of categorias" [value]="categoria.value">
               {{ categoria.label }}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
-        <app-mensagem [control]="categoriaModel" [error]="'required'"
+        <app-mensagem 
+          [control]="categoriaModel" 
+          [error]="'required'" 
           [text]="'Informe uma categoria'">
         </app-mensagem>
       </div>
@@ -92,7 +99,7 @@
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio pessoa-field">
           <mat-label>Pessoas</mat-label>
-          <mat-select [(ngModel)]="pessoaSelecionada" name="pessoaSelecionada" #pessoaModel="ngModel" required>
+          <mat-select [(ngModel)]="lancamento.pessoa.codigo" name="pessoa" #pessoaModel="ngModel" required>
             <mat-option [disabled]="true" class="pessoa-option-filtro">
               <div class="filtro-container" (click)="$event.stopPropagation()">
                 <div class="filtro-box">
@@ -111,7 +118,9 @@
           </mat-select>
         </mat-form-field>
     
-        <app-mensagem [control]="pessoaModel" [error]="'required'"
+        <app-mensagem 
+          [control]="pessoaModel" 
+          [error]="'required'" 
           [text]="'Informe uma pessoa'">
         </app-mensagem>
       </div>
@@ -120,7 +129,7 @@
     <div class="linha">
         <mat-form-field appearance="outline" style="width: 100%; margin-top: 20px;">
         <mat-label>Observação</mat-label>
-        <textarea matInput rows="3"></textarea>
+        <textarea matInput rows="3" [(ngModel)]="lancamento.observacao" name="observacao" class="sem-selecao"></textarea>
         </mat-form-field>
     </div>
 

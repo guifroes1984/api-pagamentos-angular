@@ -29,7 +29,7 @@
 
   text-transform: uppercase;
   font-weight: bold;
-  color: #fff !important; /* força branco mesmo com Angular Material */
+  color: #fff !important;
 }
 
 .navbar-menuitem {
@@ -43,4 +43,8 @@
 
 .navbar-menuitem a:hover {
   color: #fff;
+}
+
+.navbar-menuitem.ativo {
+  background-color: #494541;
 }

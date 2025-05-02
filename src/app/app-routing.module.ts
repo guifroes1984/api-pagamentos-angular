@@ -9,7 +9,7 @@ const routes: Routes = [
     children: [
       { path: '',     component: LancamentosPesquisaComponent }, 
       { path: 'novo', component: LancamentoCadastroComponent }, 
-      { path: ':id', component: LancamentoCadastroComponent }
+      { path: ':codigo', component: LancamentoCadastroComponent }
     ] 
   }, 
   { path: 'pessoas', component: PessoasPesquisaComponent }, 

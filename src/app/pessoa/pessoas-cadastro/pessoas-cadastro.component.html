@@ -1,5 +1,5 @@
 <div class="container">
-  <form #cadastroPessoaForm="ngForm" autocomplete="off" (ngSubmit)="salvar()">
+  <form #cadastroPessoaForm="ngForm" autocomplete="off" (ngSubmit)="salvar(cadastroPessoaForm)">
     <div class="mat-grid">
       <div class="mat-grid-item">
         <h1>Nova Pessoa</h1>
@@ -54,7 +54,7 @@
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Complemento</mat-label>
-          <input matInput name="complemento" [(ngModel)]="pessoa.endereco.numero" #complemento="ngModel" />
+          <input matInput name="complemento" [(ngModel)]="pessoa.endereco.complemento" #complemento="ngModel" />
         </mat-form-field>
       </div>
 

@@ -1,4 +1,10 @@
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
+
+import { PessoaService } from '../pessoa.service';
+import { ToastrService } from 'ngx-toastr';
+import { ErrorHandlerService } from 'src/app/core/error-handler.service';
+
 import { Pessoa } from 'src/app/core/model/pessoa';
 
 @Component({
@@ -8,19 +14,21 @@ import { Pessoa } from 'src/app/core/model/pessoa';
 })
 export class PessoasCadastroComponent {
 
-  // nomeModel: string = '';
-  // logradouroModel: string = '';
-  // numeroModel: string = '';
-  // bairroModel: string = '';
-  // cepModel: string = '';
-  // cidadeModel: string = '';
-  // estadoModel: string = '';
-  // complementoModel: string = '';
+  constructor(
+    private pessoaService:      PessoaService, 
+    private errorHandler: ErrorHandlerService, 
+    private toastr:             ToastrService
+  ) { }
 
   public pessoa = new Pessoa();
 
-  salvar() {
-    console.log(this.pessoa);
+  public salvar(form: NgForm) {
+    this.pessoaService.adicionarPessoa(this.pessoa)
+    .then(() => {
+      this.toastr.success('Pessoa adicionada com sucesso!');
+      form.resetForm(new Pessoa());
+    })
+    .catch(erro => this.errorHandler.handle(erro))
   }
 
 }

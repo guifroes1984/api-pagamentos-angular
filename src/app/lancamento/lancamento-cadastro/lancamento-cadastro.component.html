@@ -19,7 +19,7 @@
         <mat-form-field appearance="outline" style="width: 100%;">
           <mat-label>Vencimento</mat-label>
           <input matInput [matDatepicker]="pickerVencimento" placeholder="dd/mm/aaaa" name="vencimento"
-            [(ngModel)]="lancamento.dataVencimento" #vencimento="ngModel" required />
+            [(ngModel)]="lancamento.dataVencimento" #vencimento="ngModel" required readonly />
           <mat-datepicker-toggle matSuffix [for]="pickerVencimento"></mat-datepicker-toggle>
           <mat-datepicker #pickerVencimento></mat-datepicker>
         </mat-form-field>
@@ -35,7 +35,7 @@
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{ lancamento.tipo === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</mat-label>
           <input matInput [matDatepicker]="pickerRecebimento" placeholder="dd/mm/aaaa"
-            [(ngModel)]="lancamento.dataPagamento" name="pagamento"/>
+            [(ngModel)]="lancamento.dataPagamento" name="pagamento" readonly/>
           <mat-datepicker-toggle matSuffix [for]="pickerRecebimento"></mat-datepicker-toggle>
           <mat-datepicker #pickerRecebimento></mat-datepicker>
         </mat-form-field>

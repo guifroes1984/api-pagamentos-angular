@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule, Routes } from '@angular/router';
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,6 +27,8 @@ import { SharedModule } from './shared/shared.module';
 
 registerLocaleData(localePt);
 
+const routes: Routes = [];
+
 
 @NgModule({
   declarations: [
@@ -36,6 +39,7 @@ registerLocaleData(localePt);
     HttpClientModule , 
     AppRoutingModule,
     BrowserAnimationsModule, 
+    RouterModule.forRoot(routes),
     FormsModule, 
     LancamentoModule, 
     PessoaModule, 

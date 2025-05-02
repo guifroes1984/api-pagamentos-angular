@@ -23,7 +23,7 @@ export class LancamentoService {
 
   constructor(private http: HttpClient) { }
 
-  pesquisar(filtro: LancamentoFiltro): Promise<any> {
+  public pesquisar(filtro: LancamentoFiltro): Promise<any> {
     let params = new HttpParams();
     const headers = new HttpHeaders()
       .set('Authorization', 'Basic YWRtaW5AYWRtaW4uY29tOmFkbWlu');
@@ -54,7 +54,7 @@ export class LancamentoService {
     });
   }
 
-  excluir(codigo: number): Promise<void> {
+  public excluir(codigo: number): Promise<void> {
     const headers = new HttpHeaders()
       .set('Authorization', 'Basic YWRtaW5AYWRtaW4uY29tOmFkbWlu');
   
@@ -63,7 +63,7 @@ export class LancamentoService {
     );
   }
 
-  adicionarLancamento(lancamento: Lancamento): Promise<Lancamento> {
+  public adicionarLancamento(lancamento: Lancamento): Promise<Lancamento> {
     const headers = new HttpHeaders()
       .set('Authorization', 'Basic YWRtaW5AYWRtaW4uY29tOmFkbWlu')
       .set('Content-Type', 'application/json');
@@ -71,6 +71,39 @@ export class LancamentoService {
     return firstValueFrom(
       this.http.post<Lancamento>(this.lancamentosUrl, JSON.stringify(lancamento), { headers })
     )
+  }
+
+  public atualizarLancamento(lancamento: Lancamento): Promise<Lancamento> {
+    const headers = new HttpHeaders()
+      .set('Authorization', 'Basic YWRtaW5AYWRtaW4uY29tOmFkbWlu');
+    
+    return firstValueFrom(
+      this.http.put<Lancamento>(`${this.lancamentosUrl}/${lancamento.codigo}`, lancamento, { headers })
+    ).then(lancamentoAtualizado => {
+      this.converteStringParaDatas([lancamentoAtualizado]);
+      return lancamentoAtualizado;
+    });
+  }
+
+  public buscarLancamentoPorCodigo(codigo: number): Promise<Lancamento> {
+    const headers = new HttpHeaders()
+      .set('Authorization', 'Basic YWRtaW5AYWRtaW4uY29tOmFkbWlu');
+
+    return firstValueFrom(
+      this.http.get<Lancamento>(`${this.lancamentosUrl}/${codigo}`, { headers })
+    ).then(lancamento => {
+      this.converteStringParaDatas([lancamento]);
+      return lancamento;
+    });
+  }
+
+  private converteStringParaDatas(lancamentos: Lancamento[]) {
+    for (const lancamento of lancamentos) {
+      lancamento.dataVencimento = moment(lancamento.dataVencimento, 'YYYY-MM-DD').toDate();
+      if (lancamento.dataPagamento) {
+        lancamento.dataPagamento = moment(lancamento.dataPagamento, 'YYYY-MM-DD').toDate();
+      }
+    }
   }
  
 }

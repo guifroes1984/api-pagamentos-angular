@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
 
@@ -34,10 +35,13 @@ export class LancamentoCadastroComponent implements OnInit {
     private pessoaService:     PessoaService, 
     private errorHandler:      ErrorHandlerService, 
     private lancamentoService: LancamentoService, 
-    private toastr:            ToastrService
+    private toastr:            ToastrService, 
+    private route:             ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    console.log(this.route.snapshot.params['id']);
+
     this.caregarCategorias();
     this.carregarPessoas();
   }

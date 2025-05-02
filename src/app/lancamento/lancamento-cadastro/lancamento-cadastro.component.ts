@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormControl, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
@@ -50,7 +50,7 @@ export class LancamentoCadastroComponent implements OnInit {
     this.carregarPessoas();
   }
 
-  public editando(): boolean {
+  public get editando(): boolean {
     return !!this.lancamento?.codigo;
   }
 
@@ -62,7 +62,15 @@ export class LancamentoCadastroComponent implements OnInit {
       .catch(erro => this.errorHandler.handle(erro));
   }
 
-  public salvar(form: NgForm) {
+  public salvar(form: NgForm): void {
+    if (this.editando) {
+      this.atualizarLancamento(form);
+    } else {
+      this.adicionarLancamento(form);
+    }
+  }
+
+  public adicionarLancamento(form: NgForm) {
     this.lancamentoService.adicionarLancamento(this.lancamento)
     .then(() => {
       this.toastr.success('Lançamento adicionado com sucesso!');
@@ -71,6 +79,16 @@ export class LancamentoCadastroComponent implements OnInit {
       form.resetForm(this.lancamento);
     })
     .catch(erro => this.errorHandler.handle(erro));
+  }
+
+  public atualizarLancamento(form: NgForm) {
+    this.lancamentoService.atualizarLancamento(this.lancamento)
+      .then(lancamentoAtualizado => {
+        this.lancamento = lancamentoAtualizado;
+
+        this.toastr.success('Lançamento alterado com sucesso!');
+      })
+      .catch(erro => this.errorHandler.handle(erro));
   }
 
   public caregarCategorias() {

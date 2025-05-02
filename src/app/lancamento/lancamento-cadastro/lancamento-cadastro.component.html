@@ -1,8 +1,8 @@
 <div class="container">
-  <form #cadastroLancamentoForm="ngForm" autocomplete="off" (ngSubmit)="salvar(cadastroLancamentoForm)">
+  <form #lancamentoForm="ngForm" (ngSubmit)="salvar(lancamentoForm)">
     <div class="mat-grid">
         <div class="mat-grid-item">
-            <h1>{{ editando() ? 'Edição de ' : 'Novo' }} Lançamento</h1>
+            <h1>{{ editando ? 'Edição de ' : 'Novo' }} Lançamento</h1>
         </div>
     </div>
 
@@ -134,7 +134,7 @@
     </div>
 
     <div class="linha" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
-      <button mat-raised-button color="primary" [disabled]="!cadastroLancamentoForm.valid">
+      <button mat-raised-button color="primary" [disabled]="!lancamentoForm.valid">
         <mat-icon>save</mat-icon>
         Salvar
       </button>

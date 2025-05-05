@@ -22,6 +22,7 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
+import { Title } from '@angular/platform-browser';
 
 @NgModule({
   imports: [
@@ -55,7 +56,8 @@ import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component'
   { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
   { provide: MatPaginatorIntl, useValue: getPaginatorIntl() }, 
   { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
-    ErrorHandlerService
+    ErrorHandlerService, 
+    Title
   ]
 })
 export class CoreModule { }

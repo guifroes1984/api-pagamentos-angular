@@ -9,6 +9,7 @@ import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 import { PessoaService } from 'src/app/pessoa/pessoa.service';
 import { Lancamento } from 'src/app/core/model/lancamento';
 import { LancamentoService } from '../lancamento.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-lancamento-cadastro',
@@ -37,11 +38,14 @@ export class LancamentoCadastroComponent implements OnInit {
     private lancamentoService: LancamentoService, 
     private toastr:            ToastrService, 
     private route:             ActivatedRoute, 
-    private router:            Router
+    private router:            Router, 
+    private title: Title
   ) { }
 
   ngOnInit(): void {
     const codigoLancamento = this.route.snapshot.params['codigo'];
+
+    this.title.setTitle('Novo lançamento');
 
     if (codigoLancamento) {
       this.carregarLancamentos(codigoLancamento);
@@ -59,6 +63,7 @@ export class LancamentoCadastroComponent implements OnInit {
     this.lancamentoService.buscarLancamentoPorCodigo(codigo)
       .then(definirLancamento => {
         this.lancamento = definirLancamento;
+        this.atualizarTituloEdicao();
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
@@ -85,6 +90,7 @@ export class LancamentoCadastroComponent implements OnInit {
       .then(lancamentoAtualizado => {
         this.lancamento = lancamentoAtualizado;
         this.toastr.success('Lançamento alterado com sucesso!');
+        this.atualizarTituloEdicao();
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
@@ -118,6 +124,10 @@ export class LancamentoCadastroComponent implements OnInit {
     form.resetForm(this.lancamento);
     this.lancamento = new Lancamento();
     this.router.navigate(['/lancamentos/novo']);
+  }
+
+  public atualizarTituloEdicao() {
+    this.title.setTitle(`Edição de lançamento: ${this.lancamento.descricao}`);
   }
 
 }

@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { ErrorHandlerService } from 'src/app/core/error-handler.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-lancamentos-pesquisa',
@@ -30,11 +31,13 @@ export class LancamentosPesquisaComponent implements OnInit {
     private lancamentoService: LancamentoService, 
     private toastr: ToastrService, 
     private dialog: MatDialog, 
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService, 
+    private title: Title
   ) {}
 
   ngOnInit(): void {
     this.pesquisar();
+    this.title.setTitle('Pesquisa de lançamentos');
   }
 
   pesquisar(pagina: number = 0): void {

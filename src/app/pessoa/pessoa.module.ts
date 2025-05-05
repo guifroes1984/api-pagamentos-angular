@@ -58,9 +58,6 @@ import { MatCardModule } from '@angular/material/card';
     CurrencyMaskModule, 
     SharedModule
   ], 
-  exports: [
-    PessoasPesquisaComponent,
-    PessoasCadastroComponent
-  ]
+  exports: []
 })
 export class PessoaModule { }

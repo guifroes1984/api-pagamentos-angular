@@ -27,3 +27,24 @@ label {
     margin: 0 auto;
   }
 }
+
+.mat-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.mat-grid-item h1 {
+  font-weight: bold;
+  font-size: 36px;
+  color: #404C51;
+}
+
+.mat-grid-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}

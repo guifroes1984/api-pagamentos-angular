@@ -60,9 +60,6 @@ import { SharedModule } from '../shared/shared.module';
     CurrencyMaskModule, 
     SharedModule
   ],
-  exports: [
-    LancamentosPesquisaComponent,
-    LancamentoCadastroComponent
-  ]
+  exports: []
 })
 export class LancamentoModule { }

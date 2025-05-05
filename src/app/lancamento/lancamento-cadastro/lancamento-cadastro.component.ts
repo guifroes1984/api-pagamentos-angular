@@ -39,7 +39,7 @@ export class LancamentoCadastroComponent implements OnInit {
     private toastr:            ToastrService, 
     private route:             ActivatedRoute, 
     private router:            Router, 
-    private title: Title
+    private title:             Title
   ) { }
 
   ngOnInit(): void {

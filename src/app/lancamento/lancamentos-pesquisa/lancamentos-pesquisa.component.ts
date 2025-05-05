@@ -29,10 +29,10 @@ export class LancamentosPesquisaComponent implements OnInit {
 
   constructor(
     private lancamentoService: LancamentoService, 
-    private toastr: ToastrService, 
-    private dialog: MatDialog, 
-    private errorHandler: ErrorHandlerService, 
-    private title: Title
+    private toastr:            ToastrService, 
+    private dialog:            MatDialog, 
+    private errorHandler:      ErrorHandlerService, 
+    private title:             Title
   ) {}
 
   ngOnInit(): void {

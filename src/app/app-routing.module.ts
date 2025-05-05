@@ -13,8 +13,10 @@ const routes: Routes = [
       { path: ':codigo', component: LancamentoCadastroComponent }
     ] 
   }, 
-  { path: 'pessoas',               component: PessoasPesquisaComponent },
+  { path: 'pessoas',               component: PessoasPesquisaComponent }, 
   { path: 'pagina-nao-encontrada', component: PaginaNaoEncontradaComponent }, 
+  
+  { path: '', redirectTo: 'lancamentos', pathMatch: 'full' },
   { path: '**', redirectTo: 'pagina-nao-encontrada' } 
 ];
 

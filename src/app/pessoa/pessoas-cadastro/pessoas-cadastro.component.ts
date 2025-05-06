@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 
 import { Pessoa } from 'src/app/core/model/pessoa';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-pessoas-cadastro',
@@ -17,10 +18,15 @@ export class PessoasCadastroComponent {
   constructor(
     private pessoaService:      PessoaService, 
     private errorHandler: ErrorHandlerService, 
-    private toastr:             ToastrService
+    private toastr:             ToastrService, 
+    private route:             ActivatedRoute
   ) { }
 
   public pessoa = new Pessoa();
+
+  ngOnInit(): void {
+    console.log(this.route.snapshot.params['id']);
+  }
 
   public salvar(form: NgForm) {
     this.pessoaService.adicionarPessoa(this.pessoa)

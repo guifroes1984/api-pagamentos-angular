@@ -12,10 +12,16 @@ const routes: Routes = [
     path: 'lancamentos',
     loadChildren: () =>
       import('./lancamento/lancamento.module').then(m => m.LancamentoModule)
-  },
+  }, 
   
-  { path: 'pessoas', component: PessoasPesquisaComponent }, 
-  { path: 'pessoas/novo', component: PessoasCadastroComponent }, 
+  {
+    path: 'pessoas', 
+    children: [
+      { path: '', component: PessoasPesquisaComponent }, 
+      { path: 'novo', component: PessoasCadastroComponent }, 
+      { path: ':id', component: PessoasCadastroComponent }
+    ]
+  },
   
   { path: 'pagina-nao-encontrada', component: PaginaNaoEncontradaComponent },
   { path: '**', redirectTo: 'pagina-nao-encontrada' }

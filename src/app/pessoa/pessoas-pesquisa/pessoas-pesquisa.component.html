@@ -30,17 +30,17 @@
       <table mat-table [dataSource]="fonteDados" class="mat-elevation-z8" matSort>
         <ng-container matColumnDef="pessoa">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Nome </th>
-          <td mat-cell *matCellDef="let item"> {{ item.nome }} </td>
+          <td mat-cell *matCellDef="let pessoa"> {{ pessoa.nome }} </td>
         </ng-container>
 
         <ng-container matColumnDef="cidade">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Cidade </th>
-          <td mat-cell *matCellDef="let item"> {{ item.endereco.cidade }} </td>
+          <td mat-cell *matCellDef="let pessoa"> {{ pessoa.endereco.cidade }} </td>
         </ng-container>
 
         <ng-container matColumnDef="estado">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
-          <td mat-cell *matCellDef="let item"> {{ item.endereco.estado }} </td>
+          <td mat-cell *matCellDef="let pessoa"> {{ pessoa.endereco.estado }} </td>
         </ng-container>
 
         <ng-container matColumnDef="status">
@@ -57,13 +57,14 @@
 
         <ng-container matColumnDef="acoes">
           <th mat-header-cell *matHeaderCellDef class="col-acoes"> Ações </th>
-          <td mat-cell *matCellDef="let item">
+          <td mat-cell *matCellDef="let pessoa">
             <div class="acoes-container">
-              <button mat-icon-button color="primary" aria-label="Editar" class="botao-acao" matTooltip="Editar">
+              <button mat-icon-button color="primary" aria-label="Editar" class="botao-acao" 
+                matTooltip="Editar" [routerLink]="['/pessoas', pessoa.codigo]">
                 <mat-icon>edit</mat-icon>
               </button>
               <button mat-icon-button color="warn" aria-label="Excluir" class="botao-acao" 
-                matTooltip="Excluir" (click)="excluir(item.codigo)">
+                matTooltip="Excluir" (click)="excluir(pessoa.codigo)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

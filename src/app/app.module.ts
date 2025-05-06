@@ -27,8 +27,6 @@ import { SharedModule } from './shared/shared.module';
 
 registerLocaleData(localePt);
 
-const routes: Routes = [];
-
 
 @NgModule({
   declarations: [
@@ -38,8 +36,7 @@ const routes: Routes = [];
     BrowserModule, 
     HttpClientModule , 
     AppRoutingModule,
-    BrowserAnimationsModule, 
-    RouterModule.forRoot(routes),
+    BrowserAnimationsModule,
     FormsModule, 
     LancamentoModule, 
     PessoaModule, 

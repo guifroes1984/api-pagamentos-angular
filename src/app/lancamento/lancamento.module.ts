@@ -27,6 +27,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FilterPessoasPipe } from '../pipe/filter-pessoas.pipe';
 import { SharedModule } from '../shared/shared.module';
+import { LancamentoRoutingModule } from './lancamentos-routing.module';
 
 @NgModule({
   declarations: [
@@ -37,8 +38,7 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule, 
-    RouterModule, 
+    ReactiveFormsModule,
     
     MatTabsModule, 
     MatFormFieldModule,
@@ -58,7 +58,9 @@ import { SharedModule } from '../shared/shared.module';
     NgxMaskDirective, 
     NgxMaskPipe, 
     CurrencyMaskModule, 
-    SharedModule
+    
+    SharedModule, 
+    LancamentoRoutingModule
   ],
   exports: []
 })

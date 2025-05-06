@@ -1,23 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LancamentosPesquisaComponent } from './lancamento/lancamentos-pesquisa/lancamentos-pesquisa.component';
-import { LancamentoCadastroComponent } from './lancamento/lancamento-cadastro/lancamento-cadastro.component';
+
 import { PessoasPesquisaComponent } from './pessoa/pessoas-pesquisa/pessoas-pesquisa.component';
 import { PaginaNaoEncontradaComponent } from './core/pagina-nao-encontrada.component';
 
 const routes: Routes = [
-  { path: 'lancamentos', 
-    children: [
-      { path: '',        component: LancamentosPesquisaComponent }, 
-      { path: 'novo',    component: LancamentoCadastroComponent }, 
-      { path: ':codigo', component: LancamentoCadastroComponent }
-    ] 
-  }, 
-  { path: 'pessoas',               component: PessoasPesquisaComponent }, 
-  { path: 'pagina-nao-encontrada', component: PaginaNaoEncontradaComponent }, 
-  
   { path: '', redirectTo: 'lancamentos', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pagina-nao-encontrada' } 
+
+  {
+    path: 'lancamentos',
+    loadChildren: () =>
+      import('./lancamento/lancamento.module').then(m => m.LancamentoModule)
+  },
+  
+  { path: 'pessoas', component: PessoasPesquisaComponent },
+  { path: 'pagina-nao-encontrada', component: PaginaNaoEncontradaComponent },
+  { path: '**', redirectTo: 'pagina-nao-encontrada' }
 ];
 
 @NgModule({

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { PessoasPesquisaComponent } from './pessoa/pessoas-pesquisa/pessoas-pesquisa.component';
 import { PaginaNaoEncontradaComponent } from './core/pagina-nao-encontrada.component';
+import { PessoasCadastroComponent } from './pessoa/pessoas-cadastro/pessoas-cadastro.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'lancamentos', pathMatch: 'full' },
@@ -13,7 +14,9 @@ const routes: Routes = [
       import('./lancamento/lancamento.module').then(m => m.LancamentoModule)
   },
   
-  { path: 'pessoas', component: PessoasPesquisaComponent },
+  { path: 'pessoas', component: PessoasPesquisaComponent }, 
+  { path: 'pessoas/novo', component: PessoasCadastroComponent }, 
+  
   { path: 'pagina-nao-encontrada', component: PaginaNaoEncontradaComponent },
   { path: '**', redirectTo: 'pagina-nao-encontrada' }
 ];

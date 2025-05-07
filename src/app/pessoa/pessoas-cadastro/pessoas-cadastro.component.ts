@@ -31,8 +31,20 @@ export class PessoasCadastroComponent {
       this.carregarPessoas(codigoPessoa);
     }
   }
+  
+  public get editando(): boolean {
+    return !!this.pessoa?.codigo;
+  }
 
-  public salvar(form: NgForm) {
+  public salvar(form: NgForm): void {
+    if (this.editando) {
+      this.atualizarPessoa(form);
+    } else {
+      this.adicionarPessoa(form);
+    }
+  }
+
+  public adicionarPessoa(form: NgForm) {
     this.pessoaService.adicionarPessoa(this.pessoa)
     .then(() => {
       this.toastr.success('Pessoa adicionada com sucesso!');
@@ -41,16 +53,22 @@ export class PessoasCadastroComponent {
     .catch(erro => this.errorHandler.handle(erro))
   }
 
-  public editando(): boolean {
-    return !!this.pessoa?.codigo;
-  }
-
   public carregarPessoas(codigo: number) {
     this.pessoaService.buscarPessoaPorCodigo(codigo)
       .then(definirPessoa => {
         this.pessoa = definirPessoa;
       })
       .catch(erro => this.errorHandler.handle(erro));
+  }
+
+  public atualizarPessoa(form: NgForm) {
+    this.pessoaService.atualizarPessoa(this.pessoa)
+      .then(pessoaAtualizada => {
+        this.pessoa = pessoaAtualizada;
+
+        this.toastr.success('Pessoa alterada com sucesso!')
+      })
+    .catch(erro => this.errorHandler.handle(erro));
   }
 
 }

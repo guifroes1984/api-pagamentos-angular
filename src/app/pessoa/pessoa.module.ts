@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { PessoasPesquisaComponent } from './pessoas-pesquisa/pessoas-pesquisa.component';
-
 import { SharedModule } from '../shared/shared.module';
+import { PessoaRoutingModule } from './pessoas-routing.module';
 
 import { PessoasCadastroComponent } from './pessoas-cadastro/pessoas-cadastro.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -58,7 +58,9 @@ import { MatCardModule } from '@angular/material/card';
     NgxMaskDirective, 
     NgxMaskPipe, 
     CurrencyMaskModule, 
-    SharedModule
+
+    SharedModule, 
+    PessoaRoutingModule
   ], 
   exports: []
 })

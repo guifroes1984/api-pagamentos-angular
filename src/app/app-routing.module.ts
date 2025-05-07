@@ -13,14 +13,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./lancamento/lancamento.module').then(m => m.LancamentoModule)
   }, 
-  
+
   {
     path: 'pessoas', 
-    children: [
-      { path: '', component: PessoasPesquisaComponent }, 
-      { path: 'novo', component: PessoasCadastroComponent }, 
-      { path: ':codigo', component: PessoasCadastroComponent }
-    ]
+    loadChildren: () => 
+      import('./pessoa/pessoa.module').then(m => m.PessoaModule)
   },
   
   { path: 'pagina-nao-encontrada', component: PaginaNaoEncontradaComponent },

@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 
 import { Pessoa } from 'src/app/core/model/pessoa';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-pessoas-cadastro',
@@ -20,13 +21,16 @@ export class PessoasCadastroComponent {
     private errorHandler: ErrorHandlerService, 
     private toastr:             ToastrService, 
     private route:             ActivatedRoute, 
-    private router:                    Router
+    private router:                    Router, 
+    private title:                      Title
   ) { }
 
   public pessoa = new Pessoa();
 
   ngOnInit(): void {
     const codigoPessoa = this.route.snapshot.params['codigo'];
+
+    this.title.setTitle('Nova pessoa');
 
     if (codigoPessoa) {
       this.carregarPessoas(codigoPessoa);
@@ -58,6 +62,7 @@ export class PessoasCadastroComponent {
     this.pessoaService.buscarPessoaPorCodigo(codigo)
       .then(definirPessoa => {
         this.pessoa = definirPessoa;
+        this.atualizarTituloEdicao();
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
@@ -68,6 +73,7 @@ export class PessoasCadastroComponent {
         this.pessoa = pessoaAtualizada;
 
         this.toastr.success('Pessoa alterada com sucesso!')
+        this.atualizarTituloEdicao();
       })
     .catch(erro => this.errorHandler.handle(erro));
   }
@@ -76,6 +82,10 @@ export class PessoasCadastroComponent {
     form.resetForm(this.pessoa);
     this.pessoa = new Pessoa();
     this.router.navigate(['/pessoas/novo']);
+  }
+
+  public atualizarTituloEdicao() {
+    this.title.setTitle(`Edição de pessoas: ${this.pessoa.nome}`);
   }
 
 }

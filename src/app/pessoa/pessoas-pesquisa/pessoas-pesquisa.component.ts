@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { ErrorHandlerService } from 'src/app/core/error-handler.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-pessoas-pesquisa',
@@ -28,13 +29,15 @@ export class PessoasPesquisaComponent implements OnInit {
 
   constructor(
     private pessoaService: PessoaService, 
-    private toastr: ToastrService, 
-    private dialog: MatDialog, 
-    private errorHandler: ErrorHandlerService
+    private toastr:        ToastrService, 
+    private dialog:        MatDialog, 
+    private errorHandler:  ErrorHandlerService, 
+    private title:         Title
   ) {}
 
   ngOnInit(): void {
     this.pesquisar();
+    this.title.setTitle('Pesquisa de pessoas');
   }
 
   pesquisar(pagina: number = 0): void {

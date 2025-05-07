@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { PessoaService } from '../pessoa.service';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 
 import { Pessoa } from 'src/app/core/model/pessoa';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-pessoas-cadastro',
@@ -19,7 +19,8 @@ export class PessoasCadastroComponent {
     private pessoaService:      PessoaService, 
     private errorHandler: ErrorHandlerService, 
     private toastr:             ToastrService, 
-    private route:             ActivatedRoute
+    private route:             ActivatedRoute, 
+    private router:                    Router
   ) { }
 
   public pessoa = new Pessoa();
@@ -46,9 +47,9 @@ export class PessoasCadastroComponent {
 
   public adicionarPessoa(form: NgForm) {
     this.pessoaService.adicionarPessoa(this.pessoa)
-    .then(() => {
+    .then(pessoaAdicionada => {
       this.toastr.success('Pessoa adicionada com sucesso!');
-      form.resetForm(new Pessoa());
+      this.router.navigate(['/pessoas', pessoaAdicionada.codigo]);
     })
     .catch(erro => this.errorHandler.handle(erro))
   }
@@ -69,6 +70,12 @@ export class PessoasCadastroComponent {
         this.toastr.success('Pessoa alterada com sucesso!')
       })
     .catch(erro => this.errorHandler.handle(erro));
+  }
+
+  public novo(form: NgForm) {
+    form.resetForm(this.pessoa);
+    this.pessoa = new Pessoa();
+    this.router.navigate(['/pessoas/novo']);
   }
 
 }

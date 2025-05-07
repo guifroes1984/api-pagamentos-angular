@@ -30,7 +30,7 @@ export class LancamentosPesquisaComponent implements OnInit {
 
   constructor(
     private lancamentoService: LancamentoService, 
-    private pessoaService: PessoaService, 
+    private pessoaService:     PessoaService, 
     private toastr:            ToastrService, 
     private dialog:            MatDialog, 
     private errorHandler:      ErrorHandlerService, 

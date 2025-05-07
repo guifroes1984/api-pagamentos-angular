@@ -25,7 +25,11 @@ export class PessoasCadastroComponent {
   public pessoa = new Pessoa();
 
   ngOnInit(): void {
-    console.log(this.route.snapshot.params['codigo']);
+    const codigoPessoa = this.route.snapshot.params['codigo'];
+
+    if (codigoPessoa) {
+      this.carregarPessoas(codigoPessoa);
+    }
   }
 
   public salvar(form: NgForm) {
@@ -35,6 +39,18 @@ export class PessoasCadastroComponent {
       form.resetForm(new Pessoa());
     })
     .catch(erro => this.errorHandler.handle(erro))
+  }
+
+  public editando(): boolean {
+    return !!this.pessoa?.codigo;
+  }
+
+  public carregarPessoas(codigo: number) {
+    this.pessoaService.buscarPessoaPorCodigo(codigo)
+      .then(definirPessoa => {
+        this.pessoa = definirPessoa;
+      })
+      .catch(erro => this.errorHandler.handle(erro));
   }
 
 }

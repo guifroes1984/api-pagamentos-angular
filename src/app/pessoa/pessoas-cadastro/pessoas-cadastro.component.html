@@ -97,7 +97,8 @@
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-pequeno">
           <mat-label>Estado</mat-label>
-          <input matInput name="estado" [(ngModel)]="pessoa.endereco.estado" #estado="ngModel" required />
+          <input matInput name="estado" [(ngModel)]="pessoa.endereco.estado" #estado="ngModel" required 
+          (input)="pessoa.endereco.estado = (pessoa.endereco.estado || '').toUpperCase()"/>
         </mat-form-field>
 
         <app-mensagem [control]="estado" [error]="'required'" 

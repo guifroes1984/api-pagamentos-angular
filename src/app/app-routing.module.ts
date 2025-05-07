@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { PessoasPesquisaComponent } from './pessoa/pessoas-pesquisa/pessoas-pesquisa.component';
 import { PaginaNaoEncontradaComponent } from './core/pagina-nao-encontrada.component';
-import { PessoasCadastroComponent } from './pessoa/pessoas-cadastro/pessoas-cadastro.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'lancamentos', pathMatch: 'full' },

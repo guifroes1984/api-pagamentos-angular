@@ -24,7 +24,7 @@ export class LancamentosPesquisaComponent implements OnInit {
   itensPorPagina = 5;
   paginaAtual = 0;
 
-  filtro = new LancamentoFiltro();
+  public filtro = new LancamentoFiltro();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -42,7 +42,7 @@ export class LancamentosPesquisaComponent implements OnInit {
     this.title.setTitle('Pesquisa de lançamentos');
   }
 
-  pesquisar(pagina: number = 0): void {
+  public pesquisar(pagina: number = 0): void {
     this.filtro.pagina = pagina;
     this.filtro.itensPorPagina = this.itensPorPagina;
     this.lancamentoService.pesquisar(this.filtro).then(resultado => {
@@ -56,7 +56,7 @@ export class LancamentosPesquisaComponent implements OnInit {
     .catch(erro => this.errorHandler.handle(erro));
   }
 
-  habilitarPaginacao() {
+  public habilitarPaginacao() {
     return this.totalRegistros > 5;
   }
 
@@ -66,7 +66,7 @@ export class LancamentosPesquisaComponent implements OnInit {
     this.pesquisar(this.paginaAtual);
   }
 
-  limpar(): void {
+  public limpar(): void {
     this.filtro = new LancamentoFiltro();
     this.itensPorPagina = 5;
     this.paginaAtual = 0;
@@ -74,7 +74,7 @@ export class LancamentosPesquisaComponent implements OnInit {
     this.pesquisar();
   }
 
-  excluir(codigo: number): void {
+  public excluir(codigo: number): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       disableClose: true,

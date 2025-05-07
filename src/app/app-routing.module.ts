@@ -19,7 +19,7 @@ const routes: Routes = [
     children: [
       { path: '', component: PessoasPesquisaComponent }, 
       { path: 'novo', component: PessoasCadastroComponent }, 
-      { path: ':id', component: PessoasCadastroComponent }
+      { path: ':codigo', component: PessoasCadastroComponent }
     ]
   },
   

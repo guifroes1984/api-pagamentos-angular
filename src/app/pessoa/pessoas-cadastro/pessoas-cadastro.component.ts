@@ -25,7 +25,7 @@ export class PessoasCadastroComponent {
   public pessoa = new Pessoa();
 
   ngOnInit(): void {
-    console.log(this.route.snapshot.params['id']);
+    console.log(this.route.snapshot.params['codigo']);
   }
 
   public salvar(form: NgForm) {

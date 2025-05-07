@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 import { Title } from '@angular/platform-browser';
+import { PessoaService } from 'src/app/pessoa/pessoa.service';
 
 @Component({
   selector: 'app-lancamentos-pesquisa',
@@ -29,6 +30,7 @@ export class LancamentosPesquisaComponent implements OnInit {
 
   constructor(
     private lancamentoService: LancamentoService, 
+    private pessoaService: PessoaService, 
     private toastr:            ToastrService, 
     private dialog:            MatDialog, 
     private errorHandler:      ErrorHandlerService, 

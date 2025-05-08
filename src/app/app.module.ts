@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule, Routes } from '@angular/router';
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,6 +23,7 @@ import { PessoaModule } from './pessoa/pessoa.module';
 import { CoreModule } from './core/core.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
+import { SegurancaModule } from './seguranca/seguranca.module';
 
 registerLocaleData(localePt);
 
@@ -40,6 +40,7 @@ registerLocaleData(localePt);
     FormsModule, 
     LancamentoModule, 
     PessoaModule, 
+    SegurancaModule, 
     SharedModule, 
     CoreModule,
 

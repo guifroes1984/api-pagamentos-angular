@@ -17,6 +17,12 @@ const routes: Routes = [
     loadChildren: () => 
       import('./pessoa/pessoa.module').then(m => m.PessoaModule)
   },
+
+  {
+    path: 'login', 
+    loadChildren: () => 
+      import('./seguranca/seguranca.module').then(m => m.SegurancaModule)
+  },
   
   { path: 'pagina-nao-encontrada', component: PaginaNaoEncontradaComponent },
   { path: '**', redirectTo: 'pagina-nao-encontrada' }

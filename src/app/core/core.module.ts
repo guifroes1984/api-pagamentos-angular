@@ -7,13 +7,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 
-
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from '../shared/shared.module';
 
 import { ErrorHandlerService } from './error-handler.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LancamentoService } from '../lancamento/lancamento.service';
+import { PessoaService } from '../pessoa/pessoa.service';
+import { CategoriaService } from '../categorias/categoria.service';
+import { AuthService } from '../seguranca/auth.service';
+import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
 
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
@@ -21,7 +24,6 @@ import { getPaginatorIntl } from '../shared/mat-paginator-intl';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
-import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
 import { Title } from '@angular/platform-browser';
 
 @NgModule({
@@ -51,6 +53,10 @@ import { Title } from '@angular/platform-browser';
   exports: [NavbarComponent], 
   providers: [
     LancamentoService, 
+    PessoaService, 
+    CategoriaService, 
+    ErrorHandlerService, 
+    AuthService, 
     provideNgxMask(),
   { provide: LOCALE_ID, useValue: 'pt-BR' },
   { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },

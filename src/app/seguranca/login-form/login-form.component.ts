@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login-form',
@@ -10,16 +11,19 @@ export class LoginFormComponent {
   
   formLogin: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder, 
+    private auth: AuthService
+  ) {
+
     this.formLogin = this.fb.group({
       usuario: ['', [Validators.required, Validators.email]],
       senha: ['', Validators.required]
     });
   }
 
-  onLogin() {
+  public login() {
     const { usuario, senha } = this.formLogin.value;
-    console.log('Login com:', usuario, senha);
-    //this.formLogin.get('senha')?.reset();
+    this.auth.login(usuario, senha);
   }
 }

@@ -27,6 +27,11 @@ import { SegurancaModule } from './seguranca/seguranca.module';
 
 registerLocaleData(localePt);
 
+import { JwtModule } from '@auth0/angular-jwt';
+
+export function tokenGetter() {
+  return localStorage.getItem('access_token');
+}
 
 @NgModule({
   declarations: [
@@ -55,6 +60,13 @@ registerLocaleData(localePt);
     MatListModule, 
     MatDialogModule, 
 
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ['localhost:8080'], // ou sua API
+        disallowedRoutes: ['localhost:8080/oauth/token'] // por exemplo
+      }
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]

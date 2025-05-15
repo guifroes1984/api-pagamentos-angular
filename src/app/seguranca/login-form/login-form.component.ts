@@ -13,7 +13,7 @@ export class LoginFormComponent {
 
   constructor(
     private fb: FormBuilder, 
-    private auth: AuthService
+    public auth: AuthService
   ) {
 
     this.formLogin = this.fb.group({

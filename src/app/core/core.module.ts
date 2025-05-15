@@ -25,6 +25,7 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { Title } from '@angular/platform-browser';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @NgModule({
   imports: [
@@ -45,7 +46,9 @@ import { Title } from '@angular/platform-browser';
       closeButton: true,
       progressBar: true, 
     }),
+    
   ], 
+  
   declarations: [
     NavbarComponent,
     PaginaNaoEncontradaComponent
@@ -61,7 +64,8 @@ import { Title } from '@angular/platform-browser';
   { provide: LOCALE_ID, useValue: 'pt-BR' },
   { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
   { provide: MatPaginatorIntl, useValue: getPaginatorIntl() }, 
-  { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
+  { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}, 
+    JwtHelperService, 
     ErrorHandlerService, 
     Title
   ]

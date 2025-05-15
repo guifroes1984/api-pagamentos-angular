@@ -19,22 +19,23 @@ export class AuthService {
    }
 
   public login(usuario: string, senha: string): Promise<void> {
-    
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/x-www-form-urlencoded')
-      .set('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
+  const headers = new HttpHeaders()
+    .set('Content-Type', 'application/x-www-form-urlencoded')
+    .set('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
 
-    const body = `username=${usuario}&password=${senha}&grant_type=password`;
+  const body = `username=${usuario}&password=${senha}&grant_type=password`;
 
-        return firstValueFrom(
-      this.http.post<{ access_token: string }>(this.oauthTokenUrl, body, { headers })
-    ).then(response => {
-      console.log(response);
-      this.armazenarToken(response.access_token);
-    }).catch(error => {
-      console.log(error);
-    });
-  }
+  return firstValueFrom(
+    this.http.post<{ access_token: string }>(this.oauthTokenUrl, body, { headers })
+  ).then(response => {
+    this.armazenarToken(response.access_token);
+  }).catch(error => {
+    if (error.status === 400 && error.error?.error === 'invalid_grant') {
+      return Promise.reject('Usuário ou senha inválida!');
+    }
+    return Promise.reject(error);
+  });
+}
 
   private armazenarToken(token: string) {
     this.jwtPayload = this.jtwHelperService.decodeToken(token);

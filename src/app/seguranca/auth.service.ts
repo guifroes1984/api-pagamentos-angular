@@ -34,6 +34,10 @@ export class AuthService {
     });
   }
 
+  public temPermissao(permissao: string): boolean {
+    return this.jwtPayload?.authorities?.includes(permissao) ?? false;
+  }
+
   private armazenarToken(token: string) {
     this.jwtPayload = this.jwtHelper.decodeToken(token);
     localStorage.setItem('token', token);

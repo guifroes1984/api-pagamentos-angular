@@ -5,14 +5,18 @@
       </button>
     </div>
   
-    <mat-nav-list class="navbar-menu" *ngIf="exibindoMenu">
+    <mat-nav-list class="navbar-menu" *ngIf="exibindoMenu && auth.jwtPayload">
       <mat-list-item>
         <span class="navbar-usuario">{{ auth.jwtPayload?.nome }}</span>
       </mat-list-item>
-      <mat-list-item class="navbar-menuitem" routerLinkActive="ativo">
+      <mat-list-item class="navbar-menuitem" 
+        *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')"
+        routerLinkActive="ativo">
         <a routerLink="/lancamentos">Lançamentos</a>
       </mat-list-item>
-      <mat-list-item class="navbar-menuitem" routerLinkActive="ativo">
+      <mat-list-item class="navbar-menuitem" 
+        *ngIf="auth.temPermissao('ROLE_PESQUISAR_PESSOA')"
+        routerLinkActive="ativo">
         <a routerLink="/pessoas">Pessoas</a>
       </mat-list-item>
       <mat-list-item class="navbar-menuitem">

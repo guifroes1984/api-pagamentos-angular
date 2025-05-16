@@ -27,10 +27,10 @@ import { SegurancaModule } from './seguranca/seguranca.module';
 
 registerLocaleData(localePt);
 
-import { JwtModule } from '@auth0/angular-jwt';
+import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 
 export function tokenGetter() {
-  return localStorage.getItem('access_token');
+  return localStorage.getItem('token');
 }
 
 @NgModule({
@@ -61,12 +61,16 @@ export function tokenGetter() {
     MatDialogModule, 
 
     JwtModule.forRoot({
-      config: {
-        tokenGetter: tokenGetter,
-        allowedDomains: ['localhost:8080'], // ou sua API
-        disallowedRoutes: ['localhost:8080/oauth/token'] // por exemplo
+      jwtOptionsProvider: {
+        provide: JWT_OPTIONS,
+        useFactory: () => ({
+          tokenGetter: () => localStorage.getItem('token'),
+          allowedDomains: ['localhost:8080'],
+          disallowedRoutes: ['http://localhost:8080/oauth/token'],
+        }),
+        deps: []
       }
-    }),
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

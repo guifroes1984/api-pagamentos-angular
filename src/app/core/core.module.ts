@@ -26,6 +26,7 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { Title } from '@angular/platform-browser';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
     MatIconModule, 
     MatToolbarModule, 
     MatListModule, 
+    MatTooltipModule,
 
     NgxMaskDirective, 
     NgxMaskPipe,

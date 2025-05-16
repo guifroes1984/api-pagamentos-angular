@@ -7,7 +7,7 @@
   
     <mat-nav-list class="navbar-menu" *ngIf="exibindoMenu">
       <mat-list-item>
-        <span class="navbar-usuario">José da Silva</span>
+        <span class="navbar-usuario">{{ auth.jwtPayload?.nome }}</span>
       </mat-list-item>
       <mat-list-item class="navbar-menuitem" routerLinkActive="ativo">
         <a routerLink="/lancamentos">Lançamentos</a>

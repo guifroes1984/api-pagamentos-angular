@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { PaginaNaoEncontradaComponent } from './core/pagina-nao-encontrada.component';
+import { PaginaNaoAutorizadoComponent } from './core/nao-autorizado.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'lancamentos', pathMatch: 'full' },
@@ -24,7 +25,8 @@ const routes: Routes = [
       import('./seguranca/seguranca.module').then(m => m.SegurancaModule)
   },
   
-  { path: 'pagina-nao-encontrada', component: PaginaNaoEncontradaComponent },
+  { path: 'pagina-nao-encontrada', component: PaginaNaoEncontradaComponent }, 
+  { path: 'pagina-nao-autorizado', component: PaginaNaoAutorizadoComponent },
   { path: '**', redirectTo: 'pagina-nao-encontrada' }
 ];
 

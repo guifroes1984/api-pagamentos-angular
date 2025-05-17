@@ -59,7 +59,7 @@ import { LancamentoRoutingModule } from './lancamentos-routing.module';
     CurrencyMaskModule, 
     
     SharedModule, 
-    LancamentoRoutingModule
+    LancamentoRoutingModule, 
   ],
   exports: []
 })

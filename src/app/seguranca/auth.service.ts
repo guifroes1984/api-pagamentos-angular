@@ -68,6 +68,16 @@ public isAccessTokenInvalido() {
     return this.jwtPayload?.authorities?.includes(permissao) ?? false;
   }
 
+  public temQualquerPermissao(roles: string[]): boolean {
+    for(const role of roles) {
+      if (this.temPermissao(role)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   private armazenarToken(token: string) {
     this.jwtPayload = this.jwtHelper.decodeToken(token);
     localStorage.setItem('token', token);

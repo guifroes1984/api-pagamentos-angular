@@ -5,10 +5,10 @@ import { Component } from '@angular/core';
   template: `
     <div class="container">
       <div class="mat-grid">
-      <div class="mat-grid-item">
-        <h1>Página não encontrada!</h1>
+        <div class="mat-grid-item">
+          <h1>Página não encontrada!</h1>
+        </div>
       </div>
-  </div>
     </div>
   `,
   styles: [

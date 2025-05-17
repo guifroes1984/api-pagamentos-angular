@@ -80,7 +80,7 @@ export function tokenGetter() {
       provide: HTTP_INTERCEPTORS,
       useClass: MoneyHttp,
       multi: true
-    }
+    }, 
   ],
   bootstrap: [AppComponent]
 })

@@ -3,9 +3,9 @@
       <button mat-icon-button class="navbar-toggle" (click)="alternarMenu()" aria-label="Menu">
         <mat-icon>menu</mat-icon>
       </button>
-      <button mat-icon-button matTooltip="Novo access token" class="navbar-toggle" (click)="criarNovoAccessToken()" aria-label="Menu">
+      <!-- <button mat-icon-button matTooltip="Novo access token" class="navbar-toggle" (click)="criarNovoAccessToken()" aria-label="Menu">
         <mat-icon>add</mat-icon>
-      </button>
+      </button> -->
     </div>
   
     <mat-nav-list class="navbar-menu" *ngIf="exibindoMenu && auth.jwtPayload">

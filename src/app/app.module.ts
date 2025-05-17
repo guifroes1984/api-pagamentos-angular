@@ -29,6 +29,9 @@ registerLocaleData(localePt);
 
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MoneyHttp } from './seguranca/money-http';
+
 export function tokenGetter() {
   return localStorage.getItem('token');
 }
@@ -72,7 +75,13 @@ export function tokenGetter() {
       }
     })
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MoneyHttp,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

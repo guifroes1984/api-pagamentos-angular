@@ -9,7 +9,18 @@ export const AuthGuard: CanActivateFn = (route, state) => {
 
    const roles = route.data?.['roles'] as string[];
 
-  if (roles && !auth.temQualquerPermissao(roles)) {
+  if (auth.isAccessTokenInvalido()) {
+    console.log('Navegação com access token inválido. Obtendo novo token...');
+
+    return auth.obterNovoAccessToken()
+      .then(() => {
+        if (auth.isAccessTokenInvalido()) {
+          router.navigate(['/login']);
+          return false;
+        }
+        return true;
+      });
+  } else if (roles && !auth.temQualquerPermissao(roles)) {
     router.navigate(['/pagina-nao-autorizado']);
     return false;
   }

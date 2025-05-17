@@ -58,6 +58,11 @@ export class AuthService {
   });
 }
 
+public limparAccessToken() {
+  localStorage.removeItem('token');
+  this.jwtPayload = null;
+}
+
 public isAccessTokenInvalido() {
   const token = localStorage.getItem('token');
 

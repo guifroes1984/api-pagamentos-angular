@@ -49,14 +49,14 @@
 
         <app-mensagem 
           [control]="formulario.get('descricao')" 
-          [error]="'required'" 
+          [error]="'obrigatoriedade'" 
           [text]="'Informe uma descrição'">
         </app-mensagem>
 
         <app-mensagem 
           [control]="formulario.get('descricao')" 
-          [error]="'minlength'" 
-          [text]="'Mínimo de ' + formulario.get('descricao')?.errors?.['minlength']?.requiredLength + ' caracteres'">
+          [error]="'tamanhoMinimo'" 
+          [text]="'Mínimo de ' + formulario.get('descricao')?.errors?.['tamanhoMinimo']?.tamanho + ' caracteres'">
         </app-mensagem>
       </div>
 

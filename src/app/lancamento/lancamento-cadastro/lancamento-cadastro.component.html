@@ -1,13 +1,13 @@
 <div class="container">
-  <form #lancamentoForm="ngForm" (ngSubmit)="salvar(lancamentoForm)">
+  <form [formGroup]="formulario" (ngSubmit)="salvar()">
     <div class="mat-grid">
-        <div class="mat-grid-item">
-            <h1>{{ editando ? 'Edição de ' : 'Novo' }} Lançamento</h1>
-        </div>
+      <div class="mat-grid-item">
+        <h1>{{ editando ? 'Edição de ' : 'Novo' }} Lançamento</h1>
+      </div>
     </div>
 
     <div class="mat-elevation-z2" style="padding: 8px; border-radius: 4px; display: inline-block; margin-bottom: 16px;">
-      <mat-button-toggle-group name="tipo" [(ngModel)]="lancamento.tipo" exclusive class="tipo-toggle">
+      <mat-button-toggle-group formControlName="tipo" exclusive class="tipo-toggle">
         <mat-button-toggle *ngFor="let tipo of tipos" [value]="tipo.value">
           {{ tipo.label }}
         </mat-button-toggle>
@@ -18,46 +18,45 @@
       <div class="campo-data">
         <mat-form-field appearance="outline" style="width: 100%;">
           <mat-label>Vencimento</mat-label>
-          <input matInput [matDatepicker]="pickerVencimento" placeholder="dd/mm/aaaa" name="vencimento"
-            [(ngModel)]="lancamento.dataVencimento" #vencimento="ngModel" required readonly />
+          <input matInput [matDatepicker]="pickerVencimento" placeholder="dd/mm/aaaa" formControlName="dataVencimento" readonly />
           <mat-datepicker-toggle matSuffix [for]="pickerVencimento"></mat-datepicker-toggle>
           <mat-datepicker #pickerVencimento></mat-datepicker>
         </mat-form-field>
 
         <app-mensagem 
-          [control]="vencimento" 
+          [control]="formulario.get('dataVencimento')" 
           [error]="'required'" 
           [text]="'Informe uma data de vencimento'">
         </app-mensagem>
       </div>
-    
+
       <div class="campo-data">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>{{ lancamento.tipo === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</mat-label>
-          <input matInput [matDatepicker]="pickerRecebimento" placeholder="dd/mm/aaaa"
-            [(ngModel)]="lancamento.dataPagamento" name="pagamento" readonly/>
+          <mat-label>{{ formulario.get('tipo')?.value === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</mat-label>
+          <input matInput [matDatepicker]="pickerRecebimento" placeholder="dd/mm/aaaa" formControlName="dataPagamento" readonly />
           <mat-datepicker-toggle matSuffix [for]="pickerRecebimento"></mat-datepicker-toggle>
           <mat-datepicker #pickerRecebimento></mat-datepicker>
         </mat-form-field>
       </div>
     </div>
-    
+
     <div class="linha" style="display: flex; gap: 16px; margin-top: 20px;">
       <div style="width: 100%;">
         <mat-form-field appearance="outline" class="campo-grande">
           <mat-label>Descrição</mat-label>
-          <input matInput type="text" name="descricao"
-            [(ngModel)]="lancamento.descricao" #descricao="ngModel" required minlength="5"/>
+          <input matInput type="text" formControlName="descricao" />
         </mat-form-field>
-      
+
         <app-mensagem 
-          [control]="descricao" 
+          [control]="formulario.get('descricao')" 
           [error]="'required'" 
           [text]="'Informe uma descrição'">
         </app-mensagem>
 
-        <app-mensagem [control]="descricao" [error]="'minlength'"
-          [text]="'Mínimo de ' + descricao.errors?.['minlength']?.requiredLength + ' caracteres'">
+        <app-mensagem 
+          [control]="formulario.get('descricao')" 
+          [error]="'minlength'" 
+          [text]="'Mínimo de ' + formulario.get('descricao')?.errors?.['minlength']?.requiredLength + ' caracteres'">
         </app-mensagem>
       </div>
 
@@ -65,12 +64,12 @@
         <mat-form-field appearance="outline" class="campo-pequeno">
           <mat-label>Valor</mat-label>
           <input matInput currencyMask
-            [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, align: 'right', max: 10000 }"
-            [(ngModel)]="lancamento.valor" name="valor" #valorModel="ngModel" placeholder="0,00" required />
+                 [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, align: 'right', max: 10000 }"
+                 formControlName="valor" placeholder="0,00" />
         </mat-form-field>
-      
+
         <app-mensagem 
-          [control]="valorModel" 
+          [control]="formulario.get('valor')" 
           [error]="'required'" 
           [text]="'Informe um valor'">
         </app-mensagem>
@@ -78,67 +77,68 @@
     </div>
 
     <div class="filtros-container">
-      <div style="flex: 1; display: flex; flex-direction: column;">
+      <div style="flex: 1; display: flex; flex-direction: column;" [formGroupName]="'categoria'">
         <mat-form-field appearance="outline" class="campo-medio">
-          <mat-label>Categorias</mat-label>
-          <mat-select [(ngModel)]="lancamento.categoria.codigo" name="categoria" #categoriaModel="ngModel" required>
-            <mat-option *ngIf="!lancamento.categoria.codigo" value="">Selecione</mat-option>
-            <mat-option *ngFor="let categoria of categorias" [value]="categoria.value">
-              {{ categoria.label }}
-            </mat-option>
-          </mat-select>
+            <mat-label>Categorias</mat-label>
+            <mat-select formControlName="codigo">
+              <mat-option value="">Selecione</mat-option>
+              <mat-option *ngFor="let categoria of categorias" [value]="categoria.codigo">
+                {{ categoria.nome }}
+              </mat-option>
+            </mat-select>
         </mat-form-field>
 
         <app-mensagem 
-          [control]="categoriaModel" 
+          [control]="formulario.get('categoria')" 
           [error]="'required'" 
           [text]="'Informe uma categoria'">
         </app-mensagem>
       </div>
-      
-      <div style="flex: 1; display: flex; flex-direction: column;">
+
+      <div style="flex: 1; display: flex; flex-direction: column;" [formGroupName]="'pessoa'">
         <mat-form-field appearance="outline" class="campo-medio pessoa-field">
           <mat-label>Pessoas</mat-label>
-          <mat-select [(ngModel)]="lancamento.pessoa.codigo" name="pessoa" #pessoaModel="ngModel" required>
+          <mat-select formControlName="codigo">
             <mat-option [disabled]="true" class="pessoa-option-filtro">
               <div class="filtro-container" (click)="$event.stopPropagation()">
                 <div class="filtro-box">
                   <mat-icon class="filtro-icon">search</mat-icon>
-                  <input matInput placeholder="Filtrar..." [(ngModel)]="filtroPessoa" [ngModelOptions]="{ standalone: true }"
-                    (click)="$event.stopPropagation()"
-                    (keydown)="$event.stopPropagation()"
-                    class="filtro-input"/>
+                  <input matInput placeholder="Filtrar..." [formControl]="filtroPessoaCtrl"
+                    (click)="$event.stopPropagation()" 
+                    (keydown)="$event.stopPropagation()" 
+                    class="filtro-input" />
                 </div>
               </div>
             </mat-option>
-      
-            <mat-option *ngFor="let pessoa of pessoas | filterPessoas:filtroPessoa" [value]="pessoa.value">
+
+            <mat-option *ngFor="let pessoa of pessoas | filterPessoas:filtroPessoaCtrl.value || ''" [value]="pessoa.value">
               {{ pessoa.label }}
             </mat-option>
+
           </mat-select>
         </mat-form-field>
-    
+
         <app-mensagem 
-          [control]="pessoaModel" 
+          [control]="formulario.get('pessoa.codigo')" 
           [error]="'required'" 
           [text]="'Informe uma pessoa'">
         </app-mensagem>
       </div>
-    </div>        
+    </div>
 
     <div class="linha">
-        <mat-form-field appearance="outline" style="width: 100%; margin-top: 20px;">
+      <mat-form-field appearance="outline" style="width: 100%; margin-top: 20px;">
         <mat-label>Observação</mat-label>
-        <textarea matInput rows="3" [(ngModel)]="lancamento.observacao" name="observacao" class="sem-selecao"></textarea>
-        </mat-form-field>
+        <textarea matInput rows="3" formControlName="observacao" class="sem-selecao"></textarea>
+      </mat-form-field>
     </div>
 
     <div class="linha" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
-      <button mat-raised-button color="primary" [disabled]="!lancamentoForm.valid">
+      <button mat-raised-button color="primary" [disabled]="!formulario.valid">
         <mat-icon>save</mat-icon>
         Salvar
       </button>
-      <button mat-raised-button color="accent" type="button" (click)="novo(lancamentoForm)">
+      <button mat-raised-button color="accent" type="button" (click)="novo()">
         <mat-icon>add_circle</mat-icon>
         Novo
       </button>

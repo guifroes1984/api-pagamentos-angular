@@ -5,6 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import * as moment from 'moment';
 
 import { Lancamento } from '../core/model/lancamento';
+import { environment } from 'src/environment/environment';
 
 export class LancamentoFiltro {
   descricao?: string;
@@ -19,9 +20,11 @@ export class LancamentoFiltro {
 })
 export class LancamentoService {
 
-  lancamentosUrl = 'http://localhost:8080/lancamentos';
+  lancamentosUrl: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    this.lancamentosUrl = `${environment.apiUrl}/lancamentos`;
+  }
 
   public pesquisar(filtro: LancamentoFiltro): Promise<any> {
     let params = new HttpParams();

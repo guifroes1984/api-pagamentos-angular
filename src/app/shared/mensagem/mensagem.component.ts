@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgModel } from '@angular/forms';
+import { AbstractControl, NgModel } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 
@@ -27,7 +27,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 })
 export class MensagemComponent {
   @Input() error!: string;
-  @Input() control!: NgModel;
+  @Input() control!: AbstractControl | null;
   @Input() text!: string;
 
   temErro(): boolean {

@@ -14,13 +14,13 @@
             [(ngModel)]="pessoa.nome" #nome="ngModel" required minlength="5" />
         </mat-form-field>
 
-        <app-mensagem [control]="nome" [error]="'required'" 
+        <!-- <app-mensagem [control]="nome" [error]="'required'" 
           [text]="'Informe o nome'">
-        </app-mensagem>
+        </app-mensagem> -->
 
-        <app-mensagem [control]="nome" [error]="'minlength'" 
+        <!-- <app-mensagem [control]="nome" [error]="'minlength'" 
           [text]="'Mínimo de 5 caracteres'">
-        </app-mensagem>
+        </app-mensagem> -->
       </div>
     </div>
     
@@ -32,9 +32,9 @@
             [(ngModel)]="pessoa.endereco.logradouro" #logradouro="ngModel" required />
         </mat-form-field>
     
-        <app-mensagem [control]="logradouro" [error]="'required'" 
+        <!-- <app-mensagem [control]="logradouro" [error]="'required'" 
           [text]="'Informe o logradouro'">
-        </app-mensagem>
+        </app-mensagem> -->
       </div>
     
       <div style="flex: 1; min-width: 150px; display: flex; flex-direction: column;">
@@ -44,9 +44,9 @@
             [(ngModel)]="pessoa.endereco.numero" #numero="ngModel" required />
         </mat-form-field>
     
-        <app-mensagem [control]="numero" [error]="'required'" 
+        <!-- <app-mensagem [control]="numero" [error]="'required'" 
           [text]="'Informe o número'">
-        </app-mensagem>
+        </app-mensagem> -->
       </div>
     </div>
 
@@ -64,9 +64,9 @@
           <input matInput name="bairro" [(ngModel)]="pessoa.endereco.bairro" #bairro="ngModel" required />
         </mat-form-field>
 
-        <app-mensagem [control]="bairro" [error]="'required'" 
+        <!-- <app-mensagem [control]="bairro" [error]="'required'" 
           [text]="'Informe o bairro'">
-        </app-mensagem>
+        </app-mensagem> -->
       </div>
 
       <div style="flex: 1; display: flex; flex-direction: column;">
@@ -76,9 +76,9 @@
           name="cep" [(ngModel)]="pessoa.endereco.cep" #cep="ngModel" required />
         </mat-form-field>
 
-        <app-mensagem [control]="cep" [error]="'required'" 
+        <!-- <app-mensagem [control]="cep" [error]="'required'" 
           [text]="'Informe o CEP'">
-        </app-mensagem>
+        </app-mensagem> -->
       </div>
     </div>
 
@@ -89,9 +89,9 @@
           <input matInput name="cidade" [(ngModel)]="pessoa.endereco.cidade" #cidade="ngModel" required />
         </mat-form-field>
 
-        <app-mensagem [control]="cidade" [error]="'required'" 
+        <!-- <app-mensagem [control]="cidade" [error]="'required'" 
           [text]="'Informe a cidade'">
-        </app-mensagem>
+        </app-mensagem> -->
       </div>
 
       <div style="flex: 1; display: flex; flex-direction: column;">
@@ -101,9 +101,9 @@
           (input)="pessoa.endereco.estado = (pessoa.endereco.estado || '').toUpperCase()"/>
         </mat-form-field>
 
-        <app-mensagem [control]="estado" [error]="'required'" 
+        <!-- <app-mensagem [control]="estado" [error]="'required'" 
           [text]="'Informe o estado'">
-        </app-mensagem>
+        </app-mensagem> -->
       </div>
     </div>
 

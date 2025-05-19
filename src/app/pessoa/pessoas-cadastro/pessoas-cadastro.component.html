@@ -1,5 +1,5 @@
 <div class="container">
-  <form #cadastroPessoaForm="ngForm" autocomplete="off" (ngSubmit)="salvar(cadastroPessoaForm)">
+  <form [formGroup]="formPessoa" autocomplete="off" (ngSubmit)="salvar()">
     <div class="mat-grid">
       <div class="mat-grid-item">
         <h1>{{ editando ? 'Edição de ' : 'Nova' }} Pessoa</h1>
@@ -10,109 +10,120 @@
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-grande">
           <mat-label>Nome</mat-label>
-          <input matInput type="text" name="nome"
-            [(ngModel)]="pessoa.nome" #nome="ngModel" required minlength="5" />
+          <input matInput type="text" formControlName="nome" />
         </mat-form-field>
 
-        <!-- <app-mensagem [control]="nome" [error]="'required'" 
+        <app-mensagem 
+          [control]="formPessoa.get('nome')"
+          [error]="'required'"  
           [text]="'Informe o nome'">
-        </app-mensagem> -->
+        </app-mensagem>
 
-        <!-- <app-mensagem [control]="nome" [error]="'minlength'" 
-          [text]="'Mínimo de 5 caracteres'">
-        </app-mensagem> -->
+        <app-mensagem 
+          [control]="formPessoa.get('nome')" 
+          [error]="'tamanhoMinimo'" 
+          [text]="'Mínimo de ' + formPessoa.get('nome')?.errors?.['tamanhoMinimo']?.tamanho + ' caracteres'">
+        </app-mensagem>
       </div>
     </div>
-    
-    <div class="linha" style="display: flex; gap: 16px;">
+
+    <div class="linha" style="display: flex; gap: 16px;" formGroupName="endereco">
       <div style="flex: 3; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-grande">
           <mat-label>Logradouro</mat-label>
-          <input matInput type="text" name="logradouro"
-            [(ngModel)]="pessoa.endereco.logradouro" #logradouro="ngModel" required />
+          <input matInput type="text" formControlName="logradouro" />
         </mat-form-field>
-    
-        <!-- <app-mensagem [control]="logradouro" [error]="'required'" 
+
+        <app-mensagem 
+          [control]="formPessoa.get('endereco.logradouro')"
+          [error]="'required'"  
           [text]="'Informe o logradouro'">
-        </app-mensagem> -->
+        </app-mensagem>
       </div>
-    
+
       <div style="flex: 1; min-width: 150px; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-pequeno">
           <mat-label>Número</mat-label>
-          <input matInput type="text" name="numero"
-            [(ngModel)]="pessoa.endereco.numero" #numero="ngModel" required />
+          <input matInput type="text" formControlName="numero" />
         </mat-form-field>
-    
-        <!-- <app-mensagem [control]="numero" [error]="'required'" 
+
+        <app-mensagem 
+          [control]="formPessoa.get('endereco.numero')"
+          [error]="'required'"  
           [text]="'Informe o número'">
-        </app-mensagem> -->
+        </app-mensagem>
       </div>
     </div>
 
-    <div class="linha" style="display: flex; gap: 16px;">
+    <div class="linha" style="display: flex; gap: 16px;" formGroupName="endereco">
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Complemento</mat-label>
-          <input matInput name="complemento" [(ngModel)]="pessoa.endereco.complemento" #complemento="ngModel" />
+          <input matInput formControlName="complemento" />
         </mat-form-field>
       </div>
 
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Bairro</mat-label>
-          <input matInput name="bairro" [(ngModel)]="pessoa.endereco.bairro" #bairro="ngModel" required />
+          <input matInput formControlName="bairro" />
         </mat-form-field>
 
-        <!-- <app-mensagem [control]="bairro" [error]="'required'" 
+        <app-mensagem 
+          [control]="formPessoa.get('endereco.bairro')"
+          [error]="'required'"  
           [text]="'Informe o bairro'">
-        </app-mensagem> -->
+        </app-mensagem>
       </div>
 
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>CEP</mat-label>
-          <input matInput mask="00000-000" placeholder="00000-000" 
-          name="cep" [(ngModel)]="pessoa.endereco.cep" #cep="ngModel" required />
+          <input matInput mask="00000-000" placeholder="00000-000" formControlName="cep" />
         </mat-form-field>
 
-        <!-- <app-mensagem [control]="cep" [error]="'required'" 
+        <app-mensagem 
+          [control]="formPessoa.get('endereco.cep')"
+          [error]="'required'"  
           [text]="'Informe o CEP'">
-        </app-mensagem> -->
+        </app-mensagem>
       </div>
     </div>
 
-    <div class="linha" style="display: flex; gap: 16px;">
+    <div class="linha" style="display: flex; gap: 16px;" formGroupName="endereco">
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Cidade</mat-label>
-          <input matInput name="cidade" [(ngModel)]="pessoa.endereco.cidade" #cidade="ngModel" required />
+          <input matInput formControlName="cidade" />
         </mat-form-field>
 
-        <!-- <app-mensagem [control]="cidade" [error]="'required'" 
+        <app-mensagem 
+          [control]="formPessoa.get('endereco.cidade')"
+          [error]="'required'"  
           [text]="'Informe a cidade'">
-        </app-mensagem> -->
+        </app-mensagem>
       </div>
 
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-pequeno">
           <mat-label>Estado</mat-label>
-          <input matInput name="estado" [(ngModel)]="pessoa.endereco.estado" #estado="ngModel" required 
-          (input)="pessoa.endereco.estado = (pessoa.endereco.estado || '').toUpperCase()"/>
+          <input matInput formControlName="estado" maxlength="2" (input)="onEstadoInput($event)" />
         </mat-form-field>
 
-        <!-- <app-mensagem [control]="estado" [error]="'required'" 
+        <app-mensagem 
+          [control]="formPessoa.get('endereco.estado')"
+          [error]="'required'"  
           [text]="'Informe o estado'">
-        </app-mensagem> -->
+        </app-mensagem>
       </div>
     </div>
 
     <div class="linha linha-botoes" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
-      <button mat-raised-button color="primary" [disabled]="!cadastroPessoaForm.valid">
+      <button mat-raised-button color="primary" [disabled]="formPessoa.invalid">
         <mat-icon>save</mat-icon>
         Salvar
       </button>
-      <button mat-raised-button color="accent" type="button" (click)="novo(cadastroPessoaForm)">
+      <button mat-raised-button color="accent" type="button" (click)="novo()">
         <mat-icon>add_circle</mat-icon>
         Novo
       </button>

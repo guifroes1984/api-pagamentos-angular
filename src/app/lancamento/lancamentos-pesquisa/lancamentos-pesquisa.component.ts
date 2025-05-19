@@ -31,7 +31,7 @@ export class LancamentosPesquisaComponent implements OnInit {
 
   constructor(
     private lancamentoService: LancamentoService, 
-    public auth:              AuthService, 
+    public auth:               AuthService, 
     private pessoaService:     PessoaService, 
     private toastr:            ToastrService, 
     private dialog:            MatDialog, 

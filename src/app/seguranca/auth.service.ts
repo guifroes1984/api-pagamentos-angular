@@ -96,4 +96,9 @@ public isAccessTokenInvalido() {
       this.armazenarToken(token);
     }
   }
+
+  public isAdmin(): boolean {
+  return this.jwtPayload?.nome === 'Administrador';
+  }
+
 }

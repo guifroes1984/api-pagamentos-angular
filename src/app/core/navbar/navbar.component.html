@@ -15,7 +15,7 @@
         <a routerLink="/lancamentos">Lançamentos</a>
       </mat-list-item>
       <mat-list-item class="navbar-menuitem" 
-        *ngIf="!auth.temPermissao('ROLE_PESQUISAR_PESSOA')"
+       *ngIf="auth.isAdmin()"
         routerLinkActive="ativo">
         <a routerLink="/pessoas">Pessoas</a>
       </mat-list-item>

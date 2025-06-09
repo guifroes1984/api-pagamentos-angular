@@ -17,6 +17,7 @@ import { PessoaService } from '../pessoa/pessoa.service';
 import { CategoriaService } from '../categorias/categoria.service';
 import { AuthService } from '../seguranca/auth.service';
 import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
+import { PainelControleService } from '../painel-controle/painel-controle.service';
 
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
@@ -62,6 +63,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     CategoriaService, 
     ErrorHandlerService, 
     AuthService, 
+    PainelControleService, 
     provideNgxMask(),
   { provide: LOCALE_ID, useValue: 'pt-BR' },
   { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },

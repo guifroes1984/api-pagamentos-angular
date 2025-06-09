@@ -5,7 +5,7 @@ import { PaginaNaoEncontradaComponent } from './core/pagina-nao-encontrada.compo
 import { PaginaNaoAutorizadoComponent } from './core/nao-autorizado.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'lancamentos', pathMatch: 'full' },
+  { path: '', redirectTo: 'painel-controle', pathMatch: 'full' },
 
   {
     path: 'lancamentos',
@@ -17,6 +17,12 @@ const routes: Routes = [
     path: 'pessoas', 
     loadChildren: () => 
       import('./pessoa/pessoa.module').then(m => m.PessoaModule)
+  },
+
+  {
+    path: 'painel-controle', 
+    loadChildren: () => 
+      import('./painel-controle/painel-controle.module').then(m => m.PainelControleModule)
   },
 
   {

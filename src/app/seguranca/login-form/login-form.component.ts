@@ -31,7 +31,7 @@ export class LoginFormComponent {
     const { usuario, senha } = this.formLogin.value;
     this.auth.login(usuario, senha)
       .then(() => {
-        this.router.navigate(['/lancamentos']);
+        this.router.navigate(['/painel-controle']);
       })
       .catch(error => {
         if (error === 'Usuário ou senha inválida!') {

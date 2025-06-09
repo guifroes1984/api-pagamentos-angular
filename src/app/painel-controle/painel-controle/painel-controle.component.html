@@ -1,1 +1,28 @@
-<p>painel-controle works!</p>
+<div class="container">
+  <div class="mat-grid">
+    <div class="mat-grid-item">
+        <h1>Painel de Controle</h1>
+    </div>
+  </div>
+
+  <div class="painel-container">
+    <mat-card class="painel">
+      <mat-card-header class="cabecalho-cinza">
+        <mat-card-title>Lançamentos por categoria</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <canvas baseChart [data]="dadosGraficoPizza" [type]="'pie'"></canvas>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="painel">
+      <mat-card-header class="cabecalho-cinza">
+        <mat-card-title>Lançamentos por dia</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+       <canvas baseChart [data]="dadosGraficoLinha" [type]="'line'">
+        </canvas>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

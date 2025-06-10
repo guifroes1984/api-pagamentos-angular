@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PainelControleService } from '../painel-controle.service';
 
 @Component({
   selector: 'app-painel-controle',
@@ -7,15 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PainelControleComponent implements OnInit {
 
-  dadosGraficoPizza = {
-    labels: ['Mensal', 'Educação', 'Lazer', 'Imprevistos'],
-    datasets: [
-      {
-        data: [2500, 2700, 550, 235],
-        backgroundColor: ['#FF9900', '#109618', '#990099', '#3B3EAC']
-      }
-    ]
-  };
+  dadosGraficoPizza: any;
 
   dadosGraficoLinha = {
     labels: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
@@ -35,8 +28,29 @@ export class PainelControleComponent implements OnInit {
     ]
   };
 
-  constructor() {}
+  constructor(
+    private painelControleService: PainelControleService
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.configurarGraficoPizza();
+  }
+
+  public configurarGraficoPizza() {
+    this.painelControleService.lancamentosPorCategoria()
+      .then(dados => {
+        console.log('Dados retornados da API:', dados);
+        this.dadosGraficoPizza = {
+          labels: dados.map(dado => dado.categoria.nome),
+          datasets: [
+            {
+              data: dados.map(dado => dado.total),
+              backgroundColor: ['#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6', 
+                                  '#DD4477', '#3366CC', '#DC3912']
+            }
+          ]
+        };
+      });
+  }
 
 }

@@ -9,24 +9,7 @@ import { PainelControleService } from '../painel-controle.service';
 export class PainelControleComponent implements OnInit {
 
   dadosGraficoPizza: any;
-
-  dadosGraficoLinha = {
-    labels: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-    datasets: [
-      {
-        label: 'Receitas',
-        data: [4, 10, 18, 5, 1, 20, 3],
-        borderColor: '#3366CC',
-        fill: false
-      },
-      {
-        label: 'Despesas',
-        data: [10, 15, 8, 5, 1, 7, 9],
-        borderColor: '#D62B00',
-        fill: false
-      }
-    ]
-  };
+  dadosGraficoLinha: any;
 
   constructor(
     private painelControleService: PainelControleService
@@ -34,23 +17,86 @@ export class PainelControleComponent implements OnInit {
 
   ngOnInit(): void {
     this.configurarGraficoPizza();
+    this.configurarGraficoLinha();
   }
 
   public configurarGraficoPizza() {
     this.painelControleService.lancamentosPorCategoria()
       .then(dados => {
-        console.log('Dados retornados da API:', dados);
         this.dadosGraficoPizza = {
           labels: dados.map(dado => dado.categoria.nome),
           datasets: [
             {
               data: dados.map(dado => dado.total),
-              backgroundColor: ['#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6', 
-                                  '#DD4477', '#3366CC', '#DC3912']
+              backgroundColor: ['#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6',
+                '#DD4477', '#3366CC', '#DC3912']
             }
           ]
         };
       });
+  }
+
+  public configurarGraficoLinha() {
+    this.painelControleService.lancamentosPorDia()
+      .then(dados => {
+        const diasDoMes = this.configurarDiasMes();
+        const totaisReceitas = this.totaisPorCadaDiaMes(
+          dados.filter(dado => dado.tipo === 'RECEITA'), diasDoMes);
+        const totaisDespesas = this.totaisPorCadaDiaMes(
+          dados.filter(dado => dado.tipo === 'DESPESA'), diasDoMes);
+        this.dadosGraficoLinha = {
+          labels: diasDoMes,
+          datasets: [
+            {
+              label: 'Receitas',
+              data: totaisReceitas,
+              borderColor: '#3366CC',
+              fill: false
+            },
+            {
+              label: 'Despesas',
+              data: totaisDespesas,
+              borderColor: '#D62B00',
+              fill: false
+            }
+          ]
+        };
+      })
+  }
+
+  private totaisPorCadaDiaMes(dados: any[], diasDoMes: number[]): number[] {
+    const totais: number [] = [];
+    for(const dia of diasDoMes) {
+      let total = 0;
+
+      for(const dado of dados) {
+        if (dado.dia.getDate() === dia) {
+          total = dado.total;
+
+          break;
+        }
+      }
+
+      totais.push(total);
+    }
+
+    return totais;
+  }
+
+  private configurarDiasMes() {
+    const mesReferencia = new Date();
+    mesReferencia.setMonth(mesReferencia.getMonth() + 1);
+    mesReferencia.setDate(0);
+
+    const quantidade = mesReferencia.getDate();
+
+    const dias: number[] = [];
+
+    for(let i = 1; i <= quantidade; i++) {
+      dias.push(i);
+    }
+
+    return dias;
   }
 
 }

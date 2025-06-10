@@ -1,0 +1,7 @@
+.input-group mat-form-field {
+    margin-right: 8px;
+}
+  
+.input-group mat-form-field:last-child {
+    margin-right: 0;
+}

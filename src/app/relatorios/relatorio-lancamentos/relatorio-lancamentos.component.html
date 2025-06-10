@@ -1,1 +1,33 @@
-<p>relatorio-lancamentos works!</p>
+<div class="container">
+  <div class="mat-grid">
+    <div class="mat-grid-item">
+      <h1>Relatório de lançamentos por pessoa</h1>
+    </div>
+
+    <form #f="ngForm" (ngSubmit)="gerar()">
+      <div class="mat-grid-item" style="flex-grow: 1;">
+        <div class="input-group">
+            <mat-form-field appearance="outline">
+                <mat-label translate="no">Vencimento</mat-label>
+                <input matInput [matDatepicker]="pickerInicio" placeholder="dd/mm/aaaa" required name="periodoInicio" [(ngModel)]="periodoInicio" readonly>
+                <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+                <mat-datepicker #pickerInicio></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label translate="no">até</mat-label>
+                <input matInput [matDatepicker]="pickerFim" placeholder="dd/mm/aaaa" required name="periodoFim" [(ngModel)]="periodoFim" readonly>
+                <mat-datepicker-toggle matSuffix [for]="pickerFim"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFim></mat-datepicker>
+            </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col-12" style="margin-top: 16px;">
+        <button mat-raised-button color="primary" type="submit" [disabled]="f.invalid">
+          Gerar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

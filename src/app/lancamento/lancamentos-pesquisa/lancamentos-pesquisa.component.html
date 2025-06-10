@@ -18,14 +18,14 @@
         <div class="input-group">
           <mat-form-field appearance="outline">
             <mat-label translate="no">Vencimento</mat-label>
-            <input matInput [matDatepicker]="picker" [(ngModel)]="filtro.dataVencimentoInicio" name="dataVencimentoInicio" type="text">
+            <input matInput [matDatepicker]="picker" placeholder="dd/mm/aaaa" [(ngModel)]="filtro.dataVencimentoInicio" name="dataVencimentoInicio" type="text" readonly>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
       
           <mat-form-field appearance="outline">
             <mat-label translate="no">até</mat-label>
-            <input matInput [matDatepicker]="pickerAt" [(ngModel)]="filtro.dataVencimentoFim" name="vencimentoFim">
+            <input matInput [matDatepicker]="pickerAt" placeholder="dd/mm/aaaa" [(ngModel)]="filtro.dataVencimentoFim" name="vencimentoFim" readonly>
             <mat-datepicker-toggle matSuffix [for]="pickerAt"></mat-datepicker-toggle>
             <mat-datepicker #pickerAt></mat-datepicker>
           </mat-form-field>

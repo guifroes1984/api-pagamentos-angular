@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 
 import { NgChartsModule } from 'ng2-charts';
 import { MatCardModule } from '@angular/material/card';
@@ -14,6 +14,7 @@ import { PainelControleComponent } from './painel-controle/painel-controle.compo
   declarations: [
     PainelControleComponent
   ],
+  providers: [DecimalPipe], 
   imports: [
     CommonModule, 
 

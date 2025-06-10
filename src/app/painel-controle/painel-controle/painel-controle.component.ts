@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+
+import { TooltipItem } from 'chart.js';
+
 import { PainelControleService } from '../painel-controle.service';
 
 @Component({
@@ -11,8 +15,20 @@ export class PainelControleComponent implements OnInit {
   dadosGraficoPizza: any;
   dadosGraficoLinha: any;
 
+  opcoes = {
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem: TooltipItem<'pie'>) =>
+            this.formatarTooltip(tooltipItem)
+        }
+      }
+    }
+  };
+
   constructor(
-    private painelControleService: PainelControleService
+    private painelControleService: PainelControleService,
+    private decimalPipe: DecimalPipe
   ) { }
 
   ngOnInit(): void {
@@ -65,21 +81,18 @@ export class PainelControleComponent implements OnInit {
   }
 
   private totaisPorCadaDiaMes(dados: any[], diasDoMes: number[]): number[] {
-    const totais: number [] = [];
-    for(const dia of diasDoMes) {
+    const totais: number[] = [];
+    for (const dia of diasDoMes) {
       let total = 0;
 
-      for(const dado of dados) {
+      for (const dado of dados) {
         if (dado.dia.getDate() === dia) {
           total = dado.total;
-
           break;
         }
       }
-
       totais.push(total);
     }
-
     return totais;
   }
 
@@ -89,14 +102,20 @@ export class PainelControleComponent implements OnInit {
     mesReferencia.setDate(0);
 
     const quantidade = mesReferencia.getDate();
-
     const dias: number[] = [];
 
-    for(let i = 1; i <= quantidade; i++) {
+    for (let i = 1; i <= quantidade; i++) {
       dias.push(i);
     }
-
     return dias;
+  }
+
+  private formatarTooltip(tooltipItem: TooltipItem<'pie'>): string {
+    const dataset = tooltipItem.dataset;
+    const valor = dataset.data[tooltipItem.dataIndex] as number;
+    const label = dataset.label ? dataset.label + ': ' : '';
+
+    return label + 'R$ ' + this.decimalPipe.transform(valor, '1.2-2');
   }
 
 }

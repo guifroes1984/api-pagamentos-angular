@@ -18,6 +18,8 @@ import { CategoriaService } from '../categorias/categoria.service';
 import { AuthService } from '../seguranca/auth.service';
 import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
 import { PainelControleService } from '../painel-controle/painel-controle.service';
+import { RelatoriosService } from '../relatorios/relatorios.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
@@ -26,7 +28,6 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { Title } from '@angular/platform-browser';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
@@ -64,6 +65,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ErrorHandlerService, 
     AuthService, 
     PainelControleService, 
+    RelatoriosService, 
     provideNgxMask(),
   { provide: LOCALE_ID, useValue: 'pt-BR' },
   { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },

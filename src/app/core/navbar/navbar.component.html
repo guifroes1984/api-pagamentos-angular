@@ -9,16 +9,31 @@
       <mat-list-item>
         <span class="navbar-usuario">{{ auth.jwtPayload?.nome }}</span>
       </mat-list-item>
+
+      <mat-list-item class="navbar-menuitem" 
+        *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')"
+        routerLinkActive="ativo">
+        <a routerLink="/painel-controle">Painel de Controle</a>
+      </mat-list-item>
+
       <mat-list-item class="navbar-menuitem" 
         *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')"
         routerLinkActive="ativo">
         <a routerLink="/lancamentos">Lançamentos</a>
       </mat-list-item>
+
       <mat-list-item class="navbar-menuitem" 
        *ngIf="auth.isAdmin()"
         routerLinkActive="ativo">
         <a routerLink="/pessoas">Pessoas</a>
       </mat-list-item>
+
+      <mat-list-item class="navbar-menuitem" 
+       *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')"
+        routerLinkActive="ativo">
+        <a routerLink="/relatorios/lancamentos">Relatórios</a>
+      </mat-list-item>
+
       <mat-list-item class="navbar-menuitem">
         <a href="javascript:;" (click)="logout()">Logout</a>
       </mat-list-item>

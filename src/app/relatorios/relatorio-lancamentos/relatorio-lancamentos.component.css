@@ -5,3 +5,9 @@
 .input-group mat-form-field:last-child {
     margin-right: 0;
 }
+
+.botoes-acao {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}

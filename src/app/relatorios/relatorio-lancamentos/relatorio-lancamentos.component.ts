@@ -30,4 +30,10 @@ export class RelatorioLancamentosComponent implements OnInit {
       });
   }
 
+  public limpar(form: any) {
+    form.resetForm(); 
+    this.periodoInicio = undefined!;
+    this.periodoFim = undefined!;
+  }
+
 }

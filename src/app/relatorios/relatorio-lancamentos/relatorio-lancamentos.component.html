@@ -23,9 +23,14 @@
         </div>
       </div>
 
-      <div class="col-12" style="margin-top: 16px;">
+      <div class="botoes-acao">
         <button mat-raised-button color="primary" type="submit" [disabled]="f.invalid">
-          Gerar
+          <mat-icon>picture_as_pdf</mat-icon>
+            Gerar relatório
+        </button>
+        <button mat-raised-button color="warn" type="button" (click)="limpar(f)">
+          <mat-icon>clear_all</mat-icon>
+          Limpar
         </button>
       </div>
     </form>

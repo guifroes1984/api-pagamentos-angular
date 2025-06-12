@@ -4,6 +4,7 @@ import { DecimalPipe } from '@angular/common';
 import { TooltipItem } from 'chart.js';
 
 import { PainelControleService } from '../painel-controle.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-painel-controle',
@@ -28,12 +29,14 @@ export class PainelControleComponent implements OnInit {
 
   constructor(
     private painelControleService: PainelControleService,
-    private decimalPipe: DecimalPipe
+    private decimalPipe:           DecimalPipe, 
+    private title:                 Title
   ) { }
 
   ngOnInit(): void {
     this.configurarGraficoPizza();
     this.configurarGraficoLinha();
+    this.title.setTitle('Painel de controle');
   }
 
   public configurarGraficoPizza() {

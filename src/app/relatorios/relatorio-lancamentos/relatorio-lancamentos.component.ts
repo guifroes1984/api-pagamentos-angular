@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RelatoriosService } from '../relatorios.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-relatorio-lancamentos',
@@ -12,10 +13,12 @@ export class RelatorioLancamentosComponent implements OnInit {
   periodoFim!: Date;
 
   constructor(
-    private relatorioService: RelatoriosService
+    private relatorioService: RelatoriosService, 
+    private title:            Title
   ) { }
 
   ngOnInit(): void {
+    this.title.setTitle('Relatório de lançamentos por pessoa');
   }
 
   public gerar() {

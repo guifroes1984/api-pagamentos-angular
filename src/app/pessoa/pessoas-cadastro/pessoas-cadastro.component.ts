@@ -8,6 +8,7 @@ import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 
 import { Pessoa } from 'src/app/core/model/pessoa';
 import { Title } from '@angular/platform-browser';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-pessoas-cadastro',
@@ -16,17 +17,20 @@ import { Title } from '@angular/platform-browser';
 })
 export class PessoasCadastroComponent implements OnInit {
 
+  fonteDados = new MatTableDataSource<any>();
+  colunasExibidas = ['nome', 'email', 'telefone', 'acoes'];
+
   formPessoa!: FormGroup;
   pessoa = new Pessoa();
 
   constructor(
-    private fb: FormBuilder,
-    private pessoaService: PessoaService,
+    private fb:                   FormBuilder,
+    private pessoaService:      PessoaService,
     private errorHandler: ErrorHandlerService,
-    private toastr: ToastrService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private title: Title
+    private toastr:             ToastrService,
+    private route:             ActivatedRoute,
+    private router:                    Router,
+    private title:                      Title
   ) { }
 
   ngOnInit(): void {
@@ -66,6 +70,8 @@ export class PessoasCadastroComponent implements OnInit {
         this.pessoa = pessoa;
         this.atualizarFormulario();
         this.atualizarTituloEdicao();
+
+        this.fonteDados.data = pessoa.contatos || [];
       })
       .catch(erro => this.errorHandler.handle(erro));
   }

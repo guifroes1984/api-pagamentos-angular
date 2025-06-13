@@ -13,15 +13,10 @@
           <input matInput type="text" formControlName="nome" />
         </mat-form-field>
 
-        <app-mensagem 
-          [control]="formPessoa.get('nome')"
-          [error]="'required'"  
-          [text]="'Informe o nome'">
+        <app-mensagem [control]="formPessoa.get('nome')" [error]="'required'" [text]="'Informe o nome'">
         </app-mensagem>
 
-        <app-mensagem 
-          [control]="formPessoa.get('nome')" 
-          [error]="'tamanhoMinimo'" 
+        <app-mensagem [control]="formPessoa.get('nome')" [error]="'tamanhoMinimo'"
           [text]="'Mínimo de ' + formPessoa.get('nome')?.errors?.['tamanhoMinimo']?.tamanho + ' caracteres'">
         </app-mensagem>
       </div>
@@ -34,9 +29,7 @@
           <input matInput type="text" formControlName="logradouro" />
         </mat-form-field>
 
-        <app-mensagem 
-          [control]="formPessoa.get('endereco.logradouro')"
-          [error]="'required'"  
+        <app-mensagem [control]="formPessoa.get('endereco.logradouro')" [error]="'required'"
           [text]="'Informe o logradouro'">
         </app-mensagem>
       </div>
@@ -47,10 +40,7 @@
           <input matInput type="text" formControlName="numero" />
         </mat-form-field>
 
-        <app-mensagem 
-          [control]="formPessoa.get('endereco.numero')"
-          [error]="'required'"  
-          [text]="'Informe o número'">
+        <app-mensagem [control]="formPessoa.get('endereco.numero')" [error]="'required'" [text]="'Informe o número'">
         </app-mensagem>
       </div>
     </div>
@@ -69,10 +59,7 @@
           <input matInput formControlName="bairro" />
         </mat-form-field>
 
-        <app-mensagem 
-          [control]="formPessoa.get('endereco.bairro')"
-          [error]="'required'"  
-          [text]="'Informe o bairro'">
+        <app-mensagem [control]="formPessoa.get('endereco.bairro')" [error]="'required'" [text]="'Informe o bairro'">
         </app-mensagem>
       </div>
 
@@ -82,10 +69,7 @@
           <input matInput mask="00000-000" placeholder="00000-000" formControlName="cep" />
         </mat-form-field>
 
-        <app-mensagem 
-          [control]="formPessoa.get('endereco.cep')"
-          [error]="'required'"  
-          [text]="'Informe o CEP'">
+        <app-mensagem [control]="formPessoa.get('endereco.cep')" [error]="'required'" [text]="'Informe o CEP'">
         </app-mensagem>
       </div>
     </div>
@@ -97,10 +81,7 @@
           <input matInput formControlName="cidade" />
         </mat-form-field>
 
-        <app-mensagem 
-          [control]="formPessoa.get('endereco.cidade')"
-          [error]="'required'"  
-          [text]="'Informe a cidade'">
+        <app-mensagem [control]="formPessoa.get('endereco.cidade')" [error]="'required'" [text]="'Informe a cidade'">
         </app-mensagem>
       </div>
 
@@ -110,11 +91,60 @@
           <input matInput formControlName="estado" maxlength="2" (input)="onEstadoInput($event)" />
         </mat-form-field>
 
-        <app-mensagem 
-          [control]="formPessoa.get('endereco.estado')"
-          [error]="'required'"  
-          [text]="'Informe o estado'">
+        <app-mensagem [control]="formPessoa.get('endereco.estado')" [error]="'required'" [text]="'Informe o estado'">
         </app-mensagem>
+      </div>
+    </div>
+
+    <div class="contatos-tabela mat-elevation-z2">
+      <div class="contatos-titulo">
+        Contatos
+      </div>
+
+      <table mat-table [dataSource]="fonteDados" class="mat-elevation-z8 mat-table" matSort>
+
+        <!-- Nome -->
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Nome </th>
+          <td mat-cell *matCellDef="let contato" translate="no"> {{ contato.nome }} </td>
+        </ng-container>
+
+        <!-- Email -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> E-mail </th>
+          <td mat-cell *matCellDef="let contato" translate="no"> {{ contato.email }} </td>
+        </ng-container>
+
+        <!-- Telefone -->
+        <ng-container matColumnDef="telefone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Telefone </th>
+          <td mat-cell *matCellDef="let contato" translate="no"> {{ contato.telefone }} </td>
+        </ng-container>
+
+        <!-- Ações -->
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef class="col-acoes"> Ações </th>
+          <td mat-cell *matCellDef="let contato" translate="no">
+            <div class="acoes-container">
+              <button mat-icon-button color="primary" matTooltip="Editar" class="botao-acao">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" matTooltip="Excluir" class="botao-acao">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Header e Rows -->
+        <tr mat-header-row *matHeaderRowDef="colunasExibidas" class="mat-header"></tr>
+        <tr mat-row *matRowDef="let row; columns: colunasExibidas;" class="mat-row"></tr>
+
+      </table>
+
+      <!-- Mensagem para lista vazia -->
+      <div *ngIf="fonteDados.data.length === 0" class="mensagem-sem-resultados">
+        Nenhum contato encontrado.
       </div>
     </div>
 

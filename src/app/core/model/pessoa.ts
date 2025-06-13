@@ -1,3 +1,4 @@
+import { Contato } from "./contato";
 import { Endereco } from "./endereco";
 
 export class Pessoa {
@@ -5,4 +6,5 @@ export class Pessoa {
     nome!: string;
     endereco = new Endereco();
     ativo = true;
+    contatos = new Array<Contato>();
 }

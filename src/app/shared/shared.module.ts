@@ -5,6 +5,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { NovoContatoDialogComponent } from './dialogs/novo-contato-dialog/novo-contato-dialog.component';
 
 @NgModule({
     imports: [
@@ -14,6 +15,6 @@ import { MatIconModule } from '@angular/material/icon';
         MatButtonModule, 
         MatIconModule, 
     ], 
-    exports: [MensagemComponent], declarations: [ConfirmDialogComponent]
+    exports: [MensagemComponent], declarations: [ConfirmDialogComponent, NovoContatoDialogComponent]
 })
 export class SharedModule { }

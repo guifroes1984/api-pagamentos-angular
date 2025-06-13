@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { PessoaService } from '../pessoa.service';
@@ -9,6 +9,8 @@ import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 import { Pessoa } from 'src/app/core/model/pessoa';
 import { Title } from '@angular/platform-browser';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { NovoContatoDialogComponent } from 'src/app/shared/dialogs/novo-contato-dialog/novo-contato-dialog.component';
 
 @Component({
   selector: 'app-pessoas-cadastro',
@@ -24,13 +26,14 @@ export class PessoasCadastroComponent implements OnInit {
   pessoa = new Pessoa();
 
   constructor(
-    private fb:                   FormBuilder,
-    private pessoaService:      PessoaService,
+    private fb: FormBuilder,
+    private pessoaService: PessoaService,
     private errorHandler: ErrorHandlerService,
-    private toastr:             ToastrService,
-    private route:             ActivatedRoute,
-    private router:                    Router,
-    private title:                      Title
+    private toastr: ToastrService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private title: Title,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -45,7 +48,19 @@ export class PessoasCadastroComponent implements OnInit {
     }
   }
 
-  configurarFormulario() {
+  public prepararNovoContato() {
+    this.dialog.open(NovoContatoDialogComponent, {
+      width: '400px', 
+      disableClose: true, 
+      hasBackdrop: true,
+      data: {
+        titulo: 'Novo Contato', 
+        mensagem: 'Pronto'
+      }
+    });
+  }
+
+  public configurarFormulario() {
     this.formPessoa = this.fb.group({
       nome: ['', [Validators.required, this.validarTamanhoMinimo(5)]],
       endereco: this.fb.group({
@@ -64,7 +79,7 @@ export class PessoasCadastroComponent implements OnInit {
     return !!this.pessoa?.codigo;
   }
 
-  carregarPessoa(codigo: number) {
+  public carregarPessoa(codigo: number) {
     this.pessoaService.buscarPessoaPorCodigo(codigo)
       .then(pessoa => {
         this.pessoa = pessoa;
@@ -76,7 +91,7 @@ export class PessoasCadastroComponent implements OnInit {
       .catch(erro => this.errorHandler.handle(erro));
   }
 
-  atualizarFormulario() {
+  public atualizarFormulario() {
     this.formPessoa.patchValue({
       nome: this.pessoa.nome,
       endereco: {
@@ -92,15 +107,15 @@ export class PessoasCadastroComponent implements OnInit {
   }
 
   public validarTamanhoMinimo = (valor: number) => {
-  return (input: FormControl) => {
-    const inputValor = (input.value || '').trim();
-    return inputValor.length >= valor
-      ? null
-      : { tamanhoMinimo: { tamanho: valor } };
-  };
-}
+    return (input: FormControl) => {
+      const inputValor = (input.value || '').trim();
+      return inputValor.length >= valor
+        ? null
+        : { tamanhoMinimo: { tamanho: valor } };
+    };
+  }
 
-  salvar(): void {
+  public salvar(): void {
     if (this.formPessoa.invalid) {
       this.formPessoa.markAllAsTouched();
       return;
@@ -116,7 +131,7 @@ export class PessoasCadastroComponent implements OnInit {
     }
   }
 
-  adicionarPessoa() {
+  public adicionarPessoa() {
     this.pessoaService.adicionarPessoa(this.pessoa)
       .then(pessoaAdicionada => {
         this.toastr.success('Pessoa adicionada com sucesso!');
@@ -125,7 +140,7 @@ export class PessoasCadastroComponent implements OnInit {
       .catch(erro => this.errorHandler.handle(erro));
   }
 
-  atualizarPessoa() {
+  public atualizarPessoa() {
     this.pessoaService.atualizarPessoa(this.pessoa)
       .then(pessoaAtualizada => {
         this.pessoa = pessoaAtualizada;
@@ -135,17 +150,17 @@ export class PessoasCadastroComponent implements OnInit {
       .catch(erro => this.errorHandler.handle(erro));
   }
 
-  novo() {
+  public novo() {
     this.pessoa = new Pessoa();
     this.formPessoa.reset();
     this.router.navigate(['/pessoas/novo']);
   }
 
-  atualizarTituloEdicao() {
+  public atualizarTituloEdicao() {
     this.title.setTitle(`Edição de pessoas: ${this.pessoa.nome}`);
   }
 
-  onEstadoInput(event: Event) {
+  public onEstadoInput(event: Event) {
     const input = event.target as HTMLInputElement;
     input.value = input.value.toUpperCase();
     this.formPessoa.get('endereco.estado')?.setValue(input.value, { emitEvent: false });

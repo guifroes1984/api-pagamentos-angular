@@ -40,7 +40,7 @@ export class PessoasPesquisaComponent implements OnInit {
     this.title.setTitle('Pesquisa de pessoas');
   }
 
-  pesquisar(pagina: number = 0): void {
+  public pesquisar(pagina: number = 0): void {
     this.filtro.pagina = pagina;
     this.filtro.itensPorPagina = this.itensPorPagina;
 
@@ -54,17 +54,17 @@ export class PessoasPesquisaComponent implements OnInit {
     });
   }
 
-  habilitarPaginacao(): boolean {
+  public habilitarPaginacao(): boolean {
     return this.totalRegistros > 5;
   }
 
-  onPaginar(event: PageEvent): void {
+  public onPaginar(event: PageEvent): void {
     this.itensPorPagina = event.pageSize;
     this.paginaAtual = event.pageIndex;
     this.pesquisar(this.paginaAtual);
   }
 
-  limpar(): void {
+  public limpar(): void {
     this.filtro = new NomeFiltro();
     this.itensPorPagina = 5;
     this.paginaAtual = 0;
@@ -72,7 +72,7 @@ export class PessoasPesquisaComponent implements OnInit {
     this.pesquisar();
   }
 
-  excluir(codigo: number): void {
+  public excluir(codigo: number): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px', 
       disableClose: true, 
@@ -95,7 +95,7 @@ export class PessoasPesquisaComponent implements OnInit {
     })
   }
 
-  alterarStatus(pessoa: any): void {
+  public alterarStatus(pessoa: any): void {
     const novoStatus = !pessoa.ativo;
 
     this.pessoaService.mudarStatus(pessoa.codigo, novoStatus)

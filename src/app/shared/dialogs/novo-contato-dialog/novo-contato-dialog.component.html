@@ -33,18 +33,18 @@
 
     <div class="linha">
       <div style="flex: 1; display: flex; flex-direction: column;">
-        <mat-form-field appearance="outline" class="campo-pequeno">
+        <mat-form-field appearance="outline" class="campo-pequeno no-validate">
           <mat-label>Telefone</mat-label>
-          <input matInput name="telefone" [(ngModel)]="contato.telefone" [ngModelOptions]="{ standalone: true }"
-            (ngModelChange)="ajustarMascaraTelefone()" [mask]="maskTelefone" [dropSpecialCharacters]="false"
-            autocomplete="new-password" class="no-validate" />
+          <input matInput name="telefone" [value]="contato.telefone"
+            (input)="contato.telefone = $any($event.target).value; ajustarMascaraTelefone()" [mask]="maskTelefone"
+            [dropSpecialCharacters]="false" autocomplete="new-password" class="no-validate" />
         </mat-form-field>
       </div>
     </div>
 
     <div class="linha linha-botoes">
       <button mat-raised-button color="primary" (click)="confirmar()"
-        [disabled]="!frmContato.valid || (contato.telefone && !telefoneValido(contato.telefone))">
+        [disabled]="!frmContato.valid || !telefoneValido(contato.telefone)">
         Confirmar
       </button>
     </div>

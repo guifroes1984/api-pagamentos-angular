@@ -50,9 +50,10 @@ export class PessoasCadastroComponent implements OnInit {
 
   public prepararNovoContato() {
     this.dialog.open(NovoContatoDialogComponent, {
-      width: '400px', 
+      width: '600px', 
       disableClose: true, 
-      hasBackdrop: true,
+      hasBackdrop: true, 
+      panelClass: 'custom-dialog-container',
       data: {
         titulo: 'Novo Contato', 
         mensagem: 'Pronto'

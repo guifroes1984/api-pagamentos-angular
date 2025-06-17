@@ -1,0 +1,51 @@
+.custom-dialog-container .mat-dialog-container {
+  padding: 0;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  background-color: #f9f9f9;
+}
+
+.dialog-header {
+  background: linear-gradient(to bottom, #ffffff, #eeeeee);
+  padding: 16px;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.dialog-content {
+  padding: 24px;
+  background-color: #fff;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 8px;
+}
+
+.linha {
+  display: flex;
+  margin-bottom: 12px;
+  flex-direction: row;
+  gap: 24px;
+  justify-content: flex-start;
+  overflow: visible;
+}
+
+mat-form-field {
+  padding-top: 10px;
+}

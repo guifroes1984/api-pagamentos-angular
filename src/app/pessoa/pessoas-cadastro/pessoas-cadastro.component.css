@@ -241,7 +241,7 @@ button.botao-secundario {
 }
 
 button.botao-secundario:hover {
-  color: white;             /* texto branco */
+  color: white;
   background-color: #1976d2;
   border-color: #1976d2;
 }

@@ -27,10 +27,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 })
 export class MensagemComponent {
   @Input() error!: string;
-  @Input() control!: AbstractControl | null;
+  @Input() control!: AbstractControl | NgModel | null;
   @Input() text!: string;
 
   temErro(): boolean {
+    const control = this.control as any;
+
     return this.control?.hasError(this.error) && (this.control?.touched || this.control?.dirty) || false;
   }
 

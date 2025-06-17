@@ -1,8 +1,55 @@
-<h2 mat-dialog-title>
+<h2 mat-dialog-title class="dialog-header">
   Novo Contato
-  <button mat-icon-button mat-dialog-close style="float: right;">
+  <button mat-icon-button mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
 </h2>
+
+<mat-dialog-content>
+  <form #frmContato="ngForm" autocomplete="new-password">
+
+    <div class="linha">
+      <div style="flex: 1; display: flex; flex-direction: column;">
+        <mat-form-field appearance="outline" class="campo-grande">
+          <mat-label>Nome</mat-label>
+          <input matInput name="nome" [(ngModel)]="contato.nome" required #contatoNome="ngModel"
+            autocomplete="new-password">
+        </mat-form-field>
+        <app-mensagem [control]="contatoNome" error="required" text="Informe o nome"></app-mensagem>
+      </div>
+    </div>
+
+    <div class="linha">
+      <div style="flex: 1; display: flex; flex-direction: column;">
+        <mat-form-field appearance="outline" class="campo-grande">
+          <mat-label>E-mail</mat-label>
+          <input matInput type="email" name="email" [(ngModel)]="contato.email" required email #contatoEmail="ngModel"
+            autocomplete="new-password">
+        </mat-form-field>
+        <app-mensagem [control]="contatoEmail" error="required" text="Informe o e-mail"></app-mensagem>
+        <app-mensagem [control]="contatoEmail" error="email" text="Informe um e-mail válido"></app-mensagem>
+      </div>
+    </div>
+
+    <div class="linha">
+      <div style="flex: 1; display: flex; flex-direction: column;">
+        <mat-form-field appearance="outline" class="campo-pequeno">
+          <mat-label>Telefone</mat-label>
+          <input matInput name="telefone" [(ngModel)]="contato.telefone" [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="ajustarMascaraTelefone()" [mask]="maskTelefone" [dropSpecialCharacters]="false"
+            autocomplete="new-password" class="no-validate" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="linha linha-botoes">
+      <button mat-raised-button color="primary" (click)="confirmar()"
+        [disabled]="!frmContato.valid || (contato.telefone && !telefoneValido(contato.telefone))">
+        Confirmar
+      </button>
+    </div>
+
+  </form>
+</mat-dialog-content>
 
 <mat-dialog-content></mat-dialog-content>

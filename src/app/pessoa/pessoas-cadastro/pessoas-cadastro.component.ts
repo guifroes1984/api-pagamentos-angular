@@ -49,14 +49,24 @@ export class PessoasCadastroComponent implements OnInit {
   }
 
   public prepararNovoContato() {
-    this.dialog.open(NovoContatoDialogComponent, {
-      width: '600px', 
-      disableClose: true, 
-      hasBackdrop: true, 
+    const dialogRef = this.dialog.open(NovoContatoDialogComponent, {
+      width: '600px',
+      disableClose: true,
+      hasBackdrop: true,
       panelClass: 'custom-dialog-container',
       data: {
-        titulo: 'Novo Contato', 
+        titulo: 'Novo Contato',
         mensagem: 'Pronto'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((novoContato) => {
+      if (novoContato) {
+        if (!this.pessoa.contatos) {
+          this.pessoa.contatos = [];
+        }
+        this.pessoa.contatos.push(novoContato);
+        this.fonteDados.data = [...this.pessoa.contatos];
       }
     });
   }

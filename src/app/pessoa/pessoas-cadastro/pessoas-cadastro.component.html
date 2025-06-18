@@ -142,8 +142,11 @@
 
       </table>
 
-      <div *ngIf="fonteDados.data.length === 0" class="mensagem-sem-resultados">
+      <div *ngIf="editando && fonteDados.data.length === 0" class="mensagem-sem-resultados">
         Nenhum contato encontrado.
+      </div>
+      <div *ngIf="!editando && fonteDados.data.length === 0" class="mensagem-sem-resultados">
+        Nenhum contato adicionado ainda. Use o botão acima para incluir os contatos desta pessoa.
       </div>
     </div>
 
@@ -160,7 +163,3 @@
     </div>
   </form>
 </div>
-
-<!-- <p-dialog header="Novo Contato" [(visible)]="exibindoFormularioContato"
-  modal="modal">
-</p-dialog> -->

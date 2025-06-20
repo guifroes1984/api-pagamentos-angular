@@ -1,5 +1,5 @@
 <h2 mat-dialog-title class="dialog-header">
-  {{ editando ? 'Editando Contato' : 'Novo Contato' }}
+  {{ editando ? 'Editando Contato: ' + data.contato?.nome : 'Novo Contato' }}
   <button mat-icon-button mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>

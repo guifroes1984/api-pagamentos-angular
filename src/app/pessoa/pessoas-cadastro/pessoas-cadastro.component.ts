@@ -11,6 +11,7 @@ import { Title } from '@angular/platform-browser';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { NovoContatoDialogComponent } from 'src/app/shared/dialogs/novo-contato-dialog/novo-contato-dialog.component';
+import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-pessoas-cadastro',
@@ -73,6 +74,7 @@ export class PessoasCadastroComponent implements OnInit {
 
   public editarContato(index: number): void {
     const contatoOriginal = this.pessoa.contatos[index];
+    const nomeContato = contatoOriginal?.nome || 'Contato';
 
     const dialogRef = this.dialog.open(NovoContatoDialogComponent, {
       width: '600px',
@@ -80,7 +82,7 @@ export class PessoasCadastroComponent implements OnInit {
       hasBackdrop: true,
       panelClass: 'custom-dialog-container',
       data: {
-        titulo: 'Editar Contato',
+        titulo: `Editar Contato: ${nomeContato}`,
         contato: contatoOriginal,
         contatosExistentes: this.pessoa.contatos || []
       }
@@ -90,6 +92,28 @@ export class PessoasCadastroComponent implements OnInit {
       if (contatoEditado) {
         this.pessoa.contatos[index] = contatoEditado;
         this.fonteDados.data = [...this.pessoa.contatos];
+      }
+    });
+  }
+
+  public excluirContato(index: number): void {
+    const contatoNome = this.pessoa.contatos[index]?.nome;
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      disableClose: true,
+      hasBackdrop: true,
+      data: {
+        titulo: 'Confirmação',
+        mensagem: `Deseja realmente excluir o contato: ${contatoNome}?`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(confirmado => {
+      if (confirmado) {
+        this.pessoa.contatos.splice(index, 1);
+        this.fonteDados.data = [...this.pessoa.contatos];
+        this.toastr.success('Contato excluído com sucesso!');
       }
     });
   }

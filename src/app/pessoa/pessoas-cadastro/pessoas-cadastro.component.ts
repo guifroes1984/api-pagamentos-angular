@@ -56,7 +56,7 @@ export class PessoasCadastroComponent implements OnInit {
       panelClass: 'custom-dialog-container',
       data: {
         titulo: 'Novo Contato',
-        mensagem: 'Pronto'
+        contatosExistentes: this.pessoa.contatos || []
       }
     });
 
@@ -66,6 +66,29 @@ export class PessoasCadastroComponent implements OnInit {
           this.pessoa.contatos = [];
         }
         this.pessoa.contatos.push(novoContato);
+        this.fonteDados.data = [...this.pessoa.contatos];
+      }
+    });
+  }
+
+  public editarContato(index: number): void {
+    const contatoOriginal = this.pessoa.contatos[index];
+
+    const dialogRef = this.dialog.open(NovoContatoDialogComponent, {
+      width: '600px',
+      disableClose: true,
+      hasBackdrop: true,
+      panelClass: 'custom-dialog-container',
+      data: {
+        titulo: 'Editar Contato',
+        contato: contatoOriginal,
+        contatosExistentes: this.pessoa.contatos || []
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((contatoEditado) => {
+      if (contatoEditado) {
+        this.pessoa.contatos[index] = contatoEditado;
         this.fonteDados.data = [...this.pessoa.contatos];
       }
     });

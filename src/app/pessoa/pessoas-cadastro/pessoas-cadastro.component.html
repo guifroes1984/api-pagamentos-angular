@@ -125,9 +125,10 @@
 
         <ng-container matColumnDef="acoes">
           <th mat-header-cell *matHeaderCellDef class="col-acoes"> Ações </th>
-          <td mat-cell *matCellDef="let contato" translate="no">
+          <td mat-cell *matCellDef="let contato; let i = index" translate="no">
             <div class="acoes-container">
-              <button mat-icon-button color="primary" type="button" matTooltip="Editar" class="botao-acao">
+              <button mat-icon-button color="primary" type="button" 
+                matTooltip="Editar" class="botao-acao" (click)="editarContato(i)">
                 <mat-icon>edit</mat-icon>
               </button>
               <button mat-icon-button color="warn" type="button" matTooltip="Excluir" class="botao-acao">

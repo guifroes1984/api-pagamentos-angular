@@ -10,11 +10,20 @@ export class NovoContatoDialogComponent {
 
   contato: any = {};
   maskTelefone: string = '';
+  contatosExistentes: any[] = [];
+  editando: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<NovoContatoDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
+
+  ngOnInit(): void {
+    this.editando = !!this.data?.contato;
+    this.contato = this.editando ? { ...this.data.contato } : {};
+    this.contatosExistentes = this.data?.contatosExistentes || [];
+    this.ajustarMascaraTelefone();
+  }
 
   confirmar(): void {
     this.dialogRef.close(this.contato);

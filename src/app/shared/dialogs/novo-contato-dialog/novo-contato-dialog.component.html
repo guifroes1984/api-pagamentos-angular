@@ -1,5 +1,5 @@
 <h2 mat-dialog-title class="dialog-header">
-  Novo Contato
+  {{ editando ? 'Editando Contato' : 'Novo Contato' }}
   <button mat-icon-button mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
@@ -35,9 +35,8 @@
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-pequeno no-validate">
           <mat-label>Telefone</mat-label>
-          <input matInput name="telefone" [value]="contato.telefone"
-            (input)="contato.telefone = $any($event.target).value; ajustarMascaraTelefone()" [mask]="maskTelefone"
-            [dropSpecialCharacters]="false" autocomplete="new-password" class="no-validate" />
+          <input matInput name="telefone" [(ngModel)]="contato.telefone" (ngModelChange)="ajustarMascaraTelefone()"
+            [mask]="maskTelefone" [dropSpecialCharacters]="false" autocomplete="new-password" class="no-validate" />
         </mat-form-field>
       </div>
     </div>
@@ -45,7 +44,10 @@
     <div class="linha linha-botoes">
       <button mat-raised-button color="primary" (click)="confirmar()"
         [disabled]="!frmContato.valid || !telefoneValido(contato.telefone)">
-        Confirmar
+        <mat-icon>
+          {{ editando ? 'save' : 'check' }}
+        </mat-icon>
+        {{ editando ? 'Salvar alterações' : 'Confirmar' }}
       </button>
     </div>
 

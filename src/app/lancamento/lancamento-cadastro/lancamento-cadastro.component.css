@@ -140,3 +140,20 @@
 .sem-selecao {
   resize: none;
 }
+
+.botao-anexo {
+  background-color: #29b6f6;
+  color: #fff;
+  font-weight: 500;
+  padding: 6px 16px;
+  border-radius: 4px;
+}
+
+.botao-anexo:hover {
+  background-color: #0288d1;
+}
+
+.linha-direita {
+  margin-top: 8px;
+  text-align: right;
+}

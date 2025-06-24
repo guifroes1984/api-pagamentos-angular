@@ -25,22 +25,25 @@ export class LancamentoCadastroComponent implements OnInit {
 
   filtroPessoaCtrl = new FormControl('');
 
+  public arquivoSelecionado: File | null = null;
+  public uploadEmAndamento = false;
+
   tipos = [
-    { label: 'Receita', value: 'RECEITA'}, 
-    { label: 'Despesa', value: 'DESPESA'}
+    { label: 'Receita', value: 'RECEITA' },
+    { label: 'Despesa', value: 'DESPESA' }
   ];
 
 
   constructor(
-    private categoriaService:  CategoriaService, 
-    private pessoaService:     PessoaService, 
-    private errorHandler:      ErrorHandlerService, 
-    private lancamentoService: LancamentoService, 
-    private toastr:            ToastrService, 
-    private route:             ActivatedRoute, 
-    private router:            Router, 
-    private title:             Title, 
-    private formBuilder:       FormBuilder
+    private categoriaService: CategoriaService,
+    private pessoaService: PessoaService,
+    private errorHandler: ErrorHandlerService,
+    private lancamentoService: LancamentoService,
+    private toastr: ToastrService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private title: Title,
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit(): void {
@@ -60,20 +63,25 @@ export class LancamentoCadastroComponent implements OnInit {
   public configurarFormulario() {
     this.formulario = this.formBuilder.group({
       codigo: [],
-      tipo: ['RECEITA', Validators.required], 
-      dataVencimento: [null, Validators.required], 
-      dataPagamento: [], 
-      descricao: [null, [ this.validarObrigatoriedade, this.validarTamanhoMinimo(5)]], 
-      valor: [null, Validators.required], 
+      tipo: ['RECEITA', Validators.required],
+      dataVencimento: [null, Validators.required],
+      dataPagamento: [],
+      descricao: [null, [this.validarObrigatoriedade, this.validarTamanhoMinimo(5)]],
+      valor: [null, Validators.required],
       pessoa: this.formBuilder.group({
-        codigo: [null, Validators.required], 
+        codigo: [null, Validators.required],
         nome: []
-      }), 
+      }),
       categoria: this.formBuilder.group({
-        codigo: [null, Validators.required], 
+        codigo: [null, Validators.required],
         nome: []
-      }), 
-      observacao: []
+      }),
+      observacao: [],
+      anexo: this.formBuilder.group({
+        codigo: [],
+        nome: [],
+        tipo: []
+      })
     });
   }
 
@@ -82,10 +90,10 @@ export class LancamentoCadastroComponent implements OnInit {
   }
 
   public validarTamanhoMinimo(valor: number) {
-  return (input: FormControl) => {
-    const inputValor = input.value || '';
+    return (input: FormControl) => {
+      const inputValor = input.value || '';
 
-    return inputValor.length >= valor ? null : { tamanhoMinimo: { tamanho: valor } };
+      return inputValor.length >= valor ? null : { tamanhoMinimo: { tamanho: valor } };
     };
   }
 
@@ -95,28 +103,45 @@ export class LancamentoCadastroComponent implements OnInit {
 
   public carregarLancamentos(codigo: number) {
     this.lancamentoService.buscarLancamentoPorCodigo(codigo)
-      .then(definirLancamento => {
-        this.formulario.patchValue(definirLancamento);
+      .then(lancamento => {
+        this.formulario.patchValue(lancamento);
         this.atualizarTituloEdicao();
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
 
-  public salvar(): void {
-    if (this.editando) {
-      this.atualizarLancamento();
-    } else {
-      this.adicionarLancamento();
+  public async salvar(): Promise<void> {
+    try {
+      this.uploadEmAndamento = true;
+
+      if (this.editando) {
+        await this.atualizarLancamento();
+
+        if (this.arquivoSelecionado) {
+          const codigo = this.formulario.get('codigo')?.value;
+          await this.lancamentoService.atualizarAnexo(codigo, this.arquivoSelecionado);
+        }
+
+      } else if (this.arquivoSelecionado) {
+        await this.adicionarLancamentoComAnexo();
+
+      } else {
+        await this.adicionarLancamento();
+      }
+    } catch (erro) {
+      this.errorHandler.handle(erro);
+    } finally {
+      this.uploadEmAndamento = false;
     }
   }
 
   public adicionarLancamento() {
     this.lancamentoService.adicionarLancamento(this.formulario.value)
-    .then(lancamentoAdicionado => {
-      this.toastr.success('Lançamento adicionado com sucesso!');
-      this.router.navigate(['/lancamentos', lancamentoAdicionado.codigo]);
-    })
-    .catch(erro => this.errorHandler.handle(erro));
+      .then(lancamentoAdicionado => {
+        this.toastr.success('Lançamento adicionado com sucesso!');
+        this.router.navigate(['/lancamentos', lancamentoAdicionado.codigo]);
+      })
+      .catch(erro => this.errorHandler.handle(erro));
   }
 
   public atualizarLancamento() {
@@ -130,36 +155,78 @@ export class LancamentoCadastroComponent implements OnInit {
   }
 
   public carregarCategorias() {
-  return this.categoriaService.listarTodasCategorias()
-    .then((categorias: any[]) => {
-      this.categorias = categorias.map(c => ({
-        codigo: c.codigo,
-        nome: c.nome
-      }));
-    })
-    .catch(erro => this.errorHandler.handle(erro));
+    return this.categoriaService.listarTodasCategorias()
+      .then((categorias: any[]) => {
+        this.categorias = categorias.map(c => ({
+          codigo: c.codigo,
+          nome: c.nome
+        }));
+      })
+      .catch(erro => this.errorHandler.handle(erro));
   }
 
   public carregarPessoas() {
-  return this.pessoaService.listarTodasPessoas()
-    .then((resposta: any) => {
-      const pessoas = resposta.content || [];
-      this.pessoas = pessoas.map((p: any) => ({
-        label: p.nome,
-        value: p.codigo
-      }));
-    })
-    .catch(erro => this.errorHandler.handle(erro));
-}
+    return this.pessoaService.listarTodasPessoas()
+      .then((resposta: any) => {
+        const pessoas = resposta.content || [];
+        this.pessoas = pessoas.map((p: any) => ({
+          label: p.nome,
+          value: p.codigo
+        }));
+      })
+      .catch(erro => this.errorHandler.handle(erro));
+  }
 
   public novo() {
-  this.configurarFormulario();
-  this.router.navigate(['/lancamentos/novo']);
-  this.title.setTitle('Novo lancçamento');
-}
+    this.configurarFormulario();
+    this.router.navigate(['/lancamentos/novo']);
+    this.title.setTitle('Novo lancçamento');
+  }
 
   public atualizarTituloEdicao() {
     this.title.setTitle(`Edição de lançamento: ${this.formulario.get('descricao')?.value}`);
+  }
+
+  public aoSelecionarArquivo(evento: Event): void {
+    const input = evento.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.arquivoSelecionado = input.files[0];
+
+      this.formulario.patchValue({
+        anexo: {
+          codigo: null,
+          nome: null,
+          tipo: null
+        }
+      });
+    }
+  }
+
+  public adicionarLancamentoComAnexo(): void {
+    const formData = new FormData();
+    formData.append('lancamento', JSON.stringify(this.formulario.value));
+    formData.append('file', this.arquivoSelecionado!);
+
+    this.lancamentoService.adicionarLancamentoComAnexo(formData)
+      .then(lancamentoAdicionado => {
+        this.router.navigate(['/lancamentos', lancamentoAdicionado.codigo]);
+      })
+      .catch(erro => this.errorHandler.handle(erro));
+  }
+
+  public baixarAnexo(): void {
+    const codigo = this.formulario.get('codigo')?.value;
+
+    this.lancamentoService.downloadAnexo(codigo)
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = this.formulario.get('anexo.nome')?.value || 'anexo.pdf';
+        link.click();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(erro => this.errorHandler.handle(erro));
   }
 
 }

@@ -11,4 +11,9 @@ export class Lancamento {
     observacao!: string;
     pessoa = new Pessoa();
     categoria = new Categoria();
+    anexo?: { 
+        codigo: number; 
+        nome: string; 
+        tipo: string 
+    };
 }

@@ -18,14 +18,15 @@
       <div class="campo-data">
         <mat-form-field appearance="outline" style="width: 100%;">
           <mat-label>Vencimento</mat-label>
-          <input matInput [matDatepicker]="pickerVencimento" placeholder="dd/mm/aaaa" formControlName="dataVencimento" readonly />
+          <input matInput [matDatepicker]="pickerVencimento" placeholder="dd/mm/aaaa" formControlName="dataVencimento"
+            readonly />
           <mat-datepicker-toggle matSuffix [for]="pickerVencimento"></mat-datepicker-toggle>
           <mat-datepicker #pickerVencimento></mat-datepicker>
         </mat-form-field>
 
         <app-mensagem 
           [control]="formulario.get('dataVencimento')" 
-          [error]="'required'" 
+          [error]="'required'"
           [text]="'Informe uma data de vencimento'">
         </app-mensagem>
       </div>
@@ -33,7 +34,8 @@
       <div class="campo-data">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{ formulario.get('tipo')?.value === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</mat-label>
-          <input matInput [matDatepicker]="pickerRecebimento" placeholder="dd/mm/aaaa" formControlName="dataPagamento" readonly />
+          <input matInput [matDatepicker]="pickerRecebimento" placeholder="dd/mm/aaaa" formControlName="dataPagamento"
+            readonly />
           <mat-datepicker-toggle matSuffix [for]="pickerRecebimento"></mat-datepicker-toggle>
           <mat-datepicker #pickerRecebimento></mat-datepicker>
         </mat-form-field>
@@ -49,13 +51,13 @@
 
         <app-mensagem 
           [control]="formulario.get('descricao')" 
-          [error]="'obrigatoriedade'" 
+          [error]="'obrigatoriedade'"
           [text]="'Informe uma descrição'">
         </app-mensagem>
 
         <app-mensagem 
           [control]="formulario.get('descricao')" 
-          [error]="'tamanhoMinimo'" 
+          [error]="'tamanhoMinimo'"
           [text]="'Mínimo de ' + formulario.get('descricao')?.errors?.['tamanhoMinimo']?.tamanho + ' caracteres'">
         </app-mensagem>
       </div>
@@ -64,8 +66,8 @@
         <mat-form-field appearance="outline" class="campo-pequeno">
           <mat-label>Valor</mat-label>
           <input matInput currencyMask
-                 [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, align: 'right', max: 10000 }"
-                 formControlName="valor" placeholder="0,00" />
+            [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, align: 'right', max: 10000 }"
+            formControlName="valor" placeholder="0,00" />
         </mat-form-field>
 
         <app-mensagem 
@@ -79,13 +81,13 @@
     <div class="filtros-container">
       <div style="flex: 1; display: flex; flex-direction: column;" [formGroupName]="'categoria'">
         <mat-form-field appearance="outline" class="campo-medio">
-            <mat-label>Categorias</mat-label>
-            <mat-select formControlName="codigo">
-              <mat-option value="">Selecione</mat-option>
-              <mat-option *ngFor="let categoria of categorias" [value]="categoria.codigo">
-                {{ categoria.nome }}
-              </mat-option>
-            </mat-select>
+          <mat-label>Categorias</mat-label>
+          <mat-select formControlName="codigo">
+            <mat-option value="">Selecione</mat-option>
+            <mat-option *ngFor="let categoria of categorias" [value]="categoria.codigo">
+              {{ categoria.nome }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
 
         <app-mensagem 
@@ -104,14 +106,13 @@
                 <div class="filtro-box">
                   <mat-icon class="filtro-icon">search</mat-icon>
                   <input matInput placeholder="Filtrar..." [formControl]="filtroPessoaCtrl"
-                    (click)="$event.stopPropagation()" 
-                    (keydown)="$event.stopPropagation()" 
-                    class="filtro-input" />
+                    (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" class="filtro-input" />
                 </div>
               </div>
             </mat-option>
 
-            <mat-option *ngFor="let pessoa of pessoas | filterPessoas:filtroPessoaCtrl.value || ''" [value]="pessoa.value">
+            <mat-option *ngFor="let pessoa of pessoas | filterPessoas:filtroPessoaCtrl.value || ''"
+              [value]="pessoa.value">
               {{ pessoa.label }}
             </mat-option>
 
@@ -133,8 +134,32 @@
       </mat-form-field>
     </div>
 
+    <div class="linha" style="margin-top: 8px; text-align: right;" 
+      *ngIf="!formulario.get('anexo.nome')?.value && !arquivoSelecionado">
+      <button mat-raised-button class="botao-anexo" type="button" (click)="seletorArquivo.click()">
+        <mat-icon>add</mat-icon>
+        Anexar
+      </button>
+      <input type="file" #seletorArquivo hidden (change)="aoSelecionarArquivo($event)" />
+    </div>
+
+    <div class="linha linha-direita" *ngIf="arquivoSelecionado" style="margin-top: 8px;">
+      <p><strong>Arquivo selecionado:</strong> {{ arquivoSelecionado.name }}</p>
+    </div>
+
+    <div class="linha linha-direita" *ngIf="formulario.get('anexo.codigo')?.value">
+      <p>
+        <a 
+          (click)="baixarAnexo()" 
+          matTooltip="Baixar anexo"
+          style="cursor: pointer; text-decoration: underline; color: #1976d2;">
+          {{ formulario.get('anexo.nome')?.value }}
+        </a>
+      </p>
+    </div>
+
     <div class="linha" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
-      <button mat-raised-button color="primary" [disabled]="!formulario.valid">
+      <button mat-raised-button color="primary" [disabled]="!formulario.valid || uploadEmAndamento">
         <mat-icon>save</mat-icon>
         Salvar
       </button>

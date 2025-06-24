@@ -22,13 +22,13 @@ export class LancamentoService {
 
   lancamentosUrl: string;
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
     this.lancamentosUrl = `${environment.apiUrl}/lancamentos`;
   }
 
   public pesquisar(filtro: LancamentoFiltro): Promise<any> {
     let params = new HttpParams();
-    
+
     params = params.set('page', filtro.pagina.toString());
     params = params.set('size', filtro.itensPorPagina.toString());
 
@@ -37,26 +37,29 @@ export class LancamentoService {
     }
 
     if (filtro.dataVencimentoInicio) {
-      params = params.set('dataVencimentoDe', 
+      params = params.set('dataVencimentoDe',
         moment(filtro.dataVencimentoInicio).format('YYYY-MM-DD'));
     }
 
     if (filtro.dataVencimentoFim) {
-      params = params.set('dataVencimentoAte', 
+      params = params.set('dataVencimentoAte',
         moment(filtro.dataVencimentoFim).format('YYYY-MM-DD'));
     }
 
-    return firstValueFrom(this.http.get<{content: any[], totalElements: number, totalPages: number, size: number, 
-      number: number, numberOfElements: number, first: boolean, last: boolean}>(`${this.lancamentosUrl}`, { params }
-      )).then(response => {
-      return { lancamentos: response.content, totalElements: response.totalElements, totalPages: response.totalPages, size: response.size,
+    return firstValueFrom(this.http.get<{
+      content: any[], totalElements: number, totalPages: number, size: number,
+      number: number, numberOfElements: number, first: boolean, last: boolean
+    }>(`${this.lancamentosUrl}`, { params }
+    )).then(response => {
+      return {
+        lancamentos: response.content, totalElements: response.totalElements, totalPages: response.totalPages, size: response.size,
         number: response.number, numberOfElements: response.numberOfElements, first: response.first, last: response.last
       };
     });
   }
 
   public excluir(codigo: number): Promise<void> {
-  
+
     return firstValueFrom(
       this.http.delete<void>(`${this.lancamentosUrl}/${codigo}`)
     );
@@ -71,7 +74,7 @@ export class LancamentoService {
   }
 
   public atualizarLancamento(lancamento: Lancamento): Promise<Lancamento> {
-    
+
     return firstValueFrom(
       this.http.put<Lancamento>(`${this.lancamentosUrl}/${lancamento.codigo}`, lancamento)
     ).then(lancamentoAtualizado => {
@@ -98,5 +101,24 @@ export class LancamentoService {
       }
     }
   }
- 
+
+  public adicionarLancamentoComAnexo(formData: FormData): Promise<any> {
+    return this.http.post(`${this.lancamentosUrl}/com-anexo`, formData).toPromise();
+  }
+
+  public atualizarAnexo(codigo: number, arquivo: File): Promise<any> {
+    const formData = new FormData();
+    formData.append('file', arquivo);
+
+    return this.http.put(`${this.lancamentosUrl}/${codigo}/anexo`, formData).toPromise();
+  }
+
+  public downloadAnexo(codigo: number): Promise<Blob> {
+    return firstValueFrom(
+      this.http.get(`${this.lancamentosUrl}/${codigo}/anexo`, {
+        responseType: 'blob'
+      })
+    );
+  }
+
 }

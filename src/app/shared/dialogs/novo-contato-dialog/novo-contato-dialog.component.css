@@ -58,3 +58,8 @@ mat-form-field {
   box-shadow: none !important;
   caret-color: auto !important;
 }
+
+.botao-cancelar {
+  color: #f44336;
+  border: 1px solid #f44336;
+}

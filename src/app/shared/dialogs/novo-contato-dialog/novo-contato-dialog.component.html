@@ -1,57 +1,50 @@
 <h2 mat-dialog-title class="dialog-header">
-  {{ editando ? 'Editando Contato: ' + data.contato?.nome : 'Novo Contato' }}
+  {{ editando ? 'Editando Contato: ' + contatoForm.get('nome')?.value : 'Novo Contato' }}
   <button mat-icon-button mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
 </h2>
 
 <mat-dialog-content>
-  <form #frmContato="ngForm" autocomplete="new-password">
-
+  <form [formGroup]="contatoForm" (ngSubmit)="confirmar()" autocomplete="new-password">
     <div class="linha">
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-grande">
           <mat-label>Nome</mat-label>
-          <input matInput name="nome" [(ngModel)]="contato.nome" required #contatoNome="ngModel"
-            autocomplete="new-password">
+          <input matInput formControlName="nome" autocomplete="new-password">
         </mat-form-field>
-        <app-mensagem [control]="contatoNome" error="required" text="Informe o nome"></app-mensagem>
+        <app-mensagem [control]="contatoForm.get('nome')" error="required" text="Informe o nome"></app-mensagem>
       </div>
     </div>
-
     <div class="linha">
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-grande">
           <mat-label>E-mail</mat-label>
-          <input matInput type="email" name="email" [(ngModel)]="contato.email" required email #contatoEmail="ngModel"
-            autocomplete="new-password">
+          <input matInput type="email" formControlName="email" autocomplete="new-password">
         </mat-form-field>
-        <app-mensagem [control]="contatoEmail" error="required" text="Informe o e-mail"></app-mensagem>
-        <app-mensagem [control]="contatoEmail" error="email" text="Informe um e-mail válido"></app-mensagem>
+        <app-mensagem [control]="contatoForm.get('email')" error="required" text="Informe o e-mail"></app-mensagem>
+        <app-mensagem [control]="contatoForm.get('email')" error="email" text="Informe um e-mail válido"></app-mensagem>
       </div>
     </div>
-
     <div class="linha">
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-pequeno no-validate">
           <mat-label>Telefone</mat-label>
-          <input matInput name="telefone" [(ngModel)]="contato.telefone" (ngModelChange)="ajustarMascaraTelefone()"
-            [mask]="maskTelefone" [dropSpecialCharacters]="false" autocomplete="new-password" class="no-validate" />
+          <input matInput formControlName="telefone" (input)="ajustarMascaraTelefone()" [mask]="maskTelefone"
+            [dropSpecialCharacters]="false" autocomplete="new-password" class="no-validate" />
         </mat-form-field>
       </div>
     </div>
-
     <div class="linha linha-botoes">
-      <button mat-raised-button color="primary" (click)="confirmar()"
-        [disabled]="!frmContato.valid || !telefoneValido(contato.telefone)">
-        <mat-icon>
-          {{ editando ? 'save' : 'check' }}
-        </mat-icon>
+      <button mat-raised-button color="primary" type="submit"
+        [disabled]="!contatoForm.valid || !telefoneValido(contatoForm.get('telefone')?.value)">
+        <mat-icon>{{ editando ? 'save' : 'check' }}</mat-icon>
         {{ editando ? 'Salvar alterações' : 'Confirmar' }}
       </button>
+      <button mat-button type="button" (click)="cancelar()" class="botao-cancelar" style="margin-left: 8px;">
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
     </div>
-
   </form>
 </mat-dialog-content>
-
-<mat-dialog-content></mat-dialog-content>

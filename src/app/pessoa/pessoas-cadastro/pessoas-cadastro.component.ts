@@ -52,68 +52,67 @@ export class PessoasCadastroComponent implements OnInit {
   public prepararNovoContato() {
     const dialogRef = this.dialog.open(NovoContatoDialogComponent, {
       width: '600px',
-      disableClose: true,
-      hasBackdrop: true,
-      panelClass: 'custom-dialog-container',
       data: {
-        titulo: 'Novo Contato',
         contatosExistentes: this.pessoa.contatos || []
       }
     });
 
-    dialogRef.afterClosed().subscribe((novoContato) => {
-      if (novoContato) {
+    dialogRef.afterClosed().subscribe((resultado) => {
+      if (resultado?.acao === 'adicionar') {
         if (!this.pessoa.contatos) {
           this.pessoa.contatos = [];
         }
-        this.pessoa.contatos.push(novoContato);
-        this.fonteDados.data = [...this.pessoa.contatos];
+        this.pessoa.contatos.push(resultado.contato);
+        this.atualizarTabelaContatos();
+        this.toastr.success(`Contato ${resultado.contato.nome} adicionado com sucesso!`);
       }
     });
   }
 
   public editarContato(index: number): void {
     const contatoOriginal = this.pessoa.contatos[index];
-    const nomeContato = contatoOriginal?.nome || 'Contato';
 
     const dialogRef = this.dialog.open(NovoContatoDialogComponent, {
       width: '600px',
-      disableClose: true,
-      hasBackdrop: true,
-      panelClass: 'custom-dialog-container',
       data: {
-        titulo: `Editar Contato: ${nomeContato}`,
-        contato: contatoOriginal,
-        contatosExistentes: this.pessoa.contatos || []
+        contato: { ...contatoOriginal },
+        contatosExistentes: this.pessoa.contatos,
+        editando: true
       }
     });
 
-    dialogRef.afterClosed().subscribe((contatoEditado) => {
-      if (contatoEditado) {
-        this.pessoa.contatos[index] = contatoEditado;
-        this.fonteDados.data = [...this.pessoa.contatos];
+    dialogRef.afterClosed().subscribe((resultado) => {
+      if (resultado?.acao === 'editar') {
+        this.pessoa.contatos[index] = resultado.contato;
+        this.atualizarTabelaContatos();
+        this.toastr.success(`Contato ${resultado.contato.nome} atualizado com sucesso!`);
       }
     });
   }
 
+  private atualizarTabelaContatos(): void {
+    this.fonteDados.data = [...this.pessoa.contatos];
+  }
+
   public excluirContato(index: number): void {
-    const contatoNome = this.pessoa.contatos[index]?.nome;
+    const contato = this.pessoa.contatos[index];
+    const contatoNome = contato?.nome || 'Contato';
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
-      disableClose: true,
-      hasBackdrop: true,
       data: {
         titulo: 'Confirmação',
-        mensagem: `Deseja realmente excluir o contato: ${contatoNome}?`
+        mensagem: `Deseja realmente excluir o contato: ${contatoNome}?`,
+        textoConfirmar: 'Excluir',
+        corConfirmar: 'warn'
       }
     });
 
     dialogRef.afterClosed().subscribe(confirmado => {
       if (confirmado) {
         this.pessoa.contatos.splice(index, 1);
-        this.fonteDados.data = [...this.pessoa.contatos];
-        this.toastr.success('Contato excluído com sucesso!');
+        this.atualizarTabelaContatos();
+        this.toastr.success(`Contato ${contatoNome} excluído com sucesso!`);
       }
     });
   }

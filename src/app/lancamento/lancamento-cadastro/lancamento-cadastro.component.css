@@ -165,3 +165,34 @@
   align-items: center;
   gap: 8px;
 }
+
+.download-link {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #1976d2;
+}
+
+.red-square-close-button {
+  all: unset;
+  width: 24px;
+  height: 24px;
+  background-color: #f44336;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 8px;
+  position: relative;
+}
+
+.red-square-close-button::before,
+.red-square-close-button::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 2px;
+  background-color: white;
+}
+.red-square-close-button::before { transform: rotate(45deg); }
+.red-square-close-button::after { transform: rotate(-45deg); }

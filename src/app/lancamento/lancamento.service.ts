@@ -103,14 +103,14 @@ export class LancamentoService {
   }
 
   public adicionarLancamentoComAnexo(formData: FormData): Promise<any> {
-    return this.http.post(`${this.lancamentosUrl}/com-anexo`, formData).toPromise();
+    return this.http.post<any>(`${this.lancamentosUrl}/com-anexo`, formData).toPromise();
   }
 
   public atualizarAnexo(codigo: number, arquivo: File): Promise<any> {
     const formData = new FormData();
     formData.append('file', arquivo);
 
-    return this.http.put(`${this.lancamentosUrl}/${codigo}/anexo`, formData).toPromise();
+    return this.http.put<any>(`${this.lancamentosUrl}/${codigo}/anexo`, formData).toPromise();
   }
 
   public downloadAnexo(codigo: number): Promise<Blob> {
@@ -118,6 +118,12 @@ export class LancamentoService {
       this.http.get(`${this.lancamentosUrl}/${codigo}/anexo`, {
         responseType: 'blob'
       })
+    );
+  }
+
+  public deletarAnexo(codigo: number): Promise<void> {
+    return firstValueFrom(
+      this.http.delete<void>(`${this.lancamentosUrl}/${codigo}/anexo`)
     );
   }
 

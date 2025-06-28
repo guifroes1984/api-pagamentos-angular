@@ -119,8 +119,9 @@
       </mat-form-field>
     </div>
 
-    <div class="linha alinhamento-direita">
-      <ng-container *ngIf="!formulario.get('anexo.nome')?.value && !arquivoSelecionado; else spinnerOuArquivo">
+    <div class="linha alinhamento-direita"
+      style="margin-top: 8px; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+      <ng-container *ngIf="!arquivoSelecionado && !formulario.get('anexo.nome')?.value && !uploadEmAndamento">
         <button mat-raised-button class="botao-anexo" type="button" (click)="seletorArquivo.click()">
           <mat-icon>add</mat-icon>
           Anexar
@@ -128,25 +129,22 @@
         <input type="file" #seletorArquivo hidden (change)="aoSelecionarArquivo($event)" />
       </ng-container>
 
-      <ng-template #spinnerOuArquivo>
-        <mat-progress-spinner *ngIf="uploadEmAndamento" mode="indeterminate" diameter="30" color="primary"
-          style="margin-left: 8px;">
-        </mat-progress-spinner>
+      <mat-progress-spinner *ngIf="uploadEmAndamento" mode="indeterminate" diameter="30" color="primary">
+      </mat-progress-spinner>
 
-        <a *ngIf="arquivoSelecionado && !uploadEmAndamento"
-          style="cursor: default; text-decoration: underline; color: #1976d2; margin-left: 8px;">
+      <ng-container *ngIf="arquivoSelecionado && !uploadEmAndamento">
+        <a (click)="visualizarArquivoSelecionado()" class="download-link" matTooltip="Pré-visualizar anexo">
           {{ arquivoSelecionado.name }}
         </a>
-      </ng-template>
-    </div>
+        <button (click)="removerArquivoSelecionado()" matTooltip="Remover anexo" class="red-square-close-button"></button>
+      </ng-container>
 
-    <div class="linha linha-direita" *ngIf="formulario.get('anexo.codigo')?.value" style="margin-top: 8px;">
-      <p>
-        <a (click)="baixarAnexo()" matTooltip="Baixar anexo"
-          style="cursor: pointer; text-decoration: underline; color: #1976d2;">
+      <ng-container *ngIf="formulario.get('anexo.nome')?.value && !arquivoSelecionado && !uploadEmAndamento">
+        <a (click)="baixarAnexo()" class="download-link" matTooltip="Baixar anexo">
           {{ formulario.get('anexo.nome')?.value }}
         </a>
-      </p>
+        <button (click)="removerAnexo()" matTooltip="Remover anexo" class="red-square-close-button"></button>
+      </ng-container>
     </div>
 
     <div class="linha" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">

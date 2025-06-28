@@ -27,6 +27,7 @@ export class LancamentoCadastroComponent implements OnInit {
 
   public arquivoSelecionado: File | null = null;
   public uploadEmAndamento = false;
+  public anexoRemovido = false;
 
   tipos = [
     { label: 'Receita', value: 'RECEITA' },
@@ -106,7 +107,6 @@ export class LancamentoCadastroComponent implements OnInit {
       .then(lancamento => {
         this.formulario.patchValue(lancamento);
 
-        // Garantir que anexo está no formulário
         if (lancamento.anexo) {
           this.formulario.get('anexo')?.patchValue({
             codigo: lancamento.anexo.codigo,
@@ -124,25 +124,46 @@ export class LancamentoCadastroComponent implements OnInit {
     try {
       this.uploadEmAndamento = true;
 
+      const codigo = this.formulario.get('codigo')?.value;
+
+      if (this.editando && this.anexoRemovido && codigo) {
+        await this.lancamentoService.deletarAnexo(codigo);
+        this.anexoRemovido = false;
+      }
+
+      let lancamentoSalvo: any;
+
       if (this.editando) {
         await this.atualizarLancamento();
 
         if (this.arquivoSelecionado) {
-          const codigo = this.formulario.get('codigo')?.value;
-          await this.lancamentoService.atualizarAnexo(codigo, this.arquivoSelecionado);
+          lancamentoSalvo = await this.lancamentoService.atualizarAnexo(codigo, this.arquivoSelecionado);
+          this.formulario.patchValue(lancamentoSalvo);
+          this.arquivoSelecionado = null;
         }
 
       } else if (this.arquivoSelecionado) {
-        await this.adicionarLancamentoComAnexo();
+        lancamentoSalvo = await this.lancamentoService.adicionarLancamentoComAnexo(this.criarFormData());
+        this.formulario.patchValue(lancamentoSalvo);
+        this.arquivoSelecionado = null;
+        this.router.navigate(['/lancamentos', lancamentoSalvo.codigo]);
 
       } else {
         await this.adicionarLancamento();
       }
+
     } catch (erro) {
       this.errorHandler.handle(erro);
     } finally {
       this.uploadEmAndamento = false;
     }
+  }
+
+  private criarFormData(): FormData {
+    const formData = new FormData();
+    formData.append('lancamento', JSON.stringify(this.formulario.value));
+    formData.append('file', this.arquivoSelecionado!);
+    return formData;
   }
 
   public adicionarLancamento() {
@@ -242,6 +263,24 @@ export class LancamentoCadastroComponent implements OnInit {
         window.URL.revokeObjectURL(url);
       })
       .catch(erro => this.errorHandler.handle(erro));
+  }
+
+  public removerAnexo() {
+    this.anexoRemovido = true;
+    this.formulario.get('anexo')?.reset();
+    this.arquivoSelecionado = null;
+  }
+
+  public removerArquivoSelecionado() {
+    this.arquivoSelecionado = null;
+    this.formulario.get('anexo')?.reset();
+  }
+
+  public visualizarArquivoSelecionado() {
+    if (this.arquivoSelecionado) {
+      const url = URL.createObjectURL(this.arquivoSelecionado);
+      window.open(url, '_blank');
+    }
   }
 
 }

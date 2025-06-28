@@ -105,6 +105,16 @@ export class LancamentoCadastroComponent implements OnInit {
     this.lancamentoService.buscarLancamentoPorCodigo(codigo)
       .then(lancamento => {
         this.formulario.patchValue(lancamento);
+
+        // Garantir que anexo está no formulário
+        if (lancamento.anexo) {
+          this.formulario.get('anexo')?.patchValue({
+            codigo: lancamento.anexo.codigo,
+            nome: lancamento.anexo.nome,
+            tipo: lancamento.anexo.tipo
+          });
+        }
+
         this.atualizarTituloEdicao();
       })
       .catch(erro => this.errorHandler.handle(erro));
@@ -192,13 +202,18 @@ export class LancamentoCadastroComponent implements OnInit {
     if (input.files && input.files.length > 0) {
       this.arquivoSelecionado = input.files[0];
 
-      this.formulario.patchValue({
-        anexo: {
-          codigo: null,
-          nome: null,
-          tipo: null
-        }
-      });
+      this.uploadEmAndamento = true;
+
+      setTimeout(() => {
+        this.uploadEmAndamento = false;
+        this.formulario.patchValue({
+          anexo: {
+            nome: this.arquivoSelecionado?.name,
+            tipo: this.arquivoSelecionado?.type,
+            codigo: null
+          }
+        });
+      }, 2000);
     }
   }
 

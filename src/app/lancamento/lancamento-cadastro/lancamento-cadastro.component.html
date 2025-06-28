@@ -24,9 +24,7 @@
           <mat-datepicker #pickerVencimento></mat-datepicker>
         </mat-form-field>
 
-        <app-mensagem 
-          [control]="formulario.get('dataVencimento')" 
-          [error]="'required'"
+        <app-mensagem [control]="formulario.get('dataVencimento')" [error]="'required'"
           [text]="'Informe uma data de vencimento'">
         </app-mensagem>
       </div>
@@ -49,15 +47,11 @@
           <input matInput type="text" formControlName="descricao" />
         </mat-form-field>
 
-        <app-mensagem 
-          [control]="formulario.get('descricao')" 
-          [error]="'obrigatoriedade'"
+        <app-mensagem [control]="formulario.get('descricao')" [error]="'obrigatoriedade'"
           [text]="'Informe uma descrição'">
         </app-mensagem>
 
-        <app-mensagem 
-          [control]="formulario.get('descricao')" 
-          [error]="'tamanhoMinimo'"
+        <app-mensagem [control]="formulario.get('descricao')" [error]="'tamanhoMinimo'"
           [text]="'Mínimo de ' + formulario.get('descricao')?.errors?.['tamanhoMinimo']?.tamanho + ' caracteres'">
         </app-mensagem>
       </div>
@@ -70,10 +64,7 @@
             formControlName="valor" placeholder="0,00" />
         </mat-form-field>
 
-        <app-mensagem 
-          [control]="formulario.get('valor')" 
-          [error]="'required'" 
-          [text]="'Informe um valor'">
+        <app-mensagem [control]="formulario.get('valor')" [error]="'required'" [text]="'Informe um valor'">
         </app-mensagem>
       </div>
     </div>
@@ -90,10 +81,7 @@
           </mat-select>
         </mat-form-field>
 
-        <app-mensagem 
-          [control]="formulario.get('categoria')" 
-          [error]="'required'" 
-          [text]="'Informe uma categoria'">
+        <app-mensagem [control]="formulario.get('categoria')" [error]="'required'" [text]="'Informe uma categoria'">
         </app-mensagem>
       </div>
 
@@ -119,10 +107,7 @@
           </mat-select>
         </mat-form-field>
 
-        <app-mensagem 
-          [control]="formulario.get('pessoa.codigo')" 
-          [error]="'required'" 
-          [text]="'Informe uma pessoa'">
+        <app-mensagem [control]="formulario.get('pessoa.codigo')" [error]="'required'" [text]="'Informe uma pessoa'">
         </app-mensagem>
       </div>
     </div>
@@ -134,24 +119,30 @@
       </mat-form-field>
     </div>
 
-    <div class="linha" style="margin-top: 8px; text-align: right;" 
-      *ngIf="!formulario.get('anexo.nome')?.value && !arquivoSelecionado">
-      <button mat-raised-button class="botao-anexo" type="button" (click)="seletorArquivo.click()">
-        <mat-icon>add</mat-icon>
-        Anexar
-      </button>
-      <input type="file" #seletorArquivo hidden (change)="aoSelecionarArquivo($event)" />
+    <div class="linha alinhamento-direita">
+      <ng-container *ngIf="!formulario.get('anexo.nome')?.value && !arquivoSelecionado; else spinnerOuArquivo">
+        <button mat-raised-button class="botao-anexo" type="button" (click)="seletorArquivo.click()">
+          <mat-icon>add</mat-icon>
+          Anexar
+        </button>
+        <input type="file" #seletorArquivo hidden (change)="aoSelecionarArquivo($event)" />
+      </ng-container>
+
+      <ng-template #spinnerOuArquivo>
+        <mat-progress-spinner *ngIf="uploadEmAndamento" mode="indeterminate" diameter="30" color="primary"
+          style="margin-left: 8px;">
+        </mat-progress-spinner>
+
+        <a *ngIf="arquivoSelecionado && !uploadEmAndamento"
+          style="cursor: default; text-decoration: underline; color: #1976d2; margin-left: 8px;">
+          {{ arquivoSelecionado.name }}
+        </a>
+      </ng-template>
     </div>
 
-    <div class="linha linha-direita" *ngIf="arquivoSelecionado" style="margin-top: 8px;">
-      <p><strong>Arquivo selecionado:</strong> {{ arquivoSelecionado.name }}</p>
-    </div>
-
-    <div class="linha linha-direita" *ngIf="formulario.get('anexo.codigo')?.value">
+    <div class="linha linha-direita" *ngIf="formulario.get('anexo.codigo')?.value" style="margin-top: 8px;">
       <p>
-        <a 
-          (click)="baixarAnexo()" 
-          matTooltip="Baixar anexo"
+        <a (click)="baixarAnexo()" matTooltip="Baixar anexo"
           style="cursor: pointer; text-decoration: underline; color: #1976d2;">
           {{ formulario.get('anexo.nome')?.value }}
         </a>

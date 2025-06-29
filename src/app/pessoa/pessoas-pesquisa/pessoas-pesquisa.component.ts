@@ -1,7 +1,8 @@
 import { Component, ErrorHandler, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { NomeFiltro, PessoaService } from '../pessoa.service';
+import { PessoaService } from '../pessoa.service';
+import { NomeFiltro } from 'src/app/core/model/nome-filtro';
 
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';

@@ -5,12 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import * as moment from 'moment';
 import { Pessoa } from '../core/model/pessoa';
 import { environment } from 'src/environment/environment';
-
-export class NomeFiltro {
-  nome?: string;
-  pagina: number = 0;
-  itensPorPagina: number = 5;
-}
+import { NomeFiltro } from '../core/model/nome-filtro';
 
 @Injectable({
   providedIn: 'root'

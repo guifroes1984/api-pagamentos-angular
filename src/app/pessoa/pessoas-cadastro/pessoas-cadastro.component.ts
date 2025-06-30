@@ -14,6 +14,7 @@ import { NovoContatoDialogComponent } from 'src/app/shared/dialogs/novo-contato-
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { Estado } from 'src/app/core/model/estado';
 import { HttpClient } from '@angular/common/http';
+import { Cidade } from 'src/app/core/model/cidade';
 
 @Component({
   selector: 'app-pessoas-cadastro',
@@ -28,7 +29,7 @@ export class PessoasCadastroComponent implements OnInit {
   formPessoa!: FormGroup;
   pessoa = new Pessoa();
 
-  cidades: { nome: string }[] = [];
+  cidades: Cidade[] = [];
   estados: { label: string; value: number }[] = [];
   estadosFiltrados: { label: string; value: number }[] = [];
   filtroEstadoCtrl = new FormControl('');
@@ -79,13 +80,14 @@ export class PessoasCadastroComponent implements OnInit {
       .catch(erro => this.errorHandler.handle(erro));
   }
 
-  public carregarCidades(codigoEstado: number) {
-    this.pessoaService.listarCidadesPorEstado(codigoEstado)
-      .then(cidades => {
-        this.cidades = cidades;
-        this.formPessoa.get('endereco.cidade')?.reset();
-      })
-      .catch(erro => this.errorHandler.handle(erro));
+  public async carregarCidades(codigoEstado: number): Promise<void> {
+    try {
+      const cidades = await this.pessoaService.listarCidadesPorEstado(codigoEstado);
+      this.cidades = cidades;
+      this.formPessoa.get('endereco.cidade')?.reset();
+    } catch (erro) {
+      this.errorHandler.handle(erro);
+    }
   }
 
   public filtrarEstados(termo: string | null) {
@@ -184,12 +186,21 @@ export class PessoasCadastroComponent implements OnInit {
 
   public carregarPessoa(codigo: number) {
     this.pessoaService.buscarPessoaPorCodigo(codigo)
-      .then(pessoa => {
+      .then(async pessoa => {
         this.pessoa = pessoa;
+
+        const estadoCodigo = pessoa.endereco?.cidade?.estado?.codigo;
+        const cidadeCodigo = pessoa.endereco?.cidade?.codigo;
+
         this.atualizarFormulario();
         this.atualizarTituloEdicao();
-
         this.fonteDados.data = pessoa.contatos || [];
+
+        if (estadoCodigo) {
+          this.formPessoa.get('endereco.estado')?.setValue(estadoCodigo);
+          await this.carregarCidades(estadoCodigo);
+          this.formPessoa.get('endereco.cidade')?.setValue(cidadeCodigo);
+        }
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
@@ -203,10 +214,13 @@ export class PessoasCadastroComponent implements OnInit {
         complemento: this.pessoa.endereco.complemento,
         bairro: this.pessoa.endereco.bairro,
         cep: this.pessoa.endereco.cep,
-        cidade: this.pessoa.endereco.cidade,
-        estado: this.pessoa.endereco.estado
       }
     });
+
+    if (this.pessoa.endereco.estado?.codigo) {
+      this.carregarCidades(this.pessoa.endereco.estado.codigo);
+    }
+
   }
 
   public validarTamanhoMinimo = (valor: number) => {
@@ -225,7 +239,23 @@ export class PessoasCadastroComponent implements OnInit {
     }
 
     this.pessoa.nome = this.formPessoa.value.nome;
-    this.pessoa.endereco = this.formPessoa.value.endereco;
+    const enderecoForm = this.formPessoa.value.endereco;
+
+    const codigoCidade = enderecoForm.cidade;
+    const cidadeSelecionada = this.cidades.find(c => c.codigo === codigoCidade);
+
+    const enderecoParaSalvar: any = {
+      logradouro: enderecoForm.logradouro,
+      numero: enderecoForm.numero,
+      complemento: enderecoForm.complemento,
+      bairro: enderecoForm.bairro,
+      cep: enderecoForm.cep,
+      cidade: cidadeSelecionada
+    };
+
+    delete enderecoParaSalvar.estado;
+
+    this.pessoa.endereco = enderecoParaSalvar;
 
     if (this.editando) {
       this.atualizarPessoa();

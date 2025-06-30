@@ -88,7 +88,6 @@
                 </div>
               </div>
             </mat-option>
-
             <mat-option *ngFor="let estado of estadosFiltrados" [value]="estado.value">
               {{ estado.label }}
             </mat-option>
@@ -100,7 +99,7 @@
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Cidade</mat-label>
           <mat-select formControlName="cidade" [disabled]="!cidades || cidades.length === 0">
-            <mat-option *ngFor="let cidade of cidades" [value]="cidade.nome">
+            <mat-option *ngFor="let cidade of cidades" [value]="cidade.codigo">
               {{ cidade.nome }}
             </mat-option>
           </mat-select>

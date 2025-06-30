@@ -7,6 +7,6 @@ export class Endereco {
     complemento!: string;
     bairro!:      string;
     cep!:         string;
-    cidade = new Cidade();
+    cidade?: Cidade;
     estado = new Estado();
 }

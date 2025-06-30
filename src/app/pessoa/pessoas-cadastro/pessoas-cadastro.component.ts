@@ -12,6 +12,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { NovoContatoDialogComponent } from 'src/app/shared/dialogs/novo-contato-dialog/novo-contato-dialog.component';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { Estado } from 'src/app/core/model/estado';
 
 @Component({
   selector: 'app-pessoas-cadastro',
@@ -25,6 +26,10 @@ export class PessoasCadastroComponent implements OnInit {
 
   formPessoa!: FormGroup;
   pessoa = new Pessoa();
+
+  estados: { label: string; value: number }[] = [];
+  estadosFiltrados: { label: string; value: number }[] = [];
+  filtroEstadoCtrl = new FormControl('');
 
   constructor(
     private fb: FormBuilder,
@@ -40,6 +45,12 @@ export class PessoasCadastroComponent implements OnInit {
   ngOnInit(): void {
     this.configurarFormulario();
 
+    this.carregarEstados();
+
+    this.filtroEstadoCtrl.valueChanges.subscribe(termo => {
+      this.filtrarEstados(termo);
+    });
+
     const codigoPessoa = this.route.snapshot.params['codigo'];
 
     this.title.setTitle('Nova pessoa');
@@ -47,6 +58,21 @@ export class PessoasCadastroComponent implements OnInit {
     if (codigoPessoa) {
       this.carregarPessoa(codigoPessoa);
     }
+  }
+
+  private carregarEstados() {
+    this.pessoaService.listarEstados().then(lista => {
+      this.estados = lista.map(uf => ({ label: uf.nome, value: uf.codigo }));
+      this.estadosFiltrados = [...this.estados];
+    })
+      .catch(erro => this.errorHandler.handle(erro));
+  }
+
+  public filtrarEstados(termo: string | null) {
+    const termoTratado = (termo || '').toLowerCase();
+    this.estadosFiltrados = this.estados.filter(estado =>
+      estado.label.toLowerCase().includes(termoTratado)
+    );
   }
 
   public prepararNovoContato() {
@@ -127,7 +153,7 @@ export class PessoasCadastroComponent implements OnInit {
         bairro: ['', Validators.required],
         cep: ['', Validators.required],
         cidade: ['', Validators.required],
-        estado: ['', [Validators.required, Validators.maxLength(2), Validators.minLength(2)]]
+        estado: ['']
       })
     });
   }
@@ -158,7 +184,7 @@ export class PessoasCadastroComponent implements OnInit {
         bairro: this.pessoa.endereco.bairro,
         cep: this.pessoa.endereco.cep,
         cidade: this.pessoa.endereco.cidade,
-        //estado: this.pessoa.endereco.estado
+        estado: this.pessoa.endereco.estado
       }
     });
   }

@@ -1,4 +1,5 @@
 import { Cidade } from "./cidade";
+import { Estado } from "./estado";
 
 export class Endereco {
     logradouro!:  string;
@@ -7,4 +8,5 @@ export class Endereco {
     bairro!:      string;
     cep!:         string;
     cidade = new Cidade();
+    estado = new Estado();
 }

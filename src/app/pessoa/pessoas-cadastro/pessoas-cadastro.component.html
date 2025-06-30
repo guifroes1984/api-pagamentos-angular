@@ -76,22 +76,33 @@
 
     <div class="linha" style="display: flex; gap: 16px;" formGroupName="endereco">
       <div style="flex: 1; display: flex; flex-direction: column;">
+        <mat-form-field appearance="outline" class="campo-medio pessoa-field">
+          <mat-label>Estado</mat-label>
+          <mat-select formControlName="estado">
+            <mat-option [disabled]="true" class="estado-option-filtro">
+              <div class="filtro-container" (click)="$event.stopPropagation()">
+                <div class="filtro-box">
+                  <mat-icon class="filtro-icon">search</mat-icon>
+                  <input placeholder="Filtrar..." [formControl]="filtroEstadoCtrl" (click)="$event.stopPropagation()"
+                    (keydown)="$event.stopPropagation()" class="filtro-input" />
+                </div>
+              </div>
+            </mat-option>
+
+            <mat-option *ngFor="let estado of estadosFiltrados" [value]="estado.value">
+              {{ estado.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Cidade</mat-label>
           <input matInput formControlName="cidade" />
         </mat-form-field>
 
         <app-mensagem [control]="formPessoa.get('endereco.cidade')" [error]="'required'" [text]="'Informe a cidade'">
-        </app-mensagem>
-      </div>
-
-      <div style="flex: 1; display: flex; flex-direction: column;">
-        <mat-form-field appearance="outline" class="campo-pequeno">
-          <mat-label>Estado</mat-label>
-          <input matInput formControlName="estado" maxlength="2" (input)="onEstadoInput($event)" />
-        </mat-form-field>
-
-        <app-mensagem [control]="formPessoa.get('endereco.estado')" [error]="'required'" [text]="'Informe o estado'">
         </app-mensagem>
       </div>
     </div>
@@ -127,12 +138,12 @@
           <th mat-header-cell *matHeaderCellDef class="col-acoes"> Ações </th>
           <td mat-cell *matCellDef="let contato; let i = index" translate="no">
             <div class="acoes-container">
-              <button mat-icon-button color="primary" type="button" 
-                matTooltip="Editar" class="botao-acao" (click)="editarContato(i)">
+              <button mat-icon-button color="primary" type="button" matTooltip="Editar" class="botao-acao"
+                (click)="editarContato(i)">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button mat-icon-button color="warn" type="button" 
-                matTooltip="Excluir" class="botao-acao" (click)="excluirContato(i)">
+              <button mat-icon-button color="warn" type="button" matTooltip="Excluir" class="botao-acao"
+                (click)="excluirContato(i)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

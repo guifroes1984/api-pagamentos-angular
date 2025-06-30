@@ -158,7 +158,7 @@ export class PessoasCadastroComponent implements OnInit {
         bairro: this.pessoa.endereco.bairro,
         cep: this.pessoa.endereco.cep,
         cidade: this.pessoa.endereco.cidade,
-        estado: this.pessoa.endereco.estado
+        //estado: this.pessoa.endereco.estado
       }
     });
   }

@@ -103,4 +103,12 @@ export class PessoaService {
     );
   }
 
+  public listarCidadesPorEstado(codigoEstado: number): Promise<{ nome: string }[]> {
+    const params = { estado: codigoEstado.toString() };
+
+    return firstValueFrom(
+      this.http.get<{ nome: string }[]>(`${environment.apiUrl}/cidades`, { params })
+    );
+  }
+
 }

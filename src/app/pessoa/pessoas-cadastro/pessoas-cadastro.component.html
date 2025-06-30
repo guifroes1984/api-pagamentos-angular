@@ -78,7 +78,7 @@
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio pessoa-field">
           <mat-label>Estado</mat-label>
-          <mat-select formControlName="estado">
+          <mat-select formControlName="estado" (selectionChange)="carregarCidades($event.value)">
             <mat-option [disabled]="true" class="estado-option-filtro">
               <div class="filtro-container" (click)="$event.stopPropagation()">
                 <div class="filtro-box">
@@ -99,11 +99,12 @@
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Cidade</mat-label>
-          <input matInput formControlName="cidade" />
+          <mat-select formControlName="cidade" [disabled]="!cidades || cidades.length === 0">
+            <mat-option *ngFor="let cidade of cidades" [value]="cidade.nome">
+              {{ cidade.nome }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
-
-        <app-mensagem [control]="formPessoa.get('endereco.cidade')" [error]="'required'" [text]="'Informe a cidade'">
-        </app-mensagem>
       </div>
     </div>
 

@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NovoContatoDialogComponent } from 'src/app/shared/dialogs/novo-contato-dialog/novo-contato-dialog.component';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 import { Estado } from 'src/app/core/model/estado';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-pessoas-cadastro',
@@ -27,6 +28,7 @@ export class PessoasCadastroComponent implements OnInit {
   formPessoa!: FormGroup;
   pessoa = new Pessoa();
 
+  cidades: { nome: string }[] = [];
   estados: { label: string; value: number }[] = [];
   estadosFiltrados: { label: string; value: number }[] = [];
   filtroEstadoCtrl = new FormControl('');
@@ -51,6 +53,15 @@ export class PessoasCadastroComponent implements OnInit {
       this.filtrarEstados(termo);
     });
 
+    this.formPessoa.get('endereco.estado')?.valueChanges.subscribe(codigoEstado => {
+      if (codigoEstado) {
+        this.carregarCidades(codigoEstado);
+      } else {
+        this.cidades = [];
+        this.formPessoa.get('endereco.cidade')?.reset();
+      }
+    });
+
     const codigoPessoa = this.route.snapshot.params['codigo'];
 
     this.title.setTitle('Nova pessoa');
@@ -65,6 +76,15 @@ export class PessoasCadastroComponent implements OnInit {
       this.estados = lista.map(uf => ({ label: uf.nome, value: uf.codigo }));
       this.estadosFiltrados = [...this.estados];
     })
+      .catch(erro => this.errorHandler.handle(erro));
+  }
+
+  public carregarCidades(codigoEstado: number) {
+    this.pessoaService.listarCidadesPorEstado(codigoEstado)
+      .then(cidades => {
+        this.cidades = cidades;
+        this.formPessoa.get('endereco.cidade')?.reset();
+      })
       .catch(erro => this.errorHandler.handle(erro));
   }
 
@@ -152,7 +172,7 @@ export class PessoasCadastroComponent implements OnInit {
         complemento: [''],
         bairro: ['', Validators.required],
         cep: ['', Validators.required],
-        cidade: ['', Validators.required],
+        cidade: [''],
         estado: ['']
       })
     });

@@ -35,12 +35,12 @@
 
         <ng-container matColumnDef="cidade">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Cidade </th>
-          <td mat-cell *matCellDef="let pessoa"> {{ pessoa.endereco.cidade }} </td>
+          <td mat-cell *matCellDef="let pessoa"> {{ pessoa.endereco.cidade?.nome }} </td>
         </ng-container>
 
         <ng-container matColumnDef="estado">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
-          <td mat-cell *matCellDef="let pessoa"> {{ pessoa.endereco.estado }} </td>
+          <td mat-cell *matCellDef="let pessoa"> {{ pessoa.endereco.cidade?.estado.nome }} </td>
         </ng-container>
 
         <ng-container matColumnDef="status">

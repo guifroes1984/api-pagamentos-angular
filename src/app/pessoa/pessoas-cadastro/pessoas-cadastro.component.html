@@ -98,7 +98,7 @@
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Cidade</mat-label>
-          <mat-select formControlName="cidade" [disabled]="!cidades || cidades.length === 0">
+          <mat-select formControlName="cidade">
             <mat-option *ngFor="let cidade of cidades" [value]="cidade.codigo">
               {{ cidade.nome }}
             </mat-option>

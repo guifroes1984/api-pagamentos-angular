@@ -48,6 +48,9 @@ export class PessoasCadastroComponent implements OnInit {
   ngOnInit(): void {
     this.configurarFormulario();
 
+    // Desabilita o campo cidade inicialmente
+    this.formPessoa.get('endereco.cidade')?.disable();
+
     this.carregarEstados();
 
     this.filtroEstadoCtrl.valueChanges.subscribe(termo => {
@@ -55,11 +58,17 @@ export class PessoasCadastroComponent implements OnInit {
     });
 
     this.formPessoa.get('endereco.estado')?.valueChanges.subscribe(codigoEstado => {
+      const cidadeControl = this.formPessoa.get('endereco.cidade');
+
       if (codigoEstado) {
+        // Habilita o campo cidade e carrega as cidades
+        cidadeControl?.enable();
         this.carregarCidades(codigoEstado);
       } else {
+        // Limpa e desabilita o campo cidade
         this.cidades = [];
-        this.formPessoa.get('endereco.cidade')?.reset();
+        cidadeControl?.reset();
+        cidadeControl?.disable();
       }
     });
 

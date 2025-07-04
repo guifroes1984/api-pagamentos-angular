@@ -12,21 +12,34 @@ export class MoneyHttp implements HttpInterceptor {
   constructor(private auth: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (!req.url.includes('/oauth/token') && this.auth.isAccessTokenInvalido()) {
-        console.log('Requisição HTTP com access token inválido. Obtendo no token...')
-      return from(this.auth.obterNovoAccessToken())
-        .pipe(
-          mergeMap(() => {
-            req = req.clone({
-              setHeaders: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-              }
-            });
-
-            return next.handle(req);
-          })
-        );
+    if (req.url.includes('/oauth/token') || req.url.includes('/usuarios')) {
+      return next.handle(req);
     }
+
+    if (this.auth.isAccessTokenInvalido()) {
+      console.log('Requisição HTTP com access token inválido. Obtendo novo token...');
+      return from(this.auth.obterNovoAccessToken()).pipe(
+        mergeMap(() => {
+          const token = localStorage.getItem('token');
+          req = req.clone({
+            setHeaders: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          return next.handle(req);
+        })
+      );
+    }
+
+    const token = localStorage.getItem('token');
+    if (token) {
+      req = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
+
     return next.handle(req);
   }
 }

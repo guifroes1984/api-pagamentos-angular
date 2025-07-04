@@ -9,6 +9,8 @@ import { SegurancaRoutingModule } from './seguranca-routing.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { CadastroFormComponent } from './cadastro-form/cadastro-form.component';
 
 @NgModule({
   imports: [
@@ -19,10 +21,11 @@ import { MatButtonModule } from '@angular/material/button';
     SegurancaRoutingModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
+    MatButtonModule, 
+    MatIconModule
    
   ],
-  declarations: [LoginFormComponent],
+  declarations: [LoginFormComponent, CadastroFormComponent],
   exports: [LoginFormComponent]
 })
 export class SegurancaModule { }

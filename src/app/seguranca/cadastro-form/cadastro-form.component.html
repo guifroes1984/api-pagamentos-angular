@@ -1,0 +1,39 @@
+<div class="cadastro-container mat-elevation-z8">
+  <form [formGroup]="formCadastro" (ngSubmit)="cadastrarUsuario()" autocomplete="off">
+
+    <h1 class="cadastro-title">Cadastro</h1>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome</mat-label>
+      <input matInput type="text" formControlName="nome" placeholder="Digite seu nome"
+        (keypress)="permitirSomenteLetras($event)">
+      <mat-error *ngIf="formCadastro.get('nome')?.hasError('required')">Nome é obrigatório</mat-error>
+      <mat-error *ngIf="formCadastro.get('nome')?.hasError('minlength')">Nome deve ter no mínimo 3
+        caracteres</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>E-mail</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="Digite seu e-mail">
+      <mat-error *ngIf="formCadastro.get('email')?.hasError('required')">E-mail é obrigatório</mat-error>
+      <mat-error *ngIf="formCadastro.get('email')?.hasError('email')">E-mail inválido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Senha</mat-label>
+      <input matInput type="password" formControlName="senha" placeholder="Digite sua senha">
+      <mat-error *ngIf="formCadastro.get('senha')?.hasError('required')">Senha é obrigatória</mat-error>
+      <mat-error *ngIf="formCadastro.get('senha')?.hasError('minlength')">Senha deve ter no mínimo 6
+        caracteres</mat-error>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" class="full-width" type="submit" [disabled]="formCadastro.invalid">
+      Cadastrar
+    </button>
+
+    <button mat-stroked-button color="accent" class="full-width" style="margin-top: 8px;" routerLink="/login">
+      <mat-icon>arrow_back</mat-icon>
+      Voltar
+    </button>
+  </form>
+</div>

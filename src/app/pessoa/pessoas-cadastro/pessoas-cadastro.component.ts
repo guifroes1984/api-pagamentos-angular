@@ -232,12 +232,11 @@ export class PessoasCadastroComponent implements OnInit {
 
   }
 
-  public validarTamanhoMinimo = (valor: number) => {
+  public validarTamanhoMinimo(tamanho: number) {
     return (input: FormControl) => {
-      const inputValor = (input.value || '').trim();
-      return inputValor.length >= valor
-        ? null
-        : { tamanhoMinimo: { tamanho: valor } };
+      const valor = input.value || '';
+      if (!valor) return null;
+      return valor.length >= tamanho ? null : { tamanhoMinimo: { tamanho } };
     };
   }
 

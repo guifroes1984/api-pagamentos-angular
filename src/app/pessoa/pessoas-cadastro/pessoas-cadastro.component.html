@@ -11,14 +11,14 @@
         <mat-form-field appearance="outline" class="campo-grande">
           <mat-label>Nome</mat-label>
           <input matInput type="text" formControlName="nome" />
+          <mat-error
+            *ngIf="formPessoa.get('nome')?.hasError('required') && !formPessoa.get('nome')?.hasError('tamanhoMinimo')">
+            Informe o nome
+          </mat-error>
+          <mat-error *ngIf="formPessoa.get('nome')?.hasError('tamanhoMinimo')">
+            Mínimo de {{ formPessoa.get('nome')?.errors?.['tamanhoMinimo']?.tamanho }} caracteres
+          </mat-error>
         </mat-form-field>
-
-        <app-mensagem [control]="formPessoa.get('nome')" [error]="'required'" [text]="'Informe o nome'">
-        </app-mensagem>
-
-        <app-mensagem [control]="formPessoa.get('nome')" [error]="'tamanhoMinimo'"
-          [text]="'Mínimo de ' + formPessoa.get('nome')?.errors?.['tamanhoMinimo']?.tamanho + ' caracteres'">
-        </app-mensagem>
       </div>
     </div>
 
@@ -27,21 +27,20 @@
         <mat-form-field appearance="outline" class="campo-grande">
           <mat-label>Logradouro</mat-label>
           <input matInput type="text" formControlName="logradouro" />
+          <mat-error *ngIf="formPessoa.get('endereco.logradouro')?.hasError('required')">
+            Informe o logradouro
+          </mat-error>
         </mat-form-field>
-
-        <app-mensagem [control]="formPessoa.get('endereco.logradouro')" [error]="'required'"
-          [text]="'Informe o logradouro'">
-        </app-mensagem>
       </div>
 
       <div style="flex: 1; min-width: 150px; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-pequeno">
           <mat-label>Número</mat-label>
           <input matInput type="text" formControlName="numero" />
+          <mat-error *ngIf="formPessoa.get('endereco.numero')?.hasError('required')">
+            Informe o número
+          </mat-error>
         </mat-form-field>
-
-        <app-mensagem [control]="formPessoa.get('endereco.numero')" [error]="'required'" [text]="'Informe o número'">
-        </app-mensagem>
       </div>
     </div>
 
@@ -57,20 +56,20 @@
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>Bairro</mat-label>
           <input matInput formControlName="bairro" />
+          <mat-error *ngIf="formPessoa.get('endereco.bairro')?.hasError('required')">
+            Informe o bairro
+          </mat-error>
         </mat-form-field>
-
-        <app-mensagem [control]="formPessoa.get('endereco.bairro')" [error]="'required'" [text]="'Informe o bairro'">
-        </app-mensagem>
       </div>
 
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio">
           <mat-label>CEP</mat-label>
           <input matInput mask="00000-000" placeholder="00000-000" formControlName="cep" />
+          <mat-error *ngIf="formPessoa.get('endereco.cep')?.hasError('required')">
+            Informe o CEP
+          </mat-error>
         </mat-form-field>
-
-        <app-mensagem [control]="formPessoa.get('endereco.cep')" [error]="'required'" [text]="'Informe o CEP'">
-        </app-mensagem>
       </div>
     </div>
 

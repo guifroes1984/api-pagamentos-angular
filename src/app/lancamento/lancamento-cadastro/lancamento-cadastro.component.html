@@ -22,11 +22,9 @@
             readonly />
           <mat-datepicker-toggle matSuffix [for]="pickerVencimento"></mat-datepicker-toggle>
           <mat-datepicker #pickerVencimento></mat-datepicker>
+          <mat-error *ngIf="formulario.get('dataVencimento')?.hasError('required')">Informe uma data de
+            vencimento</mat-error>
         </mat-form-field>
-
-        <app-mensagem [control]="formulario.get('dataVencimento')" [error]="'required'"
-          [text]="'Informe uma data de vencimento'">
-        </app-mensagem>
       </div>
 
       <div class="campo-data">
@@ -45,15 +43,13 @@
         <mat-form-field appearance="outline" class="campo-grande">
           <mat-label>Descrição</mat-label>
           <input matInput type="text" formControlName="descricao" />
+          <mat-error *ngIf="formulario.get('descricao')?.hasError('tamanhoMinimo')">
+            Mínimo de {{ formulario.get('descricao')?.errors?.['tamanhoMinimo']?.tamanho }} caracteres
+          </mat-error>
+          <mat-error *ngIf="formulario.get('descricao')?.hasError('obrigatoriedade')">
+            Informe uma descrição
+          </mat-error>
         </mat-form-field>
-
-        <app-mensagem [control]="formulario.get('descricao')" [error]="'obrigatoriedade'"
-          [text]="'Informe uma descrição'">
-        </app-mensagem>
-
-        <app-mensagem [control]="formulario.get('descricao')" [error]="'tamanhoMinimo'"
-          [text]="'Mínimo de ' + formulario.get('descricao')?.errors?.['tamanhoMinimo']?.tamanho + ' caracteres'">
-        </app-mensagem>
       </div>
 
       <div>
@@ -62,10 +58,8 @@
           <input matInput currencyMask
             [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, align: 'right', max: 10000 }"
             formControlName="valor" placeholder="0,00" />
+            <mat-error *ngIf="formulario.get('valor')?.hasError('required')">Informe um valor</mat-error>
         </mat-form-field>
-
-        <app-mensagem [control]="formulario.get('valor')" [error]="'required'" [text]="'Informe um valor'">
-        </app-mensagem>
       </div>
     </div>
 
@@ -79,10 +73,8 @@
               {{ categoria.nome }}
             </mat-option>
           </mat-select>
+          <mat-error *ngIf="formulario.get('categoria.codigo')?.hasError('required')">Informe uma categoria</mat-error>
         </mat-form-field>
-
-        <app-mensagem [control]="formulario.get('categoria')" [error]="'required'" [text]="'Informe uma categoria'">
-        </app-mensagem>
       </div>
 
       <div style="flex: 1; display: flex; flex-direction: column;" [formGroupName]="'pessoa'">
@@ -103,12 +95,9 @@
               [value]="pessoa.value">
               {{ pessoa.label }}
             </mat-option>
-
           </mat-select>
+          <mat-error *ngIf="formulario.get('pessoa.codigo')?.hasError('required')">Informe uma pessoa</mat-error>
         </mat-form-field>
-
-        <app-mensagem [control]="formulario.get('pessoa.codigo')" [error]="'required'" [text]="'Informe uma pessoa'">
-        </app-mensagem>
       </div>
     </div>
 
@@ -136,7 +125,8 @@
         <a (click)="visualizarArquivoSelecionado()" class="download-link" matTooltip="Pré-visualizar anexo">
           {{ arquivoSelecionado.name }}
         </a>
-        <button (click)="removerArquivoSelecionado()" matTooltip="Remover anexo" class="red-square-close-button"></button>
+        <button (click)="removerArquivoSelecionado()" matTooltip="Remover anexo"
+          class="red-square-close-button"></button>
       </ng-container>
 
       <ng-container *ngIf="formulario.get('anexo.nome')?.value && !arquivoSelecionado && !uploadEmAndamento">

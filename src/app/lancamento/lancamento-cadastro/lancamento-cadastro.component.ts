@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
@@ -93,7 +93,7 @@ export class LancamentoCadastroComponent implements OnInit {
   public validarTamanhoMinimo(valor: number) {
     return (input: FormControl) => {
       const inputValor = input.value || '';
-
+      if (!inputValor) return null;
       return inputValor.length >= valor ? null : { tamanhoMinimo: { tamanho: valor } };
     };
   }

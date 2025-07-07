@@ -1,5 +1,5 @@
 <div class="container">
-  <form [formGroup]="formulario" (ngSubmit)="salvar()">
+  <form [formGroup]="formPessoa" (ngSubmit)="salvar()">
     <div class="mat-grid">
       <div class="mat-grid-item">
         <h1>{{ editando ? 'Edição de ' : 'Novo' }} Lançamento</h1>
@@ -22,14 +22,14 @@
             readonly />
           <mat-datepicker-toggle matSuffix [for]="pickerVencimento"></mat-datepicker-toggle>
           <mat-datepicker #pickerVencimento></mat-datepicker>
-          <mat-error *ngIf="formulario.get('dataVencimento')?.hasError('required')">Informe uma data de
+          <mat-error *ngIf="formPessoa.get('dataVencimento')?.hasError('required')">Informe uma data de
             vencimento</mat-error>
         </mat-form-field>
       </div>
 
       <div class="campo-data">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>{{ formulario.get('tipo')?.value === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</mat-label>
+          <mat-label>{{ formPessoa.get('tipo')?.value === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</mat-label>
           <input matInput [matDatepicker]="pickerRecebimento" placeholder="dd/mm/aaaa" formControlName="dataPagamento"
             readonly />
           <mat-datepicker-toggle matSuffix [for]="pickerRecebimento"></mat-datepicker-toggle>
@@ -43,10 +43,10 @@
         <mat-form-field appearance="outline" class="campo-grande">
           <mat-label>Descrição</mat-label>
           <input matInput type="text" formControlName="descricao" />
-          <mat-error *ngIf="formulario.get('descricao')?.hasError('tamanhoMinimo')">
-            Mínimo de {{ formulario.get('descricao')?.errors?.['tamanhoMinimo']?.tamanho }} caracteres
+          <mat-error *ngIf="formPessoa.get('descricao')?.hasError('tamanhoMinimo')">
+            Mínimo de {{ formPessoa.get('descricao')?.errors?.['tamanhoMinimo']?.tamanho }} caracteres
           </mat-error>
-          <mat-error *ngIf="formulario.get('descricao')?.hasError('obrigatoriedade')">
+          <mat-error *ngIf="formPessoa.get('descricao')?.hasError('obrigatoriedade')">
             Informe uma descrição
           </mat-error>
         </mat-form-field>
@@ -58,7 +58,7 @@
           <input matInput currencyMask
             [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, align: 'right', max: 10000 }"
             formControlName="valor" placeholder="0,00" />
-            <mat-error *ngIf="formulario.get('valor')?.hasError('required')">Informe um valor</mat-error>
+            <mat-error *ngIf="formPessoa.get('valor')?.hasError('required')">Informe um valor</mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -73,7 +73,7 @@
               {{ categoria.nome }}
             </mat-option>
           </mat-select>
-          <mat-error *ngIf="formulario.get('categoria.codigo')?.hasError('required')">Informe uma categoria</mat-error>
+          <mat-error *ngIf="formPessoa.get('categoria.codigo')?.hasError('required')">Informe uma categoria</mat-error>
         </mat-form-field>
       </div>
 
@@ -96,7 +96,7 @@
               {{ pessoa.label }}
             </mat-option>
           </mat-select>
-          <mat-error *ngIf="formulario.get('pessoa.codigo')?.hasError('required')">Informe uma pessoa</mat-error>
+          <mat-error *ngIf="formPessoa.get('pessoa.codigo')?.hasError('required')">Informe uma pessoa</mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -110,7 +110,7 @@
 
     <div class="linha alinhamento-direita"
       style="margin-top: 8px; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
-      <ng-container *ngIf="!arquivoSelecionado && !formulario.get('anexo.nome')?.value && !uploadEmAndamento">
+      <ng-container *ngIf="!arquivoSelecionado && !formPessoa.get('anexo.nome')?.value && !uploadEmAndamento">
         <button mat-raised-button class="botao-anexo" type="button" (click)="seletorArquivo.click()">
           <mat-icon>add</mat-icon>
           Anexar
@@ -129,16 +129,16 @@
           class="red-square-close-button"></button>
       </ng-container>
 
-      <ng-container *ngIf="formulario.get('anexo.nome')?.value && !arquivoSelecionado && !uploadEmAndamento">
+      <ng-container *ngIf="formPessoa.get('anexo.nome')?.value && !arquivoSelecionado && !uploadEmAndamento">
         <a (click)="baixarAnexo()" class="download-link" matTooltip="Baixar anexo">
-          {{ formulario.get('anexo.nome')?.value }}
+          {{ formPessoa.get('anexo.nome')?.value }}
         </a>
         <button (click)="removerAnexo()" matTooltip="Remover anexo" class="red-square-close-button"></button>
       </ng-container>
     </div>
 
     <div class="linha" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
-      <button mat-raised-button color="primary" [disabled]="!formulario.valid || uploadEmAndamento">
+      <button mat-raised-button color="primary" [disabled]="!formPessoa.valid || uploadEmAndamento">
         <mat-icon>save</mat-icon>
         Salvar
       </button>

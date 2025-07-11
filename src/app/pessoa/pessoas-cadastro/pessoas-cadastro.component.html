@@ -162,7 +162,8 @@
       </div>
     </div>
 
-    <div class="linha linha-botoes" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
+    <div class="linha linha-botoes acoes-formulario"
+      style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
       <button mat-raised-button color="primary" [disabled]="formPessoa.invalid">
         <mat-icon>save</mat-icon>
         Salvar
@@ -171,7 +172,10 @@
         <mat-icon>add_circle</mat-icon>
         Novo
       </button>
-      <a routerLink="/pessoas" href="#">Voltar para a pesquisa</a>
+      <a mat-raised-button class="btn-voltar-vermelho" routerLink="/pessoas">
+        <mat-icon>arrow_back</mat-icon>
+        Voltar
+      </a>
     </div>
   </form>
 </div>

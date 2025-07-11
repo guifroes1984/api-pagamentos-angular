@@ -1,9 +1,4 @@
 <div class="container">
-  <div *ngIf="formLancamento.dirty && !formEnviado" class="unsaved-changes-alert aviso-alteracoes">
-    <mat-icon>warning</mat-icon>
-    <span>Você tem alterações não salvas!</span>
-  </div>
-
   <form [formGroup]="formLancamento" (ngSubmit)="salvar()">
     <div class="mat-grid">
       <div class="mat-grid-item">
@@ -153,9 +148,9 @@
         Novo
       </button>
       <a mat-raised-button class="btn-voltar-vermelho" routerLink="/lancamentos">
-  <mat-icon>arrow_back</mat-icon>
-  Voltar
-</a>
+        <mat-icon>arrow_back</mat-icon>
+        Voltar
+      </a>
     </div>
   </form>
 </div>

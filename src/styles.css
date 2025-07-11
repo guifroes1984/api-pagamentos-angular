@@ -49,3 +49,13 @@ label {
   justify-content: flex-start;
 }
 
+.custom-dialog-container .mat-dialog-container {
+  padding: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cdk-overlay-dark-backdrop {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
+}

@@ -10,7 +10,8 @@ export class ConfirmDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { titulo: string; mensagem: string }
+    @Inject(MAT_DIALOG_DATA)
+    public data: any
   ) {}
 
   confirmar(): void {

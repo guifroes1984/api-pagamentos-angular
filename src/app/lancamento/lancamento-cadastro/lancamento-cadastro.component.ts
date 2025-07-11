@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
 
@@ -10,24 +10,31 @@ import { PessoaService } from 'src/app/pessoa/pessoa.service';
 import { LancamentoService } from '../lancamento.service';
 import { Title } from '@angular/platform-browser';
 
+import { IFormComPendencias } from 'src/app/core/guards/formComPendencias';
+import { Observable } from 'rxjs';
+
+
 @Component({
   selector: 'app-lancamento-cadastro',
   templateUrl: './lancamento-cadastro.component.html',
   styleUrls: ['./lancamento-cadastro.component.css']
 })
-export class LancamentoCadastroComponent implements OnInit {
+export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
 
   public categorias: any[] = [];
   public pessoas: any[] = [];
   public filtroPessoa: string = '';
 
-  formPessoa!: FormGroup;
+  formLancamento!: FormGroup;
 
   filtroPessoaCtrl = new FormControl('');
 
   public arquivoSelecionado: File | null = null;
   public uploadEmAndamento = false;
   public anexoRemovido = false;
+
+  private dadosOriginais: any;
+  public formEnviado = true;
 
   tipos = [
     { label: 'Receita', value: 'RECEITA' },
@@ -46,23 +53,40 @@ export class LancamentoCadastroComponent implements OnInit {
     private title: Title,
     private formBuilder: FormBuilder
   ) { }
-
+  
   ngOnInit(): void {
     this.configurarFormulario();
     const codigoLancamento = this.route.snapshot.params['codigo'];
 
     this.title.setTitle('Novo lançamento');
-
+    
     if (codigoLancamento) {
       this.carregarLancamentos(codigoLancamento);
+    } else {
+      this.dadosOriginais = this.formLancamento.value;
     }
-
+    
     this.carregarCategorias();
     this.carregarPessoas();
+
+    this.formLancamento.valueChanges.subscribe(() => {
+      if (this.formLancamento.pristine) {
+        this.formLancamento.markAsDirty();
+      }
+    });
+  }
+
+  get formulario(): FormGroup {
+    return this.formLancamento;
+  }
+  
+  public podeDesativar(): boolean {
+    return !this.formLancamento.dirty || 
+           JSON.stringify(this.formLancamento.value) === JSON.stringify(this.dadosOriginais);
   }
 
   public configurarFormulario() {
-    this.formPessoa = this.formBuilder.group({
+    this.formLancamento = this.formBuilder.group({
       codigo: [],
       tipo: ['RECEITA', Validators.required],
       dataVencimento: [null, Validators.required],
@@ -99,16 +123,17 @@ export class LancamentoCadastroComponent implements OnInit {
   }
 
   public get editando(): boolean {
-    return !!this.formPessoa.get('codigo')?.value;
+    return !!this.formLancamento.get('codigo')?.value;
   }
 
   public carregarLancamentos(codigo: number) {
     this.lancamentoService.buscarLancamentoPorCodigo(codigo)
       .then(lancamento => {
-        this.formPessoa.patchValue(lancamento);
+        this.formLancamento.patchValue(lancamento);
+        this.dadosOriginais = this.formLancamento.value;
 
         if (lancamento.anexo) {
-          this.formPessoa.get('anexo')?.patchValue({
+          this.formLancamento.get('anexo')?.patchValue({
             codigo: lancamento.anexo.codigo,
             nome: lancamento.anexo.nome,
             tipo: lancamento.anexo.tipo
@@ -122,9 +147,10 @@ export class LancamentoCadastroComponent implements OnInit {
 
   public async salvar(): Promise<void> {
     try {
+      this.formEnviado = false;
       this.uploadEmAndamento = true;
 
-      const codigo = this.formPessoa.get('codigo')?.value;
+      const codigo = this.formLancamento.get('codigo')?.value;
 
       if (this.editando && this.anexoRemovido && codigo) {
         await this.lancamentoService.deletarAnexo(codigo);
@@ -138,13 +164,13 @@ export class LancamentoCadastroComponent implements OnInit {
 
         if (this.arquivoSelecionado) {
           lancamentoSalvo = await this.lancamentoService.atualizarAnexo(codigo, this.arquivoSelecionado);
-          this.formPessoa.patchValue(lancamentoSalvo);
+          this.formLancamento.patchValue(lancamentoSalvo);
           this.arquivoSelecionado = null;
         }
 
       } else if (this.arquivoSelecionado) {
         lancamentoSalvo = await this.lancamentoService.adicionarLancamentoComAnexo(this.criarFormData());
-        this.formPessoa.patchValue(lancamentoSalvo);
+        this.formLancamento.patchValue(lancamentoSalvo);
         this.arquivoSelecionado = null;
         this.router.navigate(['/lancamentos', lancamentoSalvo.codigo]);
 
@@ -152,7 +178,12 @@ export class LancamentoCadastroComponent implements OnInit {
         await this.adicionarLancamento();
       }
 
+      this.dadosOriginais = this.formLancamento.value;
+      this.formLancamento.markAsPristine();
+      this.formEnviado = true;
+
     } catch (erro) {
+      this.formEnviado = false;
       this.errorHandler.handle(erro);
     } finally {
       this.uploadEmAndamento = false;
@@ -161,13 +192,13 @@ export class LancamentoCadastroComponent implements OnInit {
 
   private criarFormData(): FormData {
     const formData = new FormData();
-    formData.append('lancamento', JSON.stringify(this.formPessoa.value));
+    formData.append('lancamento', JSON.stringify(this.formLancamento.value));
     formData.append('file', this.arquivoSelecionado!);
     return formData;
   }
 
   public adicionarLancamento() {
-    this.lancamentoService.adicionarLancamento(this.formPessoa.value)
+    this.lancamentoService.adicionarLancamento(this.formLancamento.value)
       .then(lancamentoAdicionado => {
         this.toastr.success('Lançamento adicionado com sucesso!');
         this.router.navigate(['/lancamentos', lancamentoAdicionado.codigo]);
@@ -176,9 +207,9 @@ export class LancamentoCadastroComponent implements OnInit {
   }
 
   public atualizarLancamento() {
-    this.lancamentoService.atualizarLancamento(this.formPessoa.value)
+    this.lancamentoService.atualizarLancamento(this.formLancamento.value)
       .then(lancamentoAtualizado => {
-        this.formPessoa.patchValue(lancamentoAtualizado);
+        this.formLancamento.patchValue(lancamentoAtualizado);
         this.toastr.success('Lançamento alterado com sucesso!');
         this.atualizarTituloEdicao();
       })
@@ -209,13 +240,16 @@ export class LancamentoCadastroComponent implements OnInit {
   }
 
   public novo() {
-    this.configurarFormulario();
-    this.router.navigate(['/lancamentos/novo']);
-    this.title.setTitle('Novo lancçamento');
+    if (this.podeDesativar() || confirm('Deseja descartar as alterações não salvas?')) {
+      this.configurarFormulario();
+      this.dadosOriginais = this.formLancamento.value;
+      this.router.navigate(['/lancamentos/novo']);
+      this.title.setTitle('Novo lançamento');
+    }
   }
 
   public atualizarTituloEdicao() {
-    this.title.setTitle(`Edição de lançamento: ${this.formPessoa.get('descricao')?.value}`);
+    this.title.setTitle(`Edição de lançamento: ${this.formLancamento.get('descricao')?.value}`);
   }
 
   public aoSelecionarArquivo(evento: Event): void {
@@ -227,7 +261,7 @@ export class LancamentoCadastroComponent implements OnInit {
 
       setTimeout(() => {
         this.uploadEmAndamento = false;
-        this.formPessoa.patchValue({
+        this.formLancamento.patchValue({
           anexo: {
             nome: this.arquivoSelecionado?.name,
             tipo: this.arquivoSelecionado?.type,
@@ -240,7 +274,7 @@ export class LancamentoCadastroComponent implements OnInit {
 
   public adicionarLancamentoComAnexo(): void {
     const formData = new FormData();
-    formData.append('lancamento', JSON.stringify(this.formPessoa.value));
+    formData.append('lancamento', JSON.stringify(this.formLancamento.value));
     formData.append('file', this.arquivoSelecionado!);
 
     this.lancamentoService.adicionarLancamentoComAnexo(formData)
@@ -251,14 +285,14 @@ export class LancamentoCadastroComponent implements OnInit {
   }
 
   public baixarAnexo(): void {
-    const codigo = this.formPessoa.get('codigo')?.value;
+    const codigo = this.formLancamento.get('codigo')?.value;
 
     this.lancamentoService.downloadAnexo(codigo)
       .then(blob => {
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = this.formPessoa.get('anexo.nome')?.value || 'anexo.pdf';
+        link.download = this.formLancamento.get('anexo.nome')?.value || 'anexo.pdf';
         link.click();
         window.URL.revokeObjectURL(url);
       })
@@ -267,13 +301,13 @@ export class LancamentoCadastroComponent implements OnInit {
 
   public removerAnexo() {
     this.anexoRemovido = true;
-    this.formPessoa.get('anexo')?.reset();
+    this.formLancamento.get('anexo')?.reset();
     this.arquivoSelecionado = null;
   }
 
   public removerArquivoSelecionado() {
     this.arquivoSelecionado = null;
-    this.formPessoa.get('anexo')?.reset();
+    this.formLancamento.get('anexo')?.reset();
   }
 
   public visualizarArquivoSelecionado() {

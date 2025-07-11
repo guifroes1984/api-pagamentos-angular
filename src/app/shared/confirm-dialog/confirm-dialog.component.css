@@ -7,3 +7,39 @@
 .alert-icon {
   font-size: 26px;
 }
+
+.dialog-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.dialog-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+  color: #d32f2f;
+}
+
+.title-icon {
+  margin-right: 8px;
+  color: #ff9800;
+  transform: scale(1.2);
+}
+
+.dialog-content {
+  padding: 0 0 20px 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px 0 0 0;
+}
+
+.dialog-actions button {
+  min-width: 120px;
+}

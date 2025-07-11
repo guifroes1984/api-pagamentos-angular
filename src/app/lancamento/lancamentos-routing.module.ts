@@ -4,6 +4,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { LancamentosPesquisaComponent } from "./lancamentos-pesquisa/lancamentos-pesquisa.component";
 import { LancamentoCadastroComponent } from "./lancamento-cadastro/lancamento-cadastro.component";
 import { AuthGuard } from "../seguranca/auth.guard";
+import { PendenciasGuard } from "../core/guards/formComPendencias";
 
 const routes: Routes = [
     { path: '',        
@@ -14,11 +15,13 @@ const routes: Routes = [
     { path: 'novo',
       component: LancamentoCadastroComponent,
       canActivate: [AuthGuard], 
+      canDeactivate: [PendenciasGuard], 
       data: { roles: ['ROLE_CADASTRAR_LANCAMENTO'] }
     }, 
     { path: ':codigo', 
       component: LancamentoCadastroComponent, 
       canActivate: [AuthGuard], 
+      canDeactivate: [PendenciasGuard], 
       data: { roles: ['ROLE_CADASTRAR_LANCAMENTO'] }
     }
   ];

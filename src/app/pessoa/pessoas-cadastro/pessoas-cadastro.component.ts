@@ -48,7 +48,6 @@ export class PessoasCadastroComponent implements OnInit {
   ngOnInit(): void {
     this.configurarFormulario();
 
-    // Desabilita o campo cidade inicialmente
     this.formPessoa.get('endereco.cidade')?.disable();
 
     this.carregarEstados();

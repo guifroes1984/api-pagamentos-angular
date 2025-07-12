@@ -1,0 +1,21 @@
+<div class="login-container mat-elevation-z8">
+  <form [formGroup]="formRecuperar" (ngSubmit)="enviar()" autocomplete="off">
+    <h1 class="login-title">Recuperar Senha</h1>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>E-mail</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="Digite seu e-mail">
+      <mat-error *ngIf="formRecuperar.get('email')?.hasError('required')">E-mail obrigatório</mat-error>
+      <mat-error *ngIf="formRecuperar.get('email')?.hasError('email')">E-mail inválido</mat-error>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" class="full-width" type="submit" [disabled]="formRecuperar.invalid">
+      Enviar instruções
+    </button>
+
+    <button mat-stroked-button color="accent" class="full-width" style="margin-top: 16px;" routerLink="/login">
+      <mat-icon>arrow_back</mat-icon>
+      Voltar
+    </button>
+  </form>
+</div>

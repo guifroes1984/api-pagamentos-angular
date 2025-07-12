@@ -25,7 +25,7 @@ export class AuthService {
     const body = `username=${usuario}&password=${senha}&grant_type=password`;
 
     return firstValueFrom(
-      this.http.post<{ access_token: string }>(this.oauthTokenUrl, body, 
+      this.http.post<{ access_token: string }>(this.oauthTokenUrl, body,
         { headers, withCredentials: true })
     ).then(response => {
       this.armazenarToken(response.access_token);
@@ -38,45 +38,45 @@ export class AuthService {
   }
 
   public obterNovoAccessToken(): Promise<void> {
-  const headers = new HttpHeaders()
-    .set('Content-Type', 'application/x-www-form-urlencoded')
-    .set('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .set('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
 
-  const refreshToken = localStorage.getItem('refresh_token');
-  const body = `grant_type=refresh_token&refresh_token=${refreshToken}`;
+    const refreshToken = localStorage.getItem('refresh_token');
+    const body = `grant_type=refresh_token&refresh_token=${refreshToken}`;
 
-  return firstValueFrom(
-    this.http.post<{ access_token: string, refresh_token: string }>(this.oauthTokenUrl, body, 
-      { headers, withCredentials: true })
-  ).then(response => {
-    this.armazenarToken(response.access_token);
-    if (response.refresh_token) {
-      localStorage.setItem('refresh_token', response.refresh_token);
-    }
-    console.log('Novo access token criado!');
-  }).catch(response => {
-    console.error('Erro ao renovar token', response);
-    return Promise.resolve();
-  });
-}
+    return firstValueFrom(
+      this.http.post<{ access_token: string, refresh_token: string }>(this.oauthTokenUrl, body,
+        { headers, withCredentials: true })
+    ).then(response => {
+      this.armazenarToken(response.access_token);
+      if (response.refresh_token) {
+        localStorage.setItem('refresh_token', response.refresh_token);
+      }
+      console.log('Novo access token criado!');
+    }).catch(response => {
+      console.error('Erro ao renovar token', response);
+      return Promise.resolve();
+    });
+  }
 
-public limparAccessToken() {
-  localStorage.removeItem('token');
-  this.jwtPayload = null;
-}
+  public limparAccessToken() {
+    localStorage.removeItem('token');
+    this.jwtPayload = null;
+  }
 
-public isAccessTokenInvalido() {
-  const token = localStorage.getItem('token');
+  public isAccessTokenInvalido() {
+    const token = localStorage.getItem('token');
 
-  return !token || this.jwtHelper.isTokenExpired(token);
-}
+    return !token || this.jwtHelper.isTokenExpired(token);
+  }
 
   public temPermissao(permissao: string): boolean {
     return this.jwtPayload?.authorities?.includes(permissao) ?? false;
   }
 
   public temQualquerPermissao(roles: string[]): boolean {
-    for(const role of roles) {
+    for (const role of roles) {
       if (this.temPermissao(role)) {
         return true;
       }
@@ -98,7 +98,11 @@ public isAccessTokenInvalido() {
   }
 
   public isAdmin(): boolean {
-  return this.jwtPayload?.nome === 'Administrador';
+    return this.jwtPayload?.nome === 'Administrador';
+  }
+
+  public esqueciSenha(email: string) {
+    return this.http.post<void>('/auth/esqueci-senha', { email });
   }
 
 }

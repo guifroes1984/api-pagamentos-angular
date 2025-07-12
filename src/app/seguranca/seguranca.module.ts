@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CadastroFormComponent } from './cadastro-form/cadastro-form.component';
+import { RecuperarSenhaComponent } from './recuperar-senha/recuperar-senha.component';
 
 @NgModule({
   imports: [
@@ -25,7 +26,7 @@ import { CadastroFormComponent } from './cadastro-form/cadastro-form.component';
     MatIconModule
    
   ],
-  declarations: [LoginFormComponent, CadastroFormComponent],
+  declarations: [LoginFormComponent, CadastroFormComponent, RecuperarSenhaComponent],
   exports: [LoginFormComponent]
 })
 export class SegurancaModule { }

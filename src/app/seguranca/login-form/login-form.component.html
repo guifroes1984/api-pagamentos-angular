@@ -15,7 +15,7 @@
       <mat-error *ngIf="formLogin.get('senha')?.invalid">Senha obrigatória</mat-error>
     </mat-form-field>
 
-    <button mat-flat-button color="primary" class="full-width" type="submit" [disabled]="formLogin.invalid">
+    <button mat-flat-button color="primary" class="full-width" type="submit" [disabled]="formLogin.invalid || loading">
       Entrar
     </button>
 
@@ -27,6 +27,10 @@
       <span>Ainda não tem uma conta?</span>
       <a routerLink="/login/cadastro-usuario" style="margin-left: 4px;">Cadastre-se</a>
     </div>
-
+    
+    <div class="overlay" *ngIf="loading">
+      <mat-progress-spinner diameter="80" mode="indeterminate" color="primary"></mat-progress-spinner>
+    </div>
   </form>
+
 </div>

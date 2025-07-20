@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators }
 import { ActivatedRoute, Router } from '@angular/router';
 import { SenhaService } from '../senha.service';
 import { ToastrService } from 'ngx-toastr';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-resetar-senha',
@@ -20,7 +21,8 @@ export class ResetarSenhaComponent {
     private route: ActivatedRoute,
     private senhaService: SenhaService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router, 
+    private title: Title
   ) { }
 
   ngOnInit(): void {
@@ -30,6 +32,8 @@ export class ResetarSenhaComponent {
       novaSenha: ['', [Validators.required]],
       confirmarSenha: ['', Validators.required]
     }, { validators: this.senhasIguais });
+
+    this.title.setTitle('Redefinir Senha');
   }
 
   senhasIguais(group: AbstractControl): ValidationErrors | null {

@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-recuperar-senha',
   templateUrl: './recuperar-senha.component.html',
   styleUrls: ['./recuperar-senha.component.css']
 })
-export class RecuperarSenhaComponent {
+export class RecuperarSenhaComponent implements OnInit {
 
   emailEnviado = false;
   loading = false;
@@ -17,11 +18,16 @@ export class RecuperarSenhaComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private toastr: ToastrService
+    private toastr: ToastrService, 
+    private title: Title
   ) {
     this.formRecuperar = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
     });
+  }
+
+  ngOnInit(): void {
+    this.title.setTitle('Recuperar Senha');
   }
 
   public enviar() {

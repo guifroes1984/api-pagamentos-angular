@@ -53,7 +53,7 @@ export class CadastroFormComponent implements OnInit {
     const inputChar = event.key;
 
     if (!regex.test(inputChar)) {
-      event.preventDefault(); // bloqueia o caractere
+      event.preventDefault();
     }
   }
 

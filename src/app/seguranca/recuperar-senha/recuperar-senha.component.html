@@ -1,15 +1,20 @@
 <div class="login-container mat-elevation-z8">
-  <form [formGroup]="formRecuperar" (ngSubmit)="enviar()" autocomplete="off">
+  <form *ngIf="!emailEnviado" [formGroup]="formRecuperar" (ngSubmit)="enviar()" autocomplete="off">
     <h1 class="login-title">Recuperar Senha</h1>
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>E-mail</mat-label>
       <input matInput type="email" formControlName="email" placeholder="Digite seu e-mail">
-      <mat-error *ngIf="formRecuperar.get('email')?.hasError('required')">E-mail obrigatório</mat-error>
-      <mat-error *ngIf="formRecuperar.get('email')?.hasError('email')">E-mail inválido</mat-error>
+      <mat-error *ngIf="formRecuperar.get('email')?.hasError('required') && formRecuperar.get('email')?.touched">
+        E-mail obrigatório
+      </mat-error>
+      <mat-error *ngIf="formRecuperar.get('email')?.hasError('email') && formRecuperar.get('email')?.touched">
+        E-mail inválido
+      </mat-error>
     </mat-form-field>
 
-    <button mat-flat-button color="primary" class="full-width" type="submit" [disabled]="formRecuperar.invalid">
+    <button mat-flat-button color="primary" class="full-width" type="submit"
+      [disabled]="formRecuperar.invalid || loading">
       Enviar instruções
     </button>
 
@@ -17,5 +22,19 @@
       <mat-icon>arrow_back</mat-icon>
       Voltar
     </button>
+
+    <div class="overlay" *ngIf="loading">
+      <mat-progress-spinner diameter="80" mode="indeterminate" color="primary"></mat-progress-spinner>
+    </div>
   </form>
+
+  <div *ngIf="emailEnviado" class="email-confirmado">
+    <h1 class="login-title">Verifique seu e-mail</h1>
+    <p>Se o e-mail informado estiver cadastrado, você receberá as instruções para redefinir sua senha.</p>
+
+    <button mat-stroked-button color="accent" class="full-width" routerLink="/login">
+      <mat-icon>arrow_back</mat-icon>
+      Voltar para o login
+    </button>
+  </div>
 </div>

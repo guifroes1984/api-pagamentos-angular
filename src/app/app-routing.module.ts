@@ -38,9 +38,9 @@ const routes: Routes = [
       import('./seguranca/seguranca.module').then(m => m.SegurancaModule)
   },
   
-  { path: 'pagina-nao-encontrada', component: PaginaNaoEncontradaComponent }, 
-  { path: 'pagina-nao-autorizado', component: PaginaNaoAutorizadoComponent },
-  { path: '**', redirectTo: 'pagina-nao-encontrada' }
+  // { path: 'pagina-nao-encontrada', component: PaginaNaoEncontradaComponent }, 
+  // { path: 'pagina-nao-autorizado', component: PaginaNaoAutorizadoComponent },
+  // { path: '**', redirectTo: 'pagina-nao-encontrada' }
 ];
 
 @NgModule({

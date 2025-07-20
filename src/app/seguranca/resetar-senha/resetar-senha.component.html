@@ -1,0 +1,26 @@
+<div class="login-container mat-elevation-z8">
+  <form [formGroup]="formResetar" (ngSubmit)="enviar()" autocomplete="off">
+    <h1 class="login-title">Redefinir Senha</h1>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nova Senha</mat-label>
+      <input matInput type="password" formControlName="novaSenha">
+      <mat-error *ngIf="formResetar.get('novaSenha')?.hasError('required')">Campo obrigatório</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Confirmar Senha</mat-label>
+      <input matInput type="password" formControlName="confirmarSenha">
+      <mat-error *ngIf="formResetar.get('confirmarSenha')?.hasError('required')">Campo obrigatório</mat-error>
+      <mat-error *ngIf="formResetar.errors?.['senhasDiferentes']">Senhas não coincidem</mat-error>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" type="submit" [disabled]="formResetar.invalid || loading" class="full-width">
+      Redefinir
+    </button>
+
+    <div class="overlay" *ngIf="loading">
+      <mat-progress-spinner diameter="80" mode="indeterminate" color="primary"></mat-progress-spinner>
+    </div>
+  </form>
+</div>

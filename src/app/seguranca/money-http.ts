@@ -12,7 +12,13 @@ export class MoneyHttp implements HttpInterceptor {
   constructor(private auth: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.url.includes('/oauth/token') || req.url.includes('/usuarios')) {
+    const isPublicEndpoint = 
+      req.url.includes('/oauth/token') || 
+      req.url.includes('/usuarios') ||
+      req.url.includes('/auth/esqueci-senha') ||
+      req.url.includes('/auth/resetar-senha');
+
+    if (isPublicEndpoint) {
       return next.handle(req);
     }
 

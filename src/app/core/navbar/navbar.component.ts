@@ -47,7 +47,10 @@ export class NavbarComponent implements OnInit {
 
   rotaAtualEhLoginOuCadastro(): boolean {
     const url = this.router.url;
-    return url === '/login' || url === '/login/cadastro-usuario' || url === '/login/recuperar-senha';
+    return url === '/login' || 
+           url === '/login/cadastro-usuario' || 
+           url === '/login/recuperar-senha' || 
+           url.startsWith('/login/recuperar-senha/resetar-senha/');
   }
 
 }

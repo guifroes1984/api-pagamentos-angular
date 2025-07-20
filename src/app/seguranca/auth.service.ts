@@ -102,7 +102,7 @@ export class AuthService {
   }
 
   public esqueciSenha(email: string) {
-    return this.http.post<void>('/auth/esqueci-senha', { email });
+    return this.http.post<void>(`${environment.apiUrl}/auth/esqueci-senha`, { email });
   }
 
 }

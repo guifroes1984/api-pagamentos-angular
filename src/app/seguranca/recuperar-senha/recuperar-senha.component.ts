@@ -9,6 +9,9 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./recuperar-senha.component.css']
 })
 export class RecuperarSenhaComponent {
+
+  emailEnviado = false;
+  loading = false;
   formRecuperar!: FormGroup;
 
   constructor(
@@ -21,16 +24,26 @@ export class RecuperarSenhaComponent {
     });
   }
 
-  enviar() {
+  public enviar() {
+    if (this.formRecuperar.invalid) return;
+
     const email = this.formRecuperar.value.email;
+    this.loading = true;
 
     this.authService.esqueciSenha(email).subscribe({
       next: () => {
-        this.toastr.success('Instruções enviadas para seu e-mail.');
         this.formRecuperar.reset();
+        this.formRecuperar.get('email')?.setErrors(null);
+        this.formRecuperar.get('email')?.markAsPristine();
+        this.formRecuperar.get('email')?.markAsUntouched();
+
+        this.loading = false;
+        this.emailEnviado = true;
+        this.toastr.success('Instruções enviadas para seu e-mail.');
       },
       error: () => {
         this.toastr.error('Erro ao enviar instruções. Verifique o e-mail informado.');
+        this.loading = false;
       }
     });
   }

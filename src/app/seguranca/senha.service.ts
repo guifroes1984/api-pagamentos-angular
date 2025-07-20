@@ -2,16 +2,19 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environment/environment';
+import { ResetarSenha } from '../core/model/resetar-senha';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RecuperarSenhaService {
+export class SenhaService {
 
   recuperarSenhaUrl: string;
+  resetarSenhaUrl: string;
 
   constructor(private http: HttpClient) { 
     this.recuperarSenhaUrl = `${environment.apiUrl}/auth/esqueci-senha`;
+    this.resetarSenhaUrl = `${environment.apiUrl}/auth/resetar-senha`;
   }
 
   public solicitarRecuperacao(email: string): Promise<void> {
@@ -20,7 +23,15 @@ export class RecuperarSenhaService {
 
     return firstValueFrom(
       this.http.post<void>(this.recuperarSenhaUrl, body, { headers })
-    )
+    );
+  }
+
+  public resetarSenha(resetarSenha: ResetarSenha): Promise<void> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    return firstValueFrom(
+      this.http.post<void>(this.resetarSenhaUrl, resetarSenha, { headers })
+    );
   }
 
 }

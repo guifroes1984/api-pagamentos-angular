@@ -7,18 +7,9 @@ import { RecuperarSenhaComponent } from "./recuperar-senha/recuperar-senha.compo
 import { ResetarSenhaComponent } from "./resetar-senha/resetar-senha.component";
 
 const routes: Routes = [
-    { path: '', component: LoginFormComponent },
-    { path: 'cadastro-usuario', component: CadastroFormComponent },
-    {
-        path: 'login', children: [
-            {
-                path: 'recuperar-senha', children: [
-                    { path: 'resetar-senha/:token', component: ResetarSenhaComponent }
-                ]
-            }
-        ]
-    },
-    { path: 'recuperar-senha', component: RecuperarSenhaComponent }
+  { path: '', component: LoginFormComponent },
+  { path: 'cadastro-usuario', component: CadastroFormComponent },
+  { path: 'recuperar-senha', component: RecuperarSenhaComponent }
 ];
 
 @NgModule({

@@ -50,7 +50,7 @@ export class NavbarComponent implements OnInit {
     return url === '/login' || 
            url === '/login/cadastro-usuario' || 
            url === '/login/recuperar-senha' || 
-           url.startsWith('/login/recuperar-senha/resetar-senha/');
+           url.startsWith('/resetar-senha/');
   }
 
 }

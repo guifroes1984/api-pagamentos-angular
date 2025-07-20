@@ -23,7 +23,6 @@ import { PessoaModule } from './pessoa/pessoa.module';
 import { CoreModule } from './core/core.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
-import { SegurancaModule } from './seguranca/seguranca.module';
 
 registerLocaleData(localePt);
 
@@ -48,7 +47,6 @@ export function tokenGetter() {
     FormsModule, 
     LancamentoModule, 
     PessoaModule, 
-    SegurancaModule, 
     SharedModule, 
     CoreModule,
 

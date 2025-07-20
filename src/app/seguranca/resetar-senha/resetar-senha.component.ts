@@ -21,12 +21,12 @@ export class ResetarSenhaComponent {
     private route: ActivatedRoute,
     private senhaService: SenhaService,
     private toastr: ToastrService,
-    private router: Router, 
+    private router: Router,
     private title: Title
   ) { }
 
   ngOnInit(): void {
-    this.token = this.route.snapshot.paramMap.get('token')!;
+    this.token = this.route.snapshot.paramMap.get('token') || '';
 
     this.formResetar = this.fb.group({
       novaSenha: ['', [Validators.required]],

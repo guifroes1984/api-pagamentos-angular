@@ -26,11 +26,11 @@ export class SenhaService {
     );
   }
 
-  public resetarSenha(resetarSenha: ResetarSenha): Promise<void> {
+  public resetarSenha(dto: ResetarSenha): Promise<void> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     return firstValueFrom(
-      this.http.post<void>(this.resetarSenhaUrl, resetarSenha, { headers })
+      this.http.post<void>(this.resetarSenhaUrl, dto, { headers })
     );
   }
 

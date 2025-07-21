@@ -37,32 +37,31 @@ export class NovoContatoDialogComponent implements OnInit {
     this.ajustarMascaraTelefone();
   }
 
-  confirmar(): void {
-    if (this.contatoForm.valid && this.telefoneValido(this.contatoForm.get('telefone')?.value)) {
-      this.dialogRef.close({
-        acao: this.editando ? 'editar' : 'adicionar', 
-        contato: this.contatoForm.value
-      });
+  public confirmar(): void {
+    if (this.contatoForm.invalid) {
+      this.contatoForm.markAllAsTouched();
+      return;
     }
+
+    this.dialogRef.close({
+      acao: this.editando ? 'editar' : 'adicionar',
+      contato: this.contatoForm.value
+    });
   }
 
   cancelar(): void {
     this.dialogRef.close();
   }
 
-  ajustarMascaraTelefone(): void {
+  public ajustarMascaraTelefone(): void {
     const telefone = this.contatoForm.get('telefone')?.value || '';
     const numeros = telefone.replace(/\D/g, '');
-    this.maskTelefone = (numeros.length >= 3 && numeros.charAt(2) === '9') 
-      ? '(00) 00000-0000' 
+    this.maskTelefone = (numeros.length >= 3 && numeros.charAt(2) === '9')
+      ? '(00) 00000-0000'
       : '(00) 0000-0000';
   }
 
-  telefoneValido(telefone: string | undefined): boolean {
-    if (!telefone) return false;
-    const tel = telefone.trim();
-    const regexFixo = /^\(\d{2}\) \d{4}-\d{4}$/;
-    const regexCelular = /^\(\d{2}\) 9\d{4}-\d{4}$/;
-    return regexFixo.test(tel) || regexCelular.test(tel);
+  public telefoneValido(telefone: string | undefined): boolean {
+    return true;
   }
 }

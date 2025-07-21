@@ -84,7 +84,7 @@ export class PessoasCadastroComponent implements OnInit {
   }
 
   public podeDesativar(): boolean {
-    return !this.formPessoa.dirty || 
+    return !this.formPessoa.dirty ||
       JSON.stringify(this.formPessoa.value) === JSON.stringify(this.dadosOriginais);
   }
 
@@ -116,6 +116,8 @@ export class PessoasCadastroComponent implements OnInit {
   public prepararNovoContato() {
     const dialogRef = this.dialog.open(NovoContatoDialogComponent, {
       width: '600px',
+      disableClose: true,
+      hasBackdrop: true,
       data: {
         contatosExistentes: this.pessoa.contatos || []
       }
@@ -138,6 +140,8 @@ export class PessoasCadastroComponent implements OnInit {
 
     const dialogRef = this.dialog.open(NovoContatoDialogComponent, {
       width: '600px',
+      disableClose: true,
+      hasBackdrop: true,
       data: {
         contato: { ...contatoOriginal },
         contatosExistentes: this.pessoa.contatos,
@@ -164,6 +168,8 @@ export class PessoasCadastroComponent implements OnInit {
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
+      disableClose: true,
+      hasBackdrop: true,
       data: {
         titulo: 'Confirmação',
         mensagem: `Deseja realmente excluir o contato: ${contatoNome}?`,
@@ -312,10 +318,10 @@ export class PessoasCadastroComponent implements OnInit {
 
   public novo() {
     if (this.podeDesativar() || confirm('Deseja descartar as alterações não salvas?')) {
-    this.pessoa = new Pessoa();
-    this.formPessoa.reset();
-    this.router.navigate(['/pessoas/novo']);
-    this.title.setTitle('Nova pessoa')  
+      this.pessoa = new Pessoa();
+      this.formPessoa.reset();
+      this.router.navigate(['/pessoas/novo']);
+      this.title.setTitle('Nova pessoa')
     }
   }
 

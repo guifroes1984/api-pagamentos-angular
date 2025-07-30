@@ -26,15 +26,23 @@ export class ErrorHandlerService {
 
       } else if (errorResponse.status === 403) {
         msg = 'Você não tem permissão para executar a sua solicitação.';
+
+      } else if (errorResponse.status === 0) {
+        msg = 'Erro de conexão ou o arquivo enviado excede o limite de 5MB.';
+
       } else if (errorResponse.status >= 400 && errorResponse.status <= 499) {
         msg = 'Ocorreu um erro ao processar a sua solicitação.';
 
         try {
           const errors = errorResponse.error;
 
-          if (errors && errors.length > 0 && errors[0].mensagemUsuario) {
+          if (Array.isArray(errors) && errors[0]?.mensagemUsuario?.includes('Arquivo muito grande')) {
+            msg = errors[0].mensagemUsuario;
+
+          } else if (errors && errors.length > 0 && errors[0].mensagemUsuario) {
             msg = errors[0].mensagemUsuario;
           }
+
           if (
             msg === 'Operação não permitida' &&
             errors[0].mensagemDesenvolvedor?.includes('lancamento_ibfk_2')
@@ -56,5 +64,4 @@ export class ErrorHandlerService {
 
     this.toastr.error(msg);
   }
-
 }

@@ -256,6 +256,13 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
     const input = evento.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.arquivoSelecionado = input.files[0];
+      const maxSize = 5 * 1024 *1024;
+
+      if (this.arquivoSelecionado.size > maxSize) {
+        this.toastr.error('Arquivo muito grande! O tamanho máximo permitido é 5MB.');
+        this.arquivoSelecionado = null;
+        this.formLancamento.get('anexo')?.reset();
+      }
 
       this.uploadEmAndamento = true;
 

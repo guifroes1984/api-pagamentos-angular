@@ -4,7 +4,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { PessoasPesquisaComponent } from "./pessoas-pesquisa/pessoas-pesquisa.component";
 import { PessoasCadastroComponent } from "./pessoas-cadastro/pessoas-cadastro.component";
 import { AuthGuard } from "../seguranca/auth.guard";
-import { PendenciasGuard } from "../core/guards/formComPendencias";
+import { PendenciasGuard } from "../core/guards/FormComPendencias";
 
 const routes: Routes = [
     { path: '', 

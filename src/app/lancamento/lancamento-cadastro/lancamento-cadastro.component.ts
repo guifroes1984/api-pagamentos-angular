@@ -10,7 +10,7 @@ import { PessoaService } from 'src/app/pessoa/pessoa.service';
 import { LancamentoService } from '../lancamento.service';
 import { Title } from '@angular/platform-browser';
 
-import { IFormComPendencias } from 'src/app/core/guards/formComPendencias';
+import { IFormComPendencias } from 'src/app/core/guards/FormComPendencias';
 import { Observable } from 'rxjs';
 
 

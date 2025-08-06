@@ -19,15 +19,16 @@
       Entrar
     </button>
 
-    <div class="text-right" style="margin-top: 8px;">
-      <a routerLink="/login/recuperar-senha" style="font-size: 14px;">Esqueci minha senha</a>
+    <div class="login-footer">
+      <div class="left">
+        <a routerLink="/login/recuperar-senha">Esqueci minha senha</a>
+      </div>
+      <div class="right">
+        <span>Ainda não tem uma conta?</span>
+        <a routerLink="/login/cadastro-usuario">Cadastre-se</a>
+      </div>
     </div>
 
-    <div class="text-center" style="margin-top: 16px;">
-      <span>Ainda não tem uma conta?</span>
-      <a routerLink="/login/cadastro-usuario" style="margin-left: 4px;">Cadastre-se</a>
-    </div>
-    
     <div class="overlay" *ngIf="loading">
       <mat-progress-spinner diameter="80" mode="indeterminate" color="primary"></mat-progress-spinner>
     </div>

@@ -31,4 +31,26 @@
   align-items: center;
   justify-content: center;
 }
+
+.login-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 14px;
+  flex-wrap: wrap;
+}
+
+.login-footer .left,
+.login-footer .right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.login-footer a {
+  text-decoration: none;
+  color: #3f51b5;
+  font-weight: 500;
+}
   

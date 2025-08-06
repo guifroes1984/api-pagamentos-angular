@@ -15,7 +15,6 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
@@ -55,7 +54,6 @@ import { LancamentoRoutingModule } from './lancamentos-routing.module';
     MatNativeDateModule,
     MatButtonToggleModule, 
     MatCardModule, 
-    MatProgressSpinnerModule, 
     NgxMaskDirective, 
     NgxMaskPipe, 
     CurrencyMaskModule, 

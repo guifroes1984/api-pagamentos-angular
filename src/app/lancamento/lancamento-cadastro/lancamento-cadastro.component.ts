@@ -36,6 +36,9 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
   private dadosOriginais: any;
   public formEnviado = true;
 
+  public progressoUpload = 0;
+  private intervaloProgresso?: any
+
   tipos = [
     { label: 'Receita', value: 'RECEITA' },
     { label: 'Despesa', value: 'DESPESA' }
@@ -53,19 +56,19 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
     private title: Title,
     private formBuilder: FormBuilder
   ) { }
-  
+
   ngOnInit(): void {
     this.configurarFormulario();
     const codigoLancamento = this.route.snapshot.params['codigo'];
 
     this.title.setTitle('Novo lançamento');
-    
+
     if (codigoLancamento) {
       this.carregarLancamentos(codigoLancamento);
     } else {
       this.dadosOriginais = this.formLancamento.value;
     }
-    
+
     this.carregarCategorias();
     this.carregarPessoas();
 
@@ -79,10 +82,10 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
   get formulario(): FormGroup {
     return this.formLancamento;
   }
-  
+
   public podeDesativar(): boolean {
-    return !this.formLancamento.dirty || 
-           JSON.stringify(this.formLancamento.value) === JSON.stringify(this.dadosOriginais);
+    return !this.formLancamento.dirty ||
+      JSON.stringify(this.formLancamento.value) === JSON.stringify(this.dadosOriginais);
   }
 
   public configurarFormulario() {
@@ -256,26 +259,33 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
     const input = evento.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.arquivoSelecionado = input.files[0];
-      const maxSize = 5 * 1024 *1024;
+      const maxSize = 5 * 1024 * 1024;
 
       if (this.arquivoSelecionado.size > maxSize) {
         this.toastr.error('Arquivo muito grande! O tamanho máximo permitido é 5MB.');
         this.arquivoSelecionado = null;
         this.formLancamento.get('anexo')?.reset();
+        return;
       }
 
       this.uploadEmAndamento = true;
+      this.progressoUpload = 0;
 
-      setTimeout(() => {
-        this.uploadEmAndamento = false;
-        this.formLancamento.patchValue({
-          anexo: {
-            nome: this.arquivoSelecionado?.name,
-            tipo: this.arquivoSelecionado?.type,
-            codigo: null
-          }
-        });
-      }, 2000);
+      this.intervaloProgresso = setInterval(() => {
+        if (this.progressoUpload < 100) {
+          this.progressoUpload += 5; // aumenta 5% a cada 100ms (ajuste se quiser)
+        } else {
+          clearInterval(this.intervaloProgresso);
+          this.uploadEmAndamento = false;
+          this.formLancamento.patchValue({
+            anexo: {
+              nome: this.arquivoSelecionado?.name,
+              tipo: this.arquivoSelecionado?.type,
+              codigo: null
+            }
+          });
+        }
+      }, 100);
     }
   }
 

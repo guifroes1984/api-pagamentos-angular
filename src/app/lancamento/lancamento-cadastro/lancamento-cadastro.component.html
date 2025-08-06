@@ -111,6 +111,8 @@
 
     <div class="linha alinhamento-direita"
       style="margin-top: 8px; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+
+      <!-- Botão para anexar arquivo, aparece quando não há arquivo selecionado e não está em upload -->
       <ng-container *ngIf="!arquivoSelecionado && !formLancamento.get('anexo.nome')?.value && !uploadEmAndamento">
         <button mat-raised-button class="botao-anexo" type="button" (click)="seletorArquivo.click()">
           <mat-icon>add</mat-icon>
@@ -119,9 +121,14 @@
         <input type="file" #seletorArquivo hidden (change)="aoSelecionarArquivo($event)" />
       </ng-container>
 
-      <mat-progress-spinner *ngIf="uploadEmAndamento" mode="indeterminate" diameter="30" color="primary">
-      </mat-progress-spinner>
+      <div *ngIf="uploadEmAndamento" class="upload-progress-container">
+        <div class="progress-bar-bootstrap" role="progressbar" [style.width.%]="progressoUpload"
+          [attr.aria-valuenow]="progressoUpload" aria-valuemin="0" aria-valuemax="100">
+          {{ progressoUpload }}%
+        </div>
+      </div>
 
+      <!-- Visualização do arquivo selecionado, aparece quando há arquivo selecionado e não está em upload -->
       <ng-container *ngIf="arquivoSelecionado && !uploadEmAndamento">
         <a (click)="visualizarArquivoSelecionado()" class="download-link" matTooltip="Pré-visualizar anexo">
           {{ arquivoSelecionado.name }}
@@ -130,12 +137,14 @@
           class="red-square-close-button"></button>
       </ng-container>
 
+      <!-- Link para baixar anexo já salvo, aparece quando não há arquivo selecionado e não está em upload -->
       <ng-container *ngIf="formLancamento.get('anexo.nome')?.value && !arquivoSelecionado && !uploadEmAndamento">
         <a (click)="baixarAnexo()" class="download-link" matTooltip="Baixar anexo">
           {{ formLancamento.get('anexo.nome')?.value }}
         </a>
         <button (click)="removerAnexo()" matTooltip="Remover anexo" class="red-square-close-button"></button>
       </ng-container>
+
     </div>
 
     <div class="linha acoes-formulario" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">

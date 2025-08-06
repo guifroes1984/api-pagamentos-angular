@@ -27,7 +27,7 @@
         <mat-form-field appearance="outline" class="campo-grande">
           <mat-label>Logradouro</mat-label>
           <input matInput type="text" formControlName="logradouro" />
-          <mat-error *ngIf="formPessoa.get('endereco.logradouro')?.hasError('required')">
+          <mat-error *ngIf="formPessoa.get('endereco')?.get('logradouro')?.hasError('required')">
             Informe o logradouro
           </mat-error>
         </mat-form-field>
@@ -77,12 +77,12 @@
       <div style="flex: 1; display: flex; flex-direction: column;">
         <mat-form-field appearance="outline" class="campo-medio pessoa-field">
           <mat-label>Estado</mat-label>
-          <mat-select formControlName="estado" (selectionChange)="carregarCidades($event.value)">
+          <mat-select #selectEstado formControlName="estado" (selectionChange)="carregarCidades($event.value)">
             <mat-option [disabled]="true" class="estado-option-filtro">
               <div class="filtro-container" (click)="$event.stopPropagation()">
                 <div class="filtro-box">
                   <mat-icon class="filtro-icon">search</mat-icon>
-                  <input placeholder="Filtrar..." [formControl]="filtroEstadoCtrl" (click)="$event.stopPropagation()"
+                  <input #inputFiltroEstado placeholder="Filtrar..." [formControl]="filtroEstadoCtrl" (click)="$event.stopPropagation()"
                     (keydown)="$event.stopPropagation()" class="filtro-input" />
                 </div>
               </div>
@@ -95,10 +95,21 @@
       </div>
 
       <div style="flex: 1; display: flex; flex-direction: column;">
-        <mat-form-field appearance="outline" class="campo-medio">
+        <mat-form-field appearance="outline" class="campo-medio pessoa-field">
           <mat-label>Cidade</mat-label>
-          <mat-select formControlName="cidade">
-            <mat-option *ngFor="let cidade of cidades" [value]="cidade.codigo">
+          <mat-select #selectCidade formControlName="cidade" [disabled]="!cidades.length">
+
+            <mat-option [disabled]="true" class="estado-option-filtro">
+              <div class="filtro-container" (click)="$event.stopPropagation()">
+                <div class="filtro-box">
+                  <mat-icon class="filtro-icon">search</mat-icon>
+                  <input #inputFiltroCidade placeholder="Filtrar..." [formControl]="filtroCidadeCtrl" (click)="$event.stopPropagation()"
+                    (keydown)="$event.stopPropagation()" class="filtro-input" />
+                </div>
+              </div>
+            </mat-option>
+
+            <mat-option *ngFor="let cidade of cidadesFiltradas" [value]="cidade.codigo">
               {{ cidade.nome }}
             </mat-option>
           </mat-select>

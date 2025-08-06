@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -15,6 +15,7 @@ import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-di
 import { Estado } from 'src/app/core/model/estado';
 import { HttpClient } from '@angular/common/http';
 import { Cidade } from 'src/app/core/model/cidade';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-pessoas-cadastro',
@@ -33,6 +34,15 @@ export class PessoasCadastroComponent implements OnInit {
   estados: { label: string; value: number }[] = [];
   estadosFiltrados: { label: string; value: number }[] = [];
   filtroEstadoCtrl = new FormControl('');
+  cidadeFiltro: string = '';
+  cidadesFiltradas: Cidade[] = [];
+  filtroCidadeCtrl = new FormControl('');
+
+  @ViewChild('inputFiltroEstado') inputFiltroEstado!: ElementRef<HTMLInputElement>;
+  @ViewChild('inputFiltroCidade') inputFiltroCidade!: ElementRef<HTMLInputElement>;
+
+  @ViewChild('selectEstado') selectEstado!: MatSelect;
+  @ViewChild('selectCidade') selectCidade!: MatSelect;
 
   private dadosOriginais: any;
   public formEnviado = true;
@@ -59,6 +69,13 @@ export class PessoasCadastroComponent implements OnInit {
       this.filtrarEstados(termo);
     });
 
+    this.filtroCidadeCtrl.valueChanges.subscribe(valor => {
+      const termo = (valor || '').toLowerCase();
+      this.cidadesFiltradas = this.cidades.filter(c =>
+        c.nome.toLowerCase().includes(termo)
+      );
+    })
+
     this.formPessoa.get('endereco.estado')?.valueChanges.subscribe(codigoEstado => {
       const cidadeControl = this.formPessoa.get('endereco.cidade');
 
@@ -83,6 +100,24 @@ export class PessoasCadastroComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit(): void {
+    this.selectEstado.openedChange.subscribe(opened => {
+      if (opened) {
+        setTimeout(() => {
+          this.inputFiltroEstado.nativeElement.focus();
+        }, 0);
+      }
+    });
+
+    this.selectCidade.openedChange.subscribe(opened => {
+      if (opened) {
+        setTimeout(() => {
+          this.inputFiltroCidade.nativeElement.focus();
+        }, 0);
+      }
+    });
+  }
+
   public podeDesativar(): boolean {
     const formIgualOriginal = JSON.stringify(this.formPessoa.getRawValue()) === JSON.stringify(this.dadosOriginais);
     const formSujo = this.formPessoa.dirty;
@@ -103,7 +138,10 @@ export class PessoasCadastroComponent implements OnInit {
     try {
       const cidades = await this.pessoaService.listarCidadesPorEstado(codigoEstado);
       this.cidades = cidades;
-      this.formPessoa.get('endereco.cidade')?.reset();
+      this.cidadesFiltradas = cidades;
+      this.cidadeFiltro = '';
+      this.filtroCidadeCtrl.setValue('');
+      this.formPessoa.get('cidade')?.reset();
     } catch (erro) {
       this.errorHandler.handle(erro);
     }
@@ -113,6 +151,13 @@ export class PessoasCadastroComponent implements OnInit {
     const termoTratado = (termo || '').toLowerCase();
     this.estadosFiltrados = this.estados.filter(estado =>
       estado.label.toLowerCase().includes(termoTratado)
+    );
+  }
+
+  public filtrarCidades(): void {
+    const termo = this.cidadeFiltro?.toLocaleLowerCase() || '';
+    this.cidadesFiltradas = this.cidades.filter(c =>
+      c.nome.toLocaleLowerCase().includes(termo)
     );
   }
 

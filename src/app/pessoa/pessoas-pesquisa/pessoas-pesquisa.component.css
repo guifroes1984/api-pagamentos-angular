@@ -134,3 +134,11 @@
   color: #999;
   margin-top: 20px;
 }
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-left {
+  text-align: left !important;
+}

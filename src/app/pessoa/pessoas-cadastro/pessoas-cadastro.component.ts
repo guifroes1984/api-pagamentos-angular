@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -51,8 +51,6 @@ export class PessoasCadastroComponent implements OnInit {
   ngOnInit(): void {
     this.configurarFormulario();
 
-    this.dadosOriginais = this.formPessoa.value;
-
     this.formPessoa.get('endereco.cidade')?.disable();
 
     this.carregarEstados();
@@ -80,12 +78,17 @@ export class PessoasCadastroComponent implements OnInit {
 
     if (codigoPessoa) {
       this.carregarPessoa(codigoPessoa);
+    } else {
+      this.dadosOriginais = this.formPessoa.getRawValue();
     }
   }
 
   public podeDesativar(): boolean {
-    return !this.formPessoa.dirty ||
-      JSON.stringify(this.formPessoa.value) === JSON.stringify(this.dadosOriginais);
+    const formIgualOriginal = JSON.stringify(this.formPessoa.getRawValue()) === JSON.stringify(this.dadosOriginais);
+    const formSujo = this.formPessoa.dirty;
+    const podeSair = !formSujo && formIgualOriginal;
+
+    return podeSair;
   }
 
   private carregarEstados() {
@@ -210,13 +213,11 @@ export class PessoasCadastroComponent implements OnInit {
     this.pessoaService.buscarPessoaPorCodigo(codigo)
       .then(async pessoa => {
         this.pessoa = pessoa;
-
         const estadoCodigo = pessoa.endereco?.cidade?.estado?.codigo;
         const cidadeCodigo = pessoa.endereco?.cidade?.codigo;
 
         this.atualizarFormulario();
-        this.dadosOriginais = this.formPessoa.value;
-        this.atualizarTituloEdicao();
+
         this.fonteDados.data = pessoa.contatos || [];
 
         if (estadoCodigo) {
@@ -224,6 +225,11 @@ export class PessoasCadastroComponent implements OnInit {
           await this.carregarCidades(estadoCodigo);
           this.formPessoa.get('endereco.cidade')?.setValue(cidadeCodigo);
         }
+
+        this.formPessoa.markAsPristine();
+        this.dadosOriginais = this.formPessoa.getRawValue();
+
+        this.atualizarTituloEdicao();
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
@@ -296,8 +302,8 @@ export class PessoasCadastroComponent implements OnInit {
         this.router.navigate(['/pessoas', pessoaAdicionada.codigo]);
 
         this.formEnviado = true;
-        this.dadosOriginais = this.formPessoa.value;
         this.formPessoa.markAsPristine();
+        this.dadosOriginais = this.formPessoa.getRawValue();
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
@@ -310,8 +316,8 @@ export class PessoasCadastroComponent implements OnInit {
         this.atualizarTituloEdicao();
 
         this.formEnviado = true;
-        this.dadosOriginais = this.formPessoa.value;
         this.formPessoa.markAsPristine();
+        this.dadosOriginais = this.formPessoa.getRawValue();
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
@@ -320,6 +326,8 @@ export class PessoasCadastroComponent implements OnInit {
     if (this.podeDesativar() || confirm('Deseja descartar as alterações não salvas?')) {
       this.pessoa = new Pessoa();
       this.formPessoa.reset();
+      this.formPessoa.markAsPristine();
+      this.dadosOriginais = this.formPessoa.getRawValue();
       this.router.navigate(['/pessoas/novo']);
       this.title.setTitle('Nova pessoa')
     }
@@ -334,5 +342,6 @@ export class PessoasCadastroComponent implements OnInit {
     input.value = input.value.toUpperCase();
     this.formPessoa.get('endereco.estado')?.setValue(input.value, { emitEvent: false });
   }
+
 
 }

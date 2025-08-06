@@ -19,7 +19,7 @@ export class PendenciasGuard implements CanDeactivate<IFormComPendencias> {
         nextState?: RouterStateSnapshot
     ): Observable<boolean> | boolean {
         
-        if (!component.podeDesativar()) return true;
+        if (component.podeDesativar()) return true;
 
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
             width: '450px',

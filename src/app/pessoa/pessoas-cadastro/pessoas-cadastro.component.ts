@@ -57,7 +57,9 @@ export class PessoasCadastroComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.inicializarComponente();
-    this.resetarFormulario();
+    if (!this.editando) {
+      this.resetarFormulario();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -142,7 +144,12 @@ export class PessoasCadastroComponent implements OnInit, AfterViewInit {
     try {
       this.cidades = await this.pessoaService.listarCidadesPorEstado(codigoEstado);
       this.cidadesFiltradas = this.cidades;
-      this.resetarFiltroCidade();
+
+      if (!this.editando) {
+        this.resetarFiltroCidade();
+      } else {
+        this.formPessoa.get('endereco.cidade')?.enable();
+      }
     } catch (erro) {
       this.errorHandler.handle(erro);
     }
@@ -293,8 +300,13 @@ export class PessoasCadastroComponent implements OnInit, AfterViewInit {
 
     if (estadoCodigo) {
       await this.carregarCidades(estadoCodigo);
-      this.formPessoa.get('endereco.estado')?.setValue(estadoCodigo);
-      this.formPessoa.get('endereco.cidade')?.setValue(cidadeCodigo);
+
+      this.formPessoa.patchValue({
+        endereco: {
+          estado: estadoCodigo,
+          cidade: cidadeCodigo
+        }
+      });
     }
 
     this.formPessoa.markAsPristine();
@@ -413,10 +425,8 @@ export class PessoasCadastroComponent implements OnInit, AfterViewInit {
   public atualizarTituloEdicao(): void {
     this.title.setTitle(`Edição de pessoa: ${this.pessoa.nome}`);
   }
-  //#endregion
 }
 
-// Interface auxiliar para melhor tipagem
 interface EstadoOption {
   label: string;
   value: number;

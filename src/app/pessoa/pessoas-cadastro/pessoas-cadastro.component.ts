@@ -1,5 +1,5 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { PessoaService } from '../pessoa.service';
@@ -12,8 +12,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { NovoContatoDialogComponent } from 'src/app/shared/dialogs/novo-contato-dialog/novo-contato-dialog.component';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
-import { Estado } from 'src/app/core/model/estado';
-import { HttpClient } from '@angular/common/http';
 import { Cidade } from 'src/app/core/model/cidade';
 import { MatSelect } from '@angular/material/select';
 
@@ -22,30 +20,29 @@ import { MatSelect } from '@angular/material/select';
   templateUrl: './pessoas-cadastro.component.html',
   styleUrls: ['./pessoas-cadastro.component.css']
 })
-export class PessoasCadastroComponent implements OnInit {
+export class PessoasCadastroComponent implements OnInit, AfterViewInit {
 
-  fonteDados = new MatTableDataSource<any>();
-  colunasExibidas = ['nome', 'email', 'telefone', 'acoes'];
+  pessoa = new Pessoa();
+  cidades: Cidade[] = [];
+  estados: EstadoOption[] = [];
+  estadosFiltrados: EstadoOption[] = [];
+  cidadesFiltradas: Cidade[] = [];
+  private dadosOriginais: any;
 
   formPessoa!: FormGroup;
-  pessoa = new Pessoa();
+  formEnviado = true;
 
-  cidades: Cidade[] = [];
-  estados: { label: string; value: number }[] = [];
-  estadosFiltrados: { label: string; value: number }[] = [];
-  filtroEstadoCtrl = new FormControl('');
-  cidadeFiltro: string = '';
-  cidadesFiltradas: Cidade[] = [];
-  filtroCidadeCtrl = new FormControl('');
+  fonteDados = new MatTableDataSource<any>();
+  readonly colunasExibidas = ['nome', 'email', 'telefone', 'acoes'];
+
+  readonly filtroEstadoCtrl = new FormControl('');
+  readonly filtroCidadeCtrl = new FormControl('');
+  cidadeFiltro = '';
 
   @ViewChild('inputFiltroEstado') inputFiltroEstado!: ElementRef<HTMLInputElement>;
   @ViewChild('inputFiltroCidade') inputFiltroCidade!: ElementRef<HTMLInputElement>;
-
   @ViewChild('selectEstado') selectEstado!: MatSelect;
   @ViewChild('selectCidade') selectCidade!: MatSelect;
-
-  private dadosOriginais: any;
-  public formEnviado = true;
 
   constructor(
     private fb: FormBuilder,
@@ -59,109 +56,136 @@ export class PessoasCadastroComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.inicializarComponente();
+    this.resetarFormulario();
+  }
+
+  ngAfterViewInit(): void {
+    this.configurarFocoInputs();
+  }
+
+  private inicializarComponente(): void {
     this.configurarFormulario();
+    this.configurarObservables();
+    this.carregarEstados();
+    this.carregarPessoaSeExistir();
+  }
+
+  private configurarFormulario(): void {
+    this.formPessoa = this.fb.group({
+      nome: ['', [Validators.required, this.validarTamanhoMinimo(5)]],
+      endereco: this.fb.group({
+        logradouro: ['', Validators.required],
+        numero: ['', Validators.required],
+        complemento: [''],
+        bairro: ['', Validators.required],
+        cep: ['', Validators.required],
+        cidade: [''],
+        estado: ['']
+      })
+    });
 
     this.formPessoa.get('endereco.cidade')?.disable();
+  }
 
-    this.carregarEstados();
-
+  private configurarObservables(): void {
     this.filtroEstadoCtrl.valueChanges.subscribe(termo => {
       this.filtrarEstados(termo);
     });
 
     this.filtroCidadeCtrl.valueChanges.subscribe(valor => {
-      const termo = (valor || '').toLowerCase();
-      this.cidadesFiltradas = this.cidades.filter(c =>
-        c.nome.toLowerCase().includes(termo)
-      );
-    })
-
-    this.formPessoa.get('endereco.estado')?.valueChanges.subscribe(codigoEstado => {
-      const cidadeControl = this.formPessoa.get('endereco.cidade');
-
-      if (codigoEstado) {
-        cidadeControl?.enable();
-        this.carregarCidades(codigoEstado);
-      } else {
-        this.cidades = [];
-        cidadeControl?.reset();
-        cidadeControl?.disable();
-      }
+      this.filtrarCidadesPorTermo(valor);
     });
 
-    const codigoPessoa = this.route.snapshot.params['codigo'];
+    this.formPessoa.get('endereco.estado')?.valueChanges.subscribe(codigoEstado => {
+      this.handleEstadoSelecionado(codigoEstado);
+    });
+  }
 
+  private configurarFocoInputs(): void {
+    this.selectEstado.openedChange.subscribe(opened => {
+      this.focarInputAoAbrir(opened, this.inputFiltroEstado);
+    });
+
+    this.selectCidade.openedChange.subscribe(opened => {
+      this.focarInputAoAbrir(opened, this.inputFiltroCidade);
+    });
+  }
+
+  private focarInputAoAbrir(aberto: boolean, input: ElementRef<HTMLInputElement>): void {
+    if (aberto) {
+      setTimeout(() => input.nativeElement.focus(), 0);
+    }
+  }
+
+  private carregarPessoaSeExistir(): void {
+    const codigoPessoa = this.route.snapshot.params['codigo'];
     this.title.setTitle('Nova pessoa');
 
     if (codigoPessoa) {
-      this.carregarPessoa(codigoPessoa);
+      this.carregarPessoa(Number(codigoPessoa));
     } else {
       this.dadosOriginais = this.formPessoa.getRawValue();
     }
   }
 
-  ngAfterViewInit(): void {
-    this.selectEstado.openedChange.subscribe(opened => {
-      if (opened) {
-        setTimeout(() => {
-          this.inputFiltroEstado.nativeElement.focus();
-        }, 0);
-      }
-    });
-
-    this.selectCidade.openedChange.subscribe(opened => {
-      if (opened) {
-        setTimeout(() => {
-          this.inputFiltroCidade.nativeElement.focus();
-        }, 0);
-      }
-    });
-  }
-
-  public podeDesativar(): boolean {
-    const formIgualOriginal = JSON.stringify(this.formPessoa.getRawValue()) === JSON.stringify(this.dadosOriginais);
-    const formSujo = this.formPessoa.dirty;
-    const podeSair = !formSujo && formIgualOriginal;
-
-    return podeSair;
-  }
-
-  private carregarEstados() {
-    this.pessoaService.listarEstados().then(lista => {
-      this.estados = lista.map(uf => ({ label: uf.nome, value: uf.codigo }));
-      this.estadosFiltrados = [...this.estados];
-    })
+  private carregarEstados(): void {
+    this.pessoaService.listarEstados()
+      .then(estados => {
+        this.estados = estados.map(uf => ({ label: uf.nome, value: uf.codigo }));
+        this.estadosFiltrados = [...this.estados];
+      })
       .catch(erro => this.errorHandler.handle(erro));
   }
 
   public async carregarCidades(codigoEstado: number): Promise<void> {
     try {
-      const cidades = await this.pessoaService.listarCidadesPorEstado(codigoEstado);
-      this.cidades = cidades;
-      this.cidadesFiltradas = cidades;
-      this.cidadeFiltro = '';
-      this.filtroCidadeCtrl.setValue('');
-      this.formPessoa.get('cidade')?.reset();
+      this.cidades = await this.pessoaService.listarCidadesPorEstado(codigoEstado);
+      this.cidadesFiltradas = this.cidades;
+      this.resetarFiltroCidade();
     } catch (erro) {
       this.errorHandler.handle(erro);
     }
   }
 
-  public filtrarEstados(termo: string | null) {
+  private resetarFiltroCidade(): void {
+    this.cidadeFiltro = '';
+    this.filtroCidadeCtrl.setValue('');
+    this.formPessoa.get('endereco.cidade')?.reset();
+  }
+
+  public filtrarEstados(termo: string | null): void {
     const termoTratado = (termo || '').toLowerCase();
     this.estadosFiltrados = this.estados.filter(estado =>
       estado.label.toLowerCase().includes(termoTratado)
     );
   }
 
-  public filtrarCidades(): void {
-    const termo = this.cidadeFiltro?.toLocaleLowerCase() || '';
+  private filtrarCidadesPorTermo(termo: string | null): void {
+    const termoTratado = (termo || '').toLowerCase();
     this.cidadesFiltradas = this.cidades.filter(c =>
-      c.nome.toLocaleLowerCase().includes(termo)
+      c.nome.toLowerCase().includes(termoTratado)
     );
   }
 
-  public prepararNovoContato() {
+  private handleEstadoSelecionado(codigoEstado: number): void {
+    const cidadeControl = this.formPessoa.get('endereco.cidade');
+
+    if (codigoEstado) {
+      cidadeControl?.enable();
+      this.carregarCidades(codigoEstado);
+    } else {
+      this.limparCidades(cidadeControl);
+    }
+  }
+
+  private limparCidades(controleCidade: AbstractControl | null): void {
+    this.cidades = [];
+    controleCidade?.reset();
+    controleCidade?.disable();
+  }
+
+  public prepararNovoContato(): void {
     const dialogRef = this.dialog.open(NovoContatoDialogComponent, {
       width: '600px',
       disableClose: true,
@@ -172,15 +196,24 @@ export class PessoasCadastroComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((resultado) => {
-      if (resultado?.acao === 'adicionar') {
-        if (!this.pessoa.contatos) {
-          this.pessoa.contatos = [];
-        }
-        this.pessoa.contatos.push(resultado.contato);
-        this.atualizarTabelaContatos();
-        this.toastr.success(`Contato ${resultado.contato.nome} adicionado com sucesso!`);
-      }
+      this.processarResultadoContato(resultado);
     });
+  }
+
+  private processarResultadoContato(resultado: any): void {
+    if (resultado?.acao === 'adicionar') {
+      this.adicionarContato(resultado.contato);
+    }
+  }
+
+  private adicionarContato(contato: any): void {
+    if (!this.pessoa.contatos) {
+      this.pessoa.contatos = [];
+    }
+
+    this.pessoa.contatos.push(contato);
+    this.atualizarTabelaContatos();
+    this.toastr.success(`Contato ${contato.nome} adicionado com sucesso!`);
   }
 
   public editarContato(index: number): void {
@@ -199,15 +232,15 @@ export class PessoasCadastroComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((resultado) => {
       if (resultado?.acao === 'editar') {
-        this.pessoa.contatos[index] = resultado.contato;
-        this.atualizarTabelaContatos();
-        this.toastr.success(`Contato ${resultado.contato.nome} atualizado com sucesso!`);
+        this.atualizarContato(index, resultado.contato);
       }
     });
   }
 
-  private atualizarTabelaContatos(): void {
-    this.fonteDados.data = [...this.pessoa.contatos];
+  private atualizarContato(index: number, contato: any): void {
+    this.pessoa.contatos[index] = contato;
+    this.atualizarTabelaContatos();
+    this.toastr.success(`Contato ${contato.nome} atualizado com sucesso!`);
   }
 
   public excluirContato(index: number): void {
@@ -217,7 +250,6 @@ export class PessoasCadastroComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       disableClose: true,
-      hasBackdrop: true,
       data: {
         titulo: 'Confirmação',
         mensagem: `Deseja realmente excluir o contato: ${contatoNome}?`,
@@ -228,99 +260,88 @@ export class PessoasCadastroComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(confirmado => {
       if (confirmado) {
-        this.pessoa.contatos.splice(index, 1);
-        this.atualizarTabelaContatos();
-        this.toastr.success(`Contato ${contatoNome} excluído com sucesso!`);
+        this.removerContato(index, contatoNome);
       }
     });
   }
 
-  public configurarFormulario() {
-    this.formPessoa = this.fb.group({
-      nome: ['', [Validators.required, this.validarTamanhoMinimo(5)]],
-      endereco: this.fb.group({
-        logradouro: ['', Validators.required],
-        numero: ['', Validators.required],
-        complemento: [''],
-        bairro: ['', Validators.required],
-        cep: ['', Validators.required],
-        cidade: [''],
-        estado: ['']
-      })
-    });
+  private removerContato(index: number, nomeContato: string): void {
+    this.pessoa.contatos.splice(index, 1);
+    this.atualizarTabelaContatos();
+    this.toastr.success(`Contato ${nomeContato} excluído com sucesso!`);
   }
 
-  get editando(): boolean {
-    return !!this.pessoa?.codigo;
+  private atualizarTabelaContatos(): void {
+    this.fonteDados.data = [...this.pessoa.contatos];
   }
 
-  public carregarPessoa(codigo: number) {
+  public carregarPessoa(codigo: number): void {
     this.pessoaService.buscarPessoaPorCodigo(codigo)
       .then(async pessoa => {
         this.pessoa = pessoa;
-        const estadoCodigo = pessoa.endereco?.cidade?.estado?.codigo;
-        const cidadeCodigo = pessoa.endereco?.cidade?.codigo;
-
-        this.atualizarFormulario();
-
-        this.fonteDados.data = pessoa.contatos || [];
-
-        if (estadoCodigo) {
-          this.formPessoa.get('endereco.estado')?.setValue(estadoCodigo);
-          await this.carregarCidades(estadoCodigo);
-          this.formPessoa.get('endereco.cidade')?.setValue(cidadeCodigo);
-        }
-
-        this.formPessoa.markAsPristine();
-        this.dadosOriginais = this.formPessoa.getRawValue();
-
-        this.atualizarTituloEdicao();
+        await this.configurarPessoaCarregada(pessoa);
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
 
-  public atualizarFormulario() {
-    this.formPessoa.patchValue({
-      nome: this.pessoa.nome,
-      endereco: {
-        logradouro: this.pessoa.endereco.logradouro,
-        numero: this.pessoa.endereco.numero,
-        complemento: this.pessoa.endereco.complemento,
-        bairro: this.pessoa.endereco.bairro,
-        cep: this.pessoa.endereco.cep,
-      }
-    });
+  private async configurarPessoaCarregada(pessoa: Pessoa): Promise<void> {
+    this.atualizarFormulario(pessoa);
+    this.fonteDados.data = pessoa.contatos || [];
 
-    if (this.pessoa.endereco.estado?.codigo) {
-      this.carregarCidades(this.pessoa.endereco.estado.codigo);
+    const estadoCodigo = pessoa.endereco?.cidade?.estado?.codigo;
+    const cidadeCodigo = pessoa.endereco?.cidade?.codigo;
+
+    if (estadoCodigo) {
+      await this.carregarCidades(estadoCodigo);
+      this.formPessoa.get('endereco.estado')?.setValue(estadoCodigo);
+      this.formPessoa.get('endereco.cidade')?.setValue(cidadeCodigo);
     }
 
+    this.formPessoa.markAsPristine();
+    this.dadosOriginais = this.formPessoa.getRawValue();
+    this.atualizarTituloEdicao();
   }
 
-  public validarTamanhoMinimo(tamanho: number) {
-    return (input: FormControl) => {
-      const valor = input.value || '';
-      if (!valor) return null;
-      return valor.length >= tamanho ? null : { tamanhoMinimo: { tamanho } };
-    };
+  private atualizarFormulario(pessoa: Pessoa): void {
+    this.formPessoa.patchValue({
+      nome: pessoa.nome,
+      endereco: {
+        logradouro: pessoa.endereco.logradouro,
+        numero: pessoa.endereco.numero,
+        complemento: pessoa.endereco.complemento,
+        bairro: pessoa.endereco.bairro,
+        cep: pessoa.endereco.cep,
+      }
+    });
   }
 
   public salvar(): void {
     if (this.formPessoa.invalid) {
-      this.formPessoa.markAllAsTouched();
-      this.formEnviado = false;
+      this.marcarFormularioComoInvalido();
       return;
     }
 
     this.formEnviado = false;
+    this.prepararPessoaParaSalvar();
 
+    this.editando ? this.atualizarPessoa() : this.adicionarPessoa();
+  }
+
+  private marcarFormularioComoInvalido(): void {
+    this.formPessoa.markAllAsTouched();
+    this.formEnviado = false;
+  }
+
+  private prepararPessoaParaSalvar(): void {
     this.pessoa.nome = this.formPessoa.value.nome;
+    this.pessoa.endereco = this.prepararEndereco();
+  }
+
+  private prepararEndereco(): any {
     const enderecoForm = this.formPessoa.value.endereco;
+    const cidadeSelecionada = this.cidades.find(c => c.codigo === enderecoForm.cidade);
 
-    const codigoCidade = enderecoForm.cidade;
-    const cidadeSelecionada = this.cidades.find(c => c.codigo === codigoCidade);
-
-    const enderecoParaSalvar: any = {
+    return {
       logradouro: enderecoForm.logradouro,
       numero: enderecoForm.numero,
       complemento: enderecoForm.complemento,
@@ -328,65 +349,75 @@ export class PessoasCadastroComponent implements OnInit {
       cep: enderecoForm.cep,
       cidade: cidadeSelecionada
     };
-
-    delete enderecoParaSalvar.estado;
-
-    this.pessoa.endereco = enderecoParaSalvar;
-
-    if (this.editando) {
-      this.atualizarPessoa();
-    } else {
-      this.adicionarPessoa();
-    }
   }
 
-  public adicionarPessoa() {
+  private adicionarPessoa(): void {
     this.pessoaService.adicionarPessoa(this.pessoa)
       .then(pessoaAdicionada => {
-        this.toastr.success('Pessoa adicionada com sucesso!');
-        this.router.navigate(['/pessoas', pessoaAdicionada.codigo]);
-
-        this.formEnviado = true;
-        this.formPessoa.markAsPristine();
-        this.dadosOriginais = this.formPessoa.getRawValue();
+        this.processarSucessoSalvamento('adicionada', pessoaAdicionada);
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
 
-  public atualizarPessoa() {
+  private atualizarPessoa(): void {
     this.pessoaService.atualizarPessoa(this.pessoa)
       .then(pessoaAtualizada => {
         this.pessoa = pessoaAtualizada;
-        this.toastr.success('Pessoa alterada com sucesso!');
-        this.atualizarTituloEdicao();
-
-        this.formEnviado = true;
-        this.formPessoa.markAsPristine();
-        this.dadosOriginais = this.formPessoa.getRawValue();
+        this.processarSucessoSalvamento('alterada');
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
 
-  public novo() {
-    if (this.podeDesativar() || confirm('Deseja descartar as alterações não salvas?')) {
-      this.pessoa = new Pessoa();
-      this.formPessoa.reset();
-      this.formPessoa.markAsPristine();
-      this.dadosOriginais = this.formPessoa.getRawValue();
-      this.router.navigate(['/pessoas/novo']);
-      this.title.setTitle('Nova pessoa')
+  private processarSucessoSalvamento(acao: string, pessoa?: Pessoa): void {
+    this.toastr.success(`Pessoa ${acao} com sucesso!`);
+    this.formEnviado = true;
+    this.formPessoa.markAsPristine();
+    this.dadosOriginais = this.formPessoa.getRawValue();
+
+    if (pessoa) {
+      this.router.navigate(['/pessoas', pessoa.codigo]);
+    } else {
+      this.atualizarTituloEdicao();
     }
   }
 
-  public atualizarTituloEdicao() {
-    this.title.setTitle(`Edição de pessoas: ${this.pessoa.nome}`);
+  get editando(): boolean {
+    return Boolean(this.pessoa?.codigo);
   }
 
-  public onEstadoInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value.toUpperCase();
-    this.formPessoa.get('endereco.estado')?.setValue(input.value, { emitEvent: false });
+  public podeDesativar(): boolean {
+    const formIgualOriginal = JSON.stringify(this.formPessoa.getRawValue()) ===
+      JSON.stringify(this.dadosOriginais);
+    return !this.formPessoa.dirty && formIgualOriginal;
   }
 
+  public validarTamanhoMinimo(tamanho: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const valor = control.value || '';
+      return valor.length >= tamanho ? null : { tamanhoMinimo: { tamanho } };
+    };
+  }
 
+  public novo(): void {
+    this.router.navigate(['/pessoas/novo']);
+    this.title.setTitle('Nova pessoa');
+  }
+
+  private resetarFormulario(): void {
+    this.pessoa = new Pessoa();
+    this.formPessoa.reset();
+    this.formPessoa.markAsPristine();
+    this.dadosOriginais = this.formPessoa.getRawValue();
+  }
+
+  public atualizarTituloEdicao(): void {
+    this.title.setTitle(`Edição de pessoa: ${this.pessoa.nome}`);
+  }
+  //#endregion
+}
+
+// Interface auxiliar para melhor tipagem
+interface EstadoOption {
+  label: string;
+  value: number;
 }

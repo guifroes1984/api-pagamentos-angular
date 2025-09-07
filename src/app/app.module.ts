@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -45,6 +46,7 @@ export function tokenGetter() {
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule, 
+    ReactiveFormsModule, 
     LancamentoModule, 
     PessoaModule, 
     SharedModule, 

@@ -1,8 +1,20 @@
 <div class="container">
   <div class="mat-grid">
     <div class="mat-grid-item">
-        <h1>Painel de Controle</h1>
+      <h1>Painel de Controle</h1>
     </div>
+  </div>
+
+  <div class="painel-container">
+    <mat-form-field appearance="outline">
+      <mat-label>Período</mat-label>
+      <mat-date-range-input [rangePicker]="picker" (dateChange)="onPeriodoSelecionado()">
+        <input matStartDate placeholder="Data inicial" [(ngModel)]="dataInicio" (dateChange)="onPeriodoSelecionado()">
+        <input matEndDate placeholder="Data final" [(ngModel)]="dataFim" (dateChange)="onPeriodoSelecionado()">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
   </div>
 
   <div class="painel-container">
@@ -11,7 +23,8 @@
         <mat-card-title>Lançamentos por categoria</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <canvas baseChart class="grafico-pizza" [data]="dadosGraficoPizza" [options]="opcoes" [type]="'pie'"></canvas>
+        <canvas baseChart class="grafico-pizza" [data]="dadosGraficoPizza" [options]="opcoes" [type]="'pie'">
+        </canvas>
       </mat-card-content>
     </mat-card>
 
@@ -20,7 +33,7 @@
         <mat-card-title>Lançamentos por dia</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-       <canvas baseChart [data]="dadosGraficoLinha" [options]="opcoes" [type]="'line'">
+        <canvas baseChart [data]="dadosGraficoLinha" [options]="opcoes" [type]="'line'">
         </canvas>
       </mat-card-content>
     </mat-card>

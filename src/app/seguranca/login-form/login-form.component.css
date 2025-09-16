@@ -53,4 +53,40 @@
   color: #3f51b5;
   font-weight: 500;
 }
+
+.login-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(to right, #3f51b5, #5a55ae);
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px; /* espaço entre texto e ícones */
+}
+
+.login-bottom-bar .developer {
+  font-weight: 500;
+}
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+  filter: invert(100%); /* deixa branco no fundo escuro */
+  transition: transform 0.2s ease-in-out;
+}
+
+.icon:hover {
+  transform: scale(1.2);
+}
   

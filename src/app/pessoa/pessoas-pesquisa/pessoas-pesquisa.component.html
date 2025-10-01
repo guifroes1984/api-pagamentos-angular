@@ -46,12 +46,10 @@
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
           <td mat-cell *matCellDef="let pes">
-            <a href="javascript:;"
-               [matTooltip]="pes.ativo ? 'Desativar' : 'Ativar'" 
-               matTooltipPosition="above"
-               (click)="alterarStatus(pes)">
-              {{ pes.ativo ? 'Ativo' : 'Inativo' }}
-            </a>
+            <label class="interruptor">
+              <input type="checkbox" [checked]="pes.ativo" (change)="alterarStatus(pes)">
+              <span class="slider"></span>
+            </label>
           </td>
         </ng-container>
 
@@ -59,12 +57,12 @@
           <th mat-header-cell *matHeaderCellDef class="col-acoes"> Ações </th>
           <td mat-cell *matCellDef="let pessoa">
             <div class="acoes-container">
-              <button mat-icon-button color="primary" aria-label="Editar" class="botao-acao" 
-                matTooltip="Editar" [routerLink]="['/pessoas', pessoa.codigo]">
+              <button mat-icon-button color="primary" aria-label="Editar" class="botao-acao" matTooltip="Editar"
+                [routerLink]="['/pessoas', pessoa.codigo]">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button mat-icon-button color="warn" aria-label="Excluir" class="botao-acao" 
-                matTooltip="Excluir" (click)="excluir(pessoa.codigo)">
+              <button mat-icon-button color="warn" aria-label="Excluir" class="botao-acao" matTooltip="Excluir"
+                (click)="excluir(pessoa.codigo)">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
@@ -84,21 +82,19 @@
       </mat-card>
     </div>
 
-    <mat-paginator 
-      [length]="totalRegistros"
-      [pageSize]="filtro.itensPorPagina" 
-      [pageSizeOptions]="[5, 10, 15]" 
-      [disabled]="!habilitarPaginacao()"
-      showFirstLastButtons="true"
-      (page)="onPaginar($event)">
+    <mat-paginator [length]="totalRegistros" [pageSize]="filtro.itensPorPagina" [pageSizeOptions]="[5, 10, 15]"
+      [disabled]="!habilitarPaginacao()" showFirstLastButtons="true" (page)="onPaginar($event)">
     </mat-paginator>
-  
-      <div class="mat-grid-item" style="margin-top: 20px;">
-        <button mat-raised-button color="primary" routerLink="/pessoas/novo" >
-          <mat-icon>person_add</mat-icon>
-          Nova Pessoa
-        </button>
-      </div>
+
+    <div class="mat-grid-item" style="margin-top: 20px;">
+      <button mat-raised-button color="primary" routerLink="/pessoas/novo">
+        <mat-icon>person_add</mat-icon>
+        Nova Pessoa
+      </button>
     </div>
   </div>
-  
+</div>
+
+<!-- <body>
+  <input type="checkbox" class="interruptor">
+</body> -->

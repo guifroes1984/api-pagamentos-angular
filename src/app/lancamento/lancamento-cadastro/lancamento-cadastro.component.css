@@ -282,3 +282,11 @@
   white-space: nowrap;
   transition: width 0.4s ease;
 }
+
+.aviso-tipos {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  margin-left: 4px;
+  font-style: italic;
+}

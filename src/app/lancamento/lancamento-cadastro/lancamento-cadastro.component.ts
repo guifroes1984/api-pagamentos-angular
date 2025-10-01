@@ -260,6 +260,14 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
     if (input.files && input.files.length > 0) {
       this.arquivoSelecionado = input.files[0];
       const maxSize = 5 * 1024 * 1024;
+      const tiposPermitidos = ['application/pdf', 'image/jpeg'];
+
+      if (!tiposPermitidos.includes(this.arquivoSelecionado.type)) {
+        this.toastr.error('Tipo de arquivo inválido. Apenas PDF e JPGE são permitidos.');
+        this.arquivoSelecionado = null;
+        this.formLancamento.get('anexo')?.reset();
+        return;
+      }
 
       if (this.arquivoSelecionado.size > maxSize) {
         this.toastr.error('Arquivo muito grande! O tamanho máximo permitido é 5MB.');
@@ -273,7 +281,7 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
 
       this.intervaloProgresso = setInterval(() => {
         if (this.progressoUpload < 100) {
-          this.progressoUpload += 5; // aumenta 5% a cada 100ms (ajuste se quiser)
+          this.progressoUpload += 5;
         } else {
           clearInterval(this.intervaloProgresso);
           this.uploadEmAndamento = false;

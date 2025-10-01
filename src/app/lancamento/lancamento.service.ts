@@ -103,7 +103,7 @@ export class LancamentoService {
   }
 
   public adicionarLancamentoComAnexo(formData: FormData): Promise<any> {
-    return this.http.post<any>(`${this.lancamentosUrl}/com-anexo`, formData).toPromise();
+    return firstValueFrom(this.http.post<any>(`${this.lancamentosUrl}/com-anexo`, formData));
   }
 
   public atualizarAnexo(codigo: number, arquivo: File): Promise<any> {

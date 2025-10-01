@@ -112,13 +112,14 @@
     <div class="linha alinhamento-direita"
       style="margin-top: 8px; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
 
-      <!-- Botão para anexar arquivo, aparece quando não há arquivo selecionado e não está em upload -->
       <ng-container *ngIf="!arquivoSelecionado && !formLancamento.get('anexo.nome')?.value && !uploadEmAndamento">
+        <p class="aviso-tipos">⚠ Apenas arquivos PDF ou JPEG são permitidos.</p>
         <button mat-raised-button class="botao-anexo" type="button" (click)="seletorArquivo.click()">
           <mat-icon>add</mat-icon>
           Anexar
         </button>
-        <input type="file" #seletorArquivo hidden (change)="aoSelecionarArquivo($event)" />
+        <input type="file" #seletorArquivo hidden (change)="aoSelecionarArquivo($event)" accept=".pdf, .jpeg, .jpg" />
+
       </ng-container>
 
       <div *ngIf="uploadEmAndamento" class="upload-progress-container">
@@ -128,7 +129,6 @@
         </div>
       </div>
 
-      <!-- Visualização do arquivo selecionado, aparece quando há arquivo selecionado e não está em upload -->
       <ng-container *ngIf="arquivoSelecionado && !uploadEmAndamento">
         <a (click)="visualizarArquivoSelecionado()" class="download-link" matTooltip="Pré-visualizar anexo">
           {{ arquivoSelecionado.name }}
@@ -137,7 +137,6 @@
           class="red-square-close-button"></button>
       </ng-container>
 
-      <!-- Link para baixar anexo já salvo, aparece quando não há arquivo selecionado e não está em upload -->
       <ng-container *ngIf="formLancamento.get('anexo.nome')?.value && !arquivoSelecionado && !uploadEmAndamento">
         <a (click)="baixarAnexo()" class="download-link" matTooltip="Baixar anexo">
           {{ formLancamento.get('anexo.nome')?.value }}

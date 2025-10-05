@@ -1,50 +1,67 @@
 .navbar {
-  padding: 10px 0;
-  background-color: #1e94d2;
+  background: linear-gradient(135deg, #1e94d2 0%, #1976d2 100%) !important;
+  padding: 0.5rem 0;
 }
 
-.navbar-toggle {
-  color: #fff;
-}
-
-.navbar-menu {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 210px;
-  margin: 0;
-  padding: 0;
-  z-index: 9998;
-
-  background-color: #3a3633;
-
-  list-style: none;
+.navbar-brand {
+  font-size: 1.3rem;
+  padding: 0.5rem 0;
 }
 
 .navbar-usuario {
-  padding: 15px;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #525151;
-
+  font-weight: 600;
   text-transform: uppercase;
-  font-weight: bold;
-  color: #fff !important;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
 }
 
-.navbar-menuitem {
-  padding: 15px;
+.nav-link {
+  padding: 0.75rem 1rem !important;
+  margin: 0 0.1rem;
+  border-radius: 0.375rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
 }
 
-.navbar-menuitem a {
-  color: #c0bbb7;
-  text-decoration: none;
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  transform: translateY(-1px);
 }
 
-.navbar-menuitem a:hover {
-  color: #fff;
+.nav-link.active {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  font-weight: 600;
 }
 
-.navbar-menuitem.ativo {
-  background-color: #494541;
+.nav-link.text-warning:hover {
+  background-color: rgba(255, 193, 7, 0.2) !important;
 }
+
+.nav-link i {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    background: linear-gradient(135deg, #1e94d2 0%, #1976d2 100%);
+    padding: 1rem;
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+  }
+  
+  .nav-link {
+    margin: 0.25rem 0;
+    justify-content: flex-start;
+  }
+  
+  .nav-link span {
+    display: inline-block !important;
+    margin-left: 0.5rem;
+  }
+}
+
+body {
+  padding-top: 76px;
+}
+

@@ -1,42 +1,69 @@
-<mat-toolbar class="navbar" *ngIf="!rotaAtualEhLoginOuCadastro()">
-    <div class="container">
-      <button mat-icon-button class="navbar-toggle" (click)="alternarMenu()" aria-label="Menu">
-        <mat-icon>menu</mat-icon>
-      </button>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm fixed-top" 
+     *ngIf="!rotaAtualEhLoginOuCadastro()">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="#">
+      <i class="bi bi-cash-coin me-2"></i>
+      Controle Financeiro
+    </a>
+
+    <div class="navbar-text me-3 d-none d-lg-block">
+      <i class="bi bi-person-check me-1"></i>
+      <span class="navbar-usuario">{{ auth.jwtPayload?.nome }}</span>
     </div>
-  
-    <mat-nav-list class="navbar-menu" *ngIf="exibindoMenu && auth.jwtPayload">
-      <mat-list-item>
-        <span class="navbar-usuario">{{ auth.jwtPayload?.nome }}</span>
-      </mat-list-item>
 
-      <mat-list-item class="navbar-menuitem" 
-        *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')"
-        routerLinkActive="ativo">
-        <a routerLink="/painel-controle">Painel de Controle</a>
-      </mat-list-item>
+    <button class="navbar-toggler" 
+            type="button" 
+            (click)="alternarMenu()"
+            aria-controls="navbarContent" 
+            aria-expanded="false" 
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-      <mat-list-item class="navbar-menuitem" 
-        *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')"
-        routerLinkActive="ativo">
-        <a routerLink="/lancamentos">Lançamentos</a>
-      </mat-list-item>
+    <div class="collapse navbar-collapse" [class.show]="exibindoMenu" id="navbarContent">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item" *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')">
+          <a class="nav-link d-flex align-items-center" 
+             routerLink="/painel-controle" 
+             routerLinkActive="active">
+             <i class="bi bi-graph-up me-1"></i>
+            <span class="d-none d-sm-block">Painel</span>
+          </a>
+        </li>
 
-      <mat-list-item class="navbar-menuitem" 
-       *ngIf="auth.isAdmin()"
-        routerLinkActive="ativo">
-        <a routerLink="/pessoas">Pessoas</a>
-      </mat-list-item>
-
-      <mat-list-item class="navbar-menuitem" 
-       *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')"
-        routerLinkActive="ativo">
-        <a routerLink="/relatorios/lancamentos">Relatórios</a>
-      </mat-list-item>
-
-      <mat-list-item class="navbar-menuitem">
-        <a href="javascript:;" (click)="logout()">Logout</a>
-      </mat-list-item>
-    </mat-nav-list>
-  </mat-toolbar>
-  
+        <li class="nav-item" *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')">
+          <a class="nav-link d-flex align-items-center" 
+             routerLink="/lancamentos" 
+             routerLinkActive="active">
+            <i class="bi bi-arrow-left-right me-1"></i>
+            <span class="d-none d-sm-block">Lançamentos</span>
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="auth.isAdmin()">
+          <a class="nav-link d-flex align-items-center" 
+             routerLink="/pessoas" 
+             routerLinkActive="active">
+            <i class="bi bi-person-badge me-1"></i>
+            <span class="d-none d-sm-block">Pessoas</span>
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')">
+          <a class="nav-link d-flex align-items-center" 
+             routerLink="/relatorios/lancamentos" 
+             routerLinkActive="active">
+            <i class="bi bi-bar-chart me-1"></i>
+            <span class="d-none d-sm-block">Relatórios</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center text-warning" 
+             href="javascript:;" 
+             (click)="logout()">
+            <i class="bi bi-power me-1"></i>
+            <span class="d-none d-sm-block">Sair</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

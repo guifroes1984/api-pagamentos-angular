@@ -1,164 +1,220 @@
-<div class="container">
-  <form [formGroup]="formLancamento" (ngSubmit)="salvar()">
-    <div class="mat-grid">
-      <div class="mat-grid-item">
-        <h1>{{ editando ? 'Edição de ' : 'Novo' }} Lançamento</h1>
-      </div>
-    </div>
+<div class="min-vh-100 bg-light pt-5">
+  <div class="container-fluid py-4">
+    <div class="row justify-content-center">
+      <div class="col-12 col-xl-10">
+        <div class="card shadow-lg border-0 rounded-3 mt-4">
+          <div class="card-header bg-primary text-white py-3 rounded-top">
+            <div class="row align-items-center">
+              <div class="col">
+                <h1 class="h3 mb-0 fw-bold">
+                  <i class="bi bi-receipt me-2"></i>
+                  {{ editando ? 'Edição de ' : 'Novo' }} Lançamento
+                </h1>
+              </div>
+              <div class="col-auto">
+                <span class="badge bg-light text-primary fs-6">
+                  {{ formLancamento.get('tipo')?.value === 'RECEITA' ? '📈 Receita' : '📉 Despesa' }}
+                </span>
+              </div>
+            </div>
+          </div>
 
-    <div class="mat-elevation-z2" style="padding: 8px; border-radius: 4px; display: inline-block; margin-bottom: 16px;">
-      <mat-button-toggle-group formControlName="tipo" exclusive class="tipo-toggle">
-        <mat-button-toggle *ngFor="let tipo of tipos" [value]="tipo.value">
-          {{ tipo.label }}
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
+          <div class="card-body p-4">
+            <form [formGroup]="formLancamento" (ngSubmit)="salvar()" class="needs-validation" novalidate>
 
-    <div class="linha" style="display: flex; gap: 16px; flex-wrap: wrap;">
-      <div class="campo-data">
-        <mat-form-field appearance="outline" style="width: 100%;">
-          <mat-label>Vencimento</mat-label>
-          <input matInput [matDatepicker]="pickerVencimento" placeholder="dd/mm/aaaa" formControlName="dataVencimento"
-            readonly />
-          <mat-datepicker-toggle matSuffix [for]="pickerVencimento"></mat-datepicker-toggle>
-          <mat-datepicker #pickerVencimento></mat-datepicker>
-          <mat-error *ngIf="formLancamento.get('dataVencimento')?.hasError('required')">Informe uma data de
-            vencimento</mat-error>
-        </mat-form-field>
-      </div>
-
-      <div class="campo-data">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>{{ formLancamento.get('tipo')?.value === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}</mat-label>
-          <input matInput [matDatepicker]="pickerRecebimento" placeholder="dd/mm/aaaa" formControlName="dataPagamento"
-            readonly />
-          <mat-datepicker-toggle matSuffix [for]="pickerRecebimento"></mat-datepicker-toggle>
-          <mat-datepicker #pickerRecebimento></mat-datepicker>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="linha" style="display: flex; gap: 16px; margin-top: 20px;">
-      <div style="width: 100%;">
-        <mat-form-field appearance="outline" class="campo-grande">
-          <mat-label>Descrição</mat-label>
-          <input matInput type="text" formControlName="descricao" />
-          <mat-error *ngIf="formLancamento.get('descricao')?.hasError('tamanhoMinimo')">
-            Mínimo de {{ formLancamento.get('descricao')?.errors?.['tamanhoMinimo']?.tamanho }} caracteres
-          </mat-error>
-          <mat-error *ngIf="formLancamento.get('descricao')?.hasError('obrigatoriedade')">
-            Informe uma descrição
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <div>
-        <mat-form-field appearance="outline" class="campo-pequeno">
-          <mat-label>Valor</mat-label>
-          <input matInput currencyMask
-            [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, align: 'right', max: 10000 }"
-            formControlName="valor" placeholder="0,00" />
-          <mat-error *ngIf="formLancamento.get('valor')?.hasError('required')">Informe um valor</mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="filtros-container">
-      <div style="flex: 1; display: flex; flex-direction: column;" [formGroupName]="'categoria'">
-        <mat-form-field appearance="outline" class="campo-medio">
-          <mat-label>Categorias</mat-label>
-          <mat-select formControlName="codigo">
-            <mat-option value="">Selecione</mat-option>
-            <mat-option *ngFor="let categoria of categorias" [value]="categoria.codigo">
-              {{ categoria.nome }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="formLancamento.get('categoria.codigo')?.hasError('required')">Informe uma
-            categoria</mat-error>
-        </mat-form-field>
-      </div>
-
-      <div style="flex: 1; display: flex; flex-direction: column;" [formGroupName]="'pessoa'">
-        <mat-form-field appearance="outline" class="campo-medio pessoa-field">
-          <mat-label>Pessoas</mat-label>
-          <mat-select formControlName="codigo">
-            <mat-option [disabled]="true" class="pessoa-option-filtro">
-              <div class="filtro-container" (click)="$event.stopPropagation()">
-                <div class="filtro-box">
-                  <mat-icon class="filtro-icon">search</mat-icon>
-                  <input matInput placeholder="Filtrar..." [formControl]="filtroPessoaCtrl"
-                    (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" class="filtro-input" />
+              <div class="row mb-4">
+                <div class="col-12">
+                  <div class="card shadow-sm border-0 bg-light">
+                    <div class="card-body py-3">
+                      <div class="btn-group w-100" role="group">
+                        <button type="button" *ngFor="let tipo of tipos" [class]="formLancamento.get('tipo')?.value === tipo.value ? 
+                                         'btn btn-success active' : 'btn btn-outline-success'"
+                          (click)="formLancamento.get('tipo')?.setValue(tipo.value)">
+                          <i class="bi" [class.bi-arrow-down-circle]="tipo.value === 'DESPESA'"
+                            [class.bi-arrow-up-circle]="tipo.value === 'RECEITA'"></i>
+                          {{ tipo.label }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </mat-option>
+              <div class="row g-3 mb-4">
+                <div class="col-12 col-md-6 col-lg-3">
+                  <label class="form-label fw-semibold">Vencimento *</label>
+                  <input type="date" class="form-control" formControlName="dataVencimento"
+                    [value]="formatarDataParaInput(formLancamento.get('dataVencimento')?.value)"
+                    (keydown)="bloquearDigitacao($event)" [class.is-invalid]="formLancamento.get('dataVencimento')?.invalid && 
+                              formLancamento.get('dataVencimento')?.touched">
+                  <div class="invalid-feedback" *ngIf="formLancamento.get('dataVencimento')?.hasError('required')">
+                    Informe uma data de vencimento
+                  </div>
+                </div>
 
-            <mat-option *ngFor="let pessoa of pessoas | filterPessoas:filtroPessoaCtrl.value || ''"
-              [value]="pessoa.value">
-              {{ pessoa.label }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="formLancamento.get('pessoa.codigo')?.hasError('required')">Informe uma pessoa</mat-error>
-        </mat-form-field>
-      </div>
-    </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                  <label class="form-label fw-semibold">
+                    {{ formLancamento.get('tipo')?.value === 'RECEITA' ? 'Recebimento' : 'Pagamento' }}
+                  </label>
+                  <input type="date" class="form-control" formControlName="dataPagamento"
+                    [value]="formatarDataParaInput(formLancamento.get('dataPagamento')?.value)"
+                    (keydown)="bloquearDigitacao($event)">
+                </div>
+              </div>
 
-    <div class="linha">
-      <mat-form-field appearance="outline" style="width: 100%; margin-top: 20px;">
-        <mat-label>Observação</mat-label>
-        <textarea matInput rows="3" formControlName="observacao" class="sem-selecao"></textarea>
-      </mat-form-field>
-    </div>
+              <div class="row g-3 mb-4">
+                <div class="col-12 col-md-8">
+                  <label class="form-label fw-semibold">Descrição *</label>
+                  <input type="text" class="form-control" formControlName="descricao"
+                    placeholder="Descrição do lançamento" [class.is-invalid]="formLancamento.get('descricao')?.invalid && 
+                                            formLancamento.get('descricao')?.touched">
+                  <div class="invalid-feedback" *ngIf="formLancamento.get('descricao')?.hasError('obrigatoriedade')">
+                    Informe uma descrição
+                  </div>
+                  <div class="invalid-feedback" *ngIf="formLancamento.get('descricao')?.hasError('tamanhoMinimo')">
+                    Mínimo de 5 caracteres
+                  </div>
+                </div>
 
-    <div class="linha alinhamento-direita"
-      style="margin-top: 8px; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                <div class="col-12 col-md-4">
+                  <label class="form-label fw-semibold">Valor *</label>
+                  <input type="text" class="form-control text-end" formControlName="valor" currencyMask
+                    [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', allowNegative: false, align: 'right', max: 10000 }"
+                    placeholder="0,00" [class.is-invalid]="formLancamento.get('valor')?.invalid && 
+                                            formLancamento.get('valor')?.touched">
+                  <div class="invalid-feedback" *ngIf="formLancamento.get('valor')?.hasError('required')">
+                    Informe um valor
+                  </div>
+                </div>
+              </div>
 
-      <ng-container *ngIf="!arquivoSelecionado && !formLancamento.get('anexo.nome')?.value && !uploadEmAndamento">
-        <p class="aviso-tipos">⚠ Apenas arquivos PDF ou JPEG são permitidos.</p>
-        <button mat-raised-button class="botao-anexo" type="button" (click)="seletorArquivo.click()">
-          <mat-icon>add</mat-icon>
-          Anexar
-        </button>
-        <input type="file" #seletorArquivo hidden (change)="aoSelecionarArquivo($event)" accept=".pdf, .jpeg, .jpg" />
+              <div class="row g-3 mb-4">
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold">Categoria *</label>
+                  <select class="form-select" [value]="formLancamento.get('categoria.codigo')?.value"
+                    (change)="onCategoriaChange($any($event).target.value)" [class.is-invalid]="formLancamento.get('categoria.codigo')?.invalid && 
+                                             formLancamento.get('categoria.codigo')?.touched">
+                    <option value="">Selecione uma categoria</option>
+                    <option *ngFor="let categoria of categorias" [value]="categoria.codigo"
+                      [selected]="categoria.codigo === formLancamento.get('categoria.codigo')?.value">
+                      {{ categoria.nome }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="formLancamento.get('categoria.codigo')?.hasError('required')">
+                    Informe uma categoria
+                  </div>
+                </div>
 
-      </ng-container>
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold">Pessoa *</label>
+                  <select class="form-select" [value]="formLancamento.get('pessoa.codigo')?.value"
+                    (change)="onPessoaChange($any($event).target.value)" [class.is-invalid]="formLancamento.get('pessoa.codigo')?.invalid && 
+                                             formLancamento.get('pessoa.codigo')?.touched">
+                    <option value="">Selecione uma pessoa</option>
+                    <option *ngFor="let pessoa of pessoas" [value]="pessoa.value"
+                      [selected]="pessoa.value === formLancamento.get('pessoa.codigo')?.value">
+                      {{ pessoa.label }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="formLancamento.get('pessoa.codigo')?.hasError('required')">
+                    Informe uma pessoa
+                  </div>
+                </div>
+              </div>
 
-      <div *ngIf="uploadEmAndamento" class="upload-progress-container">
-        <div class="progress-bar-bootstrap" role="progressbar" [style.width.%]="progressoUpload"
-          [attr.aria-valuenow]="progressoUpload" aria-valuemin="0" aria-valuemax="100">
-          {{ progressoUpload }}%
+              <div class="row mb-4">
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Observação</label>
+                  <textarea class="form-control" formControlName="observacao" placeholder="Observações adicionais"
+                    style="height: 100px; resize: none;"></textarea>
+                </div>
+              </div>
+
+              <div class="row mb-4">
+                <div class="col-12">
+                  <div class="card border-0 bg-light">
+                    <div class="card-body">
+                      <h6 class="card-title mb-3">
+                        <i class="bi bi-paperclip me-2"></i>Anexos
+                      </h6>
+                      <div class="d-flex flex-wrap align-items-center gap-3 p-3 bg-white rounded">
+                        <ng-container
+                          *ngIf="!arquivoSelecionado && !formLancamento.get('anexo.nome')?.value && !uploadEmAndamento">
+                          <small class="text-muted">
+                            <i class="bi bi-exclamation-triangle me-1"></i>
+                            Apenas arquivos PDF ou JPEG são permitidos (máx. 5MB)
+                          </small>
+                          <button type="button" class="btn btn-outline-primary btn-sm" (click)="seletorArquivo.click()">
+                            <i class="bi bi-paperclip me-1"></i>
+                            Anexar
+                          </button>
+                          <input type="file" #seletorArquivo hidden (change)="aoSelecionarArquivo($event)"
+                            accept=".pdf, .jpeg, .jpg" />
+                        </ng-container>
+
+                        <div *ngIf="uploadEmAndamento" class="d-flex align-items-center gap-2">
+                          <div class="progress" style="width: 150px;">
+                            <div class="progress-bar" role="progressbar" [style.width.%]="progressoUpload"
+                              [attr.aria-valuenow]="progressoUpload" aria-valuemin="0" aria-valuemax="100">
+                              {{ progressoUpload }}%
+                            </div>
+                          </div>
+                          <small class="text-muted">Processando...</small>
+                        </div>
+
+                        <ng-container *ngIf="arquivoSelecionado && !uploadEmAndamento">
+                          <a href="javascript:void(0)" (click)="visualizarArquivoSelecionado()"
+                            class="text-decoration-none" title="Pré-visualizar anexo">
+                            <i class="bi bi-file-earmark me-1"></i>
+                            {{ arquivoSelecionado.name }}
+                          </a>
+                          <button type="button" class="btn btn-outline-danger btn-sm"
+                            (click)="removerArquivoSelecionado()" title="Remover anexo">
+                            <i class="bi bi-x"></i>
+                          </button>
+                        </ng-container>
+
+                        <ng-container
+                          *ngIf="formLancamento.get('anexo.nome')?.value && !arquivoSelecionado && !uploadEmAndamento">
+                          <a href="javascript:void(0)" (click)="baixarAnexo()" class="text-decoration-none"
+                            title="Baixar anexo">
+                            <i class="bi bi-download me-1"></i>
+                            {{ formLancamento.get('anexo.nome')?.value }}
+                          </a>
+                          <button type="button" class="btn btn-outline-danger btn-sm" (click)="removerAnexo()"
+                            title="Remover anexo">
+                            <i class="bi bi-x"></i>
+                          </button>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-5 pt-4 border-top">
+                <div class="col-12">
+                  <div class="d-flex flex-wrap gap-2 justify-content-end">
+                    <button type="submit" class="btn btn-success px-4"
+                      [disabled]="!formLancamento.valid || uploadEmAndamento">
+                      <i class="bi bi-check-lg me-1"></i>
+                      Salvar
+                    </button>
+
+                    <button type="button" class="btn btn-outline-primary px-4" (click)="novo()">
+                      <i class="bi bi-plus-circle me-1"></i>
+                      Novo
+                    </button>
+                    <a class="btn btn-outline-secondary px-4" routerLink="/lancamentos">
+                      <i class="bi bi-arrow-left me-1"></i>
+                      Voltar
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-
-      <ng-container *ngIf="arquivoSelecionado && !uploadEmAndamento">
-        <a (click)="visualizarArquivoSelecionado()" class="download-link" matTooltip="Pré-visualizar anexo">
-          {{ arquivoSelecionado.name }}
-        </a>
-        <button (click)="removerArquivoSelecionado()" matTooltip="Remover anexo"
-          class="red-square-close-button"></button>
-      </ng-container>
-
-      <ng-container *ngIf="formLancamento.get('anexo.nome')?.value && !arquivoSelecionado && !uploadEmAndamento">
-        <a (click)="baixarAnexo()" class="download-link" matTooltip="Baixar anexo">
-          {{ formLancamento.get('anexo.nome')?.value }}
-        </a>
-        <button (click)="removerAnexo()" matTooltip="Remover anexo" class="red-square-close-button"></button>
-      </ng-container>
-
     </div>
-
-    <div class="linha acoes-formulario" style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
-      <button mat-raised-button color="primary" [disabled]="!formLancamento.valid || uploadEmAndamento">
-        <mat-icon>save</mat-icon>
-        Salvar
-      </button>
-      <button mat-raised-button color="accent" type="button" (click)="novo()">
-        <mat-icon>add_circle</mat-icon>
-        Novo
-      </button>
-      <a mat-raised-button class="btn-voltar-vermelho" routerLink="/lancamentos">
-        <mat-icon>arrow_back</mat-icon>
-        Voltar
-      </a>
-    </div>
-  </form>
+  </div>
 </div>

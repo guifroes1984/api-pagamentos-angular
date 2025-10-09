@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 import { ToastrService } from 'ngx-toastr';
 
@@ -8,11 +9,7 @@ import { CategoriaService } from 'src/app/categorias/categoria.service';
 import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 import { PessoaService } from 'src/app/pessoa/pessoa.service';
 import { LancamentoService } from '../lancamento.service';
-import { Title } from '@angular/platform-browser';
-
 import { IFormComPendencias } from 'src/app/core/guards/FormComPendencias';
-import { Observable } from 'rxjs';
-
 
 @Component({
   selector: 'app-lancamento-cadastro',
@@ -26,24 +23,23 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
   public filtroPessoa: string = '';
 
   formLancamento!: FormGroup;
-
   filtroPessoaCtrl = new FormControl('');
 
   public arquivoSelecionado: File | null = null;
   public uploadEmAndamento = false;
   public anexoRemovido = false;
+  public mostrarSucesso = false;
 
   private dadosOriginais: any;
   public formEnviado = true;
 
   public progressoUpload = 0;
-  private intervaloProgresso?: any
+  private intervaloProgresso?: any;
 
   tipos = [
     { label: 'Receita', value: 'RECEITA' },
     { label: 'Despesa', value: 'DESPESA' }
   ];
-
 
   constructor(
     private categoriaService: CategoriaService,
@@ -132,7 +128,12 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
   public carregarLancamentos(codigo: number) {
     this.lancamentoService.buscarLancamentoPorCodigo(codigo)
       .then(lancamento => {
-        this.formLancamento.patchValue(lancamento);
+        this.formLancamento.patchValue({
+          ...lancamento,
+          dataVencimento: this.formatarDataParaInput(lancamento.dataVencimento),
+          dataPagamento: this.formatarDataParaInput(lancamento.dataPagamento)
+        });
+
         this.dadosOriginais = this.formLancamento.value;
 
         if (lancamento.anexo) {
@@ -146,6 +147,27 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
         this.atualizarTituloEdicao();
       })
       .catch(erro => this.errorHandler.handle(erro));
+  }
+
+  public formatarDataParaInput(data: any): string {
+    if (!data) return '';
+
+    if (typeof data === 'string' && data.includes('-')) {
+      return data;
+    }
+
+    if (data instanceof Date) {
+      return data.toISOString().split('T')[0];
+    }
+
+    if (typeof data === 'string' && data.includes('/')) {
+      const partes = data.split('/');
+      if (partes.length === 3) {
+        return `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
+      }
+    }
+
+    return '';
   }
 
   public async salvar(): Promise<void> {
@@ -175,6 +197,14 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
         lancamentoSalvo = await this.lancamentoService.adicionarLancamentoComAnexo(this.criarFormData());
         this.formLancamento.patchValue(lancamentoSalvo);
         this.arquivoSelecionado = null;
+
+        try {
+          this.toastr.success('Lançamento adicionado com sucesso!');
+        } catch (e) {
+          this.mostrarSucesso = true;
+          setTimeout(() => this.mostrarSucesso = false, 5000);
+        }
+
         this.router.navigate(['/lancamentos', lancamentoSalvo.codigo]);
 
       } else {
@@ -200,23 +230,48 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
     return formData;
   }
 
-  public adicionarLancamento() {
-    this.lancamentoService.adicionarLancamento(this.formLancamento.value)
-      .then(lancamentoAdicionado => {
-        this.toastr.success('Lançamento adicionado com sucesso!');
-        this.router.navigate(['/lancamentos', lancamentoAdicionado.codigo]);
-      })
-      .catch(erro => this.errorHandler.handle(erro));
+  public adicionarLancamento(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.lancamentoService.adicionarLancamento(this.formLancamento.value)
+        .then(lancamentoAdicionado => {
+          try {
+            this.toastr.success('Lançamento adicionado com sucesso!');
+          } catch (e) {
+            this.mostrarSucesso = true;
+            setTimeout(() => this.mostrarSucesso = false, 5000);
+          }
+
+          this.router.navigate(['/lancamentos', lancamentoAdicionado.codigo]);
+          resolve();
+        })
+        .catch(erro => {
+          this.errorHandler.handle(erro);
+          reject(erro);
+        });
+    });
   }
 
-  public atualizarLancamento() {
-    this.lancamentoService.atualizarLancamento(this.formLancamento.value)
-      .then(lancamentoAtualizado => {
-        this.formLancamento.patchValue(lancamentoAtualizado);
-        this.toastr.success('Lançamento alterado com sucesso!');
-        this.atualizarTituloEdicao();
-      })
-      .catch(erro => this.errorHandler.handle(erro));
+  public atualizarLancamento(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.lancamentoService.atualizarLancamento(this.formLancamento.value)
+        .then(lancamentoAtualizado => {
+          this.formLancamento.patchValue(lancamentoAtualizado);
+
+          try {
+            this.toastr.success('Lançamento alterado com sucesso!');
+          } catch (e) {
+            this.mostrarSucesso = true;
+            setTimeout(() => this.mostrarSucesso = false, 5000);
+          }
+
+          this.atualizarTituloEdicao();
+          resolve();
+        })
+        .catch(erro => {
+          this.errorHandler.handle(erro);
+          reject(erro);
+        });
+    });
   }
 
   public carregarCategorias() {
@@ -255,6 +310,22 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
     this.title.setTitle(`Edição de lançamento: ${this.formLancamento.get('descricao')?.value}`);
   }
 
+  public onCategoriaChange(codigo: string): void {
+    const categoriaSelecionada = this.categorias.find(c => c.codigo == codigo);
+    this.formLancamento.get('categoria')?.patchValue({
+      codigo: codigo ? Number(codigo) : null,
+      nome: categoriaSelecionada?.nome || ''
+    });
+  }
+
+  public onPessoaChange(codigo: string): void {
+    const pessoaSelecionada = this.pessoas.find(p => p.value == codigo);
+    this.formLancamento.get('pessoa')?.patchValue({
+      codigo: codigo ? Number(codigo) : null,
+      nome: pessoaSelecionada?.label || ''
+    });
+  }
+
   public aoSelecionarArquivo(evento: Event): void {
     const input = evento.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -263,7 +334,7 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
       const tiposPermitidos = ['application/pdf', 'image/jpeg'];
 
       if (!tiposPermitidos.includes(this.arquivoSelecionado.type)) {
-        this.toastr.error('Tipo de arquivo inválido. Apenas PDF e JPGE são permitidos.');
+        this.toastr.error('Tipo de arquivo inválido. Apenas PDF e JPEG são permitidos.');
         this.arquivoSelecionado = null;
         this.formLancamento.get('anexo')?.reset();
         return;
@@ -297,18 +368,6 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
     }
   }
 
-  public adicionarLancamentoComAnexo(): void {
-    const formData = new FormData();
-    formData.append('lancamento', JSON.stringify(this.formLancamento.value));
-    formData.append('file', this.arquivoSelecionado!);
-
-    this.lancamentoService.adicionarLancamentoComAnexo(formData)
-      .then(lancamentoAdicionado => {
-        this.router.navigate(['/lancamentos', lancamentoAdicionado.codigo]);
-      })
-      .catch(erro => this.errorHandler.handle(erro));
-  }
-
   public baixarAnexo(): void {
     const codigo = this.formLancamento.get('codigo')?.value;
 
@@ -339,6 +398,19 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
     if (this.arquivoSelecionado) {
       const url = URL.createObjectURL(this.arquivoSelecionado);
       window.open(url, '_blank');
+    }
+  }
+
+  public bloquearDigitacao(event: KeyboardEvent): void {
+    const teclasPermitidas = [
+      'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
+      'Home', 'End', 'Enter', 'Escape', 'Backspace', 'Delete'
+    ];
+    if (event.ctrlKey || event.metaKey) {
+      return;
+    }
+    if (!teclasPermitidas.includes(event.key)) {
+      event.preventDefault();
     }
   }
 

@@ -1,131 +1,157 @@
-<div class="container">
-  <div class="mat-grid">
-    <div class="mat-grid-item">
-      <h1>Lançamentos</h1>
-    </div>
-  </div>
+<div class="min-vh-100 bg-light pt-5">
+  <div class="container-fluid py-4">
+    <div class="row justify-content-center">
+      <div class="col-12 col-xl-10">
+        <div class="card shadow-lg border-0 rounded-3">
+          <div class="card-header bg-primary text-white py-3 rounded-top">
+            <div class="row align-items-center">
+              <div class="col">
+                <h1 class="h3 mb-0 fw-bold">
+                  <i class="bi bi-search me-2"></i>
+                  Pesquisa de Lançamentos
+                </h1>
+              </div>
+              <div class="col-auto">
+                <span class="badge bg-light text-primary fs-6">
+                  {{ totalRegistros }} registros
+                </span>
+              </div>
+            </div>
+          </div>
 
-  <form (ngSubmit)="pesquisar()" #form="ngForm">
-    <div class="mat-grid" style="display: flex; justify-content: space-between; align-items: center;">
-      <div class="mat-grid-item" style="flex-grow: 1; margin-right: 10px;">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Descrição</mat-label>
-          <input matInput type="text" name="descricao" [(ngModel)]="filtro.descricao" (keydown.enter)="pesquisar()">
-        </mat-form-field>
-      </div>
+          <div class="card-body p-4">
+            <div class="row g-3 mb-4">
+              <div class="col-12 col-md-4">
+                <label class="form-label fw-semibold">Descrição</label>
+                <input type="text" class="form-control" #descricaoInput [value]="filtro.descricao || ''"
+                  (input)="filtro.descricao = descricaoInput.value" (keydown.enter)="pesquisar()"
+                  placeholder="Digite para pesquisar...">
+              </div>
 
-      <div class="mat-grid-item" style="flex-grow: 1;">
-        <div class="input-group">
-          <mat-form-field appearance="outline">
-            <mat-label translate="no">Vencimento</mat-label>
-            <input matInput [matDatepicker]="picker" placeholder="dd/mm/aaaa" [(ngModel)]="filtro.dataVencimentoInicio" name="dataVencimentoInicio" type="text" readonly>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-      
-          <mat-form-field appearance="outline">
-            <mat-label translate="no">até</mat-label>
-            <input matInput [matDatepicker]="pickerAt" placeholder="dd/mm/aaaa" [(ngModel)]="filtro.dataVencimentoFim" name="vencimentoFim" readonly>
-            <mat-datepicker-toggle matSuffix [for]="pickerAt"></mat-datepicker-toggle>
-            <mat-datepicker #pickerAt></mat-datepicker>
-          </mat-form-field>
-        </div>
-      </div>    
+              <div class="col-12 col-md-4">
+                <label class="form-label fw-semibold">Vencimento</label>
+                <div class="row g-2">
+                  <div class="col-6">
+                    <input type="date" class="form-control" #dataInicioInput
+                      [value]="formatarDataParaInput(filtro.dataVencimentoInicio)"
+                      (change)="onDataInicioChange(dataInicioInput.value)" (keydown)="bloquearDigitacao($event)">
+                  </div>
+                  <div class="col-6">
+                    <input type="date" class="form-control" #dataFimInput
+                      [value]="formatarDataParaInput(filtro.dataVencimentoFim)"
+                      (change)="onDataFimChange(dataFimInput.value)" (keydown)="bloquearDigitacao($event)"
+                      placeholder="até">
+                  </div>
+                </div>
+              </div>
 
-      <div class="mat-grid-item" style="flex-shrink: 0;">
-        <button mat-raised-button color="primary" type="submit" style="margin-right: 10px;">
-          <mat-icon>search</mat-icon>
-          Pesquisar
-        </button>
-        <button mat-raised-button color="warn" type="button" (click)="limpar()">
-          <mat-icon>clear_all</mat-icon>
-          Limpar
-        </button>
-      </div>
-    </div>
-
-    <div class="mat-grid" style="margin-top: 20px;">
-      <div class="mat-grid-item">
-        <table mat-table [dataSource]="fonteDados" class="mat-elevation-z8" matSort>
-          <ng-container matColumnDef="pessoa">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Pessoa </th>
-            <td mat-cell *matCellDef="let lanc" translate="no"> {{ lanc.pessoa.nome }} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="descricao">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Descrição </th>
-            <td mat-cell *matCellDef="let lanc" translate="no"> {{ lanc.descricao }} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="dataVencimento">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-data"> Vencimento </th>
-            <td mat-cell *matCellDef="let lanc" translate="no"> {{ lanc.dataVencimento | date: 'dd/MM/yyyy' }} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="dataPagamento">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-data"> Pagamento </th>
-            <td mat-cell *matCellDef="let lanc" translate="no">
-              {{ lanc.dataPagamento ? (lanc.dataPagamento | date:'dd/MM/yyyy') : '-' }}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="valor">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="col-valor" translate="no"> Valor </th>
-            <td mat-cell *matCellDef="let lanc" class="col-valor" translate="no">
-              <span [style.color]="lanc.tipo === 'DESPESA' ? 'red' : 'blue'">
-                {{ lanc.valor | currency:'BRL':'symbol':'1.2-2' }}
-              </span>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="acoes">
-            <th mat-header-cell *matHeaderCellDef class="col-acoes"> Ações </th>
-            <td mat-cell *matCellDef="let lanc" translate="no">
-              <div class="acoes-container">
-                <button mat-icon-button color="primary" 
-                  aria-label="Editar" class="botao-acao" 
-                  matTooltip="Editar" [routerLink]="['/lancamentos', lanc.codigo]">
-                  <mat-icon>edit</mat-icon>
+              <div class="col-12 col-md-4 d-flex align-items-end gap-2">
+                <button type="button" class="btn btn-primary flex-fill" (click)="pesquisar()">
+                  <i class="bi bi-search me-1"></i>
+                  Pesquisar
                 </button>
-                <button mat-icon-button color="warn" aria-label="Excluir" class="botao-acao" 
-                  matTooltip="Excluir" (click)="excluir(lanc.codigo)"
-                  [disabled]="!auth.temPermissao('ROLE_REMOVER_LANCAMENTO')">
-                  <mat-icon>delete</mat-icon>
+                <button type="button" class="btn btn-outline-danger" (click)="limpar()">
+                  <i class="bi bi-x-circle me-1"></i>
+                  Limpar
                 </button>
               </div>
-            </td>
-          </ng-container>        
+            </div>
 
-          <tr mat-header-row *matHeaderRowDef="colunasExibidas" class="mat-header"></tr>
-          <tr mat-row *matRowDef="let row; columns: colunasExibidas;" class="mat-row"></tr>
-        </table>
-      </div>
+            <div class="table-responsive">
+              <table class="table table-hover table-striped table-bordered mb-4">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col" class="w-25">Pessoa</th>
+                    <th scope="col" class="w-30">Descrição</th>
+                    <th scope="col" class="w-15 text-center">Vencimento</th>
+                    <th scope="col" class="w-15 text-center">Pagamento</th>
+                    <th scope="col" class="w-10 text-center">Valor</th>
+                    <th scope="col" class="w-5 text-center">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let lanc of fonteDados.data">
+                    <td class="fw-semibold">{{ lanc.pessoa.nome }}</td>
+                    <td>{{ lanc.descricao }}</td>
+                    <td class="text-center">{{ lanc.dataVencimento | date: 'dd/MM/yyyy' }}</td>
+                    <td class="text-center">
+                      {{ lanc.dataPagamento ? (lanc.dataPagamento | date:'dd/MM/yyyy') : '-' }}
+                    </td>
+                    <td class="text-end">
+                      <span [class]="lanc.tipo === 'DESPESA' ? 'text-danger' : 'text-success'">
+                        {{ lanc.valor | currency:'BRL':'symbol':'1.2-2' }}
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <div class="d-flex gap-2 justify-content-center">
+                        <button type="button" class="btn btn-outline-primary btn-sm"
+                          [routerLink]="['/lancamentos', lanc.codigo]" title="Editar">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-danger btn-sm" (click)="excluir(lanc.codigo)"
+                          [disabled]="!auth.temPermissao('ROLE_REMOVER_LANCAMENTO')" title="Excluir">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr *ngIf="fonteDados.data.length === 0">
+                    <td colspan="6" class="text-center py-4">
+                      <div class="text-muted">
+                        <i class="bi bi-inbox display-4 d-block mb-2"></i>
+                        <h5>Nenhum resultado encontrado</h5>
+                        <p class="mb-0">Tente ajustar os filtros de pesquisa</p>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-      <div class="mensagem-sem-resultados" *ngIf="fonteDados.data.length === 0">
-        <mat-card>
-          <mat-card-content>
-            <p>Nenhum resultado encontrado.</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
+            <div class="row align-items-center" *ngIf="habilitarPaginacao()">
+              <div class="col-md-6">
+                <div class="d-flex align-items-center gap-3">
+                  <span class="text-muted">
+                    Mostrando {{ (paginaAtual * itensPorPagina) + 1 }}-{{ Math.min((paginaAtual + 1) * itensPorPagina,
+                    totalRegistros) }} de {{ totalRegistros }}
+                  </span>
+                  <select class="form-select form-select-sm w-auto" #itensPorPaginaSelect [value]="itensPorPagina"
+                    (change)="mudarItensPorPagina(itensPorPaginaSelect.value)">
+                    <option value="5">5 por página</option>
+                    <option value="10">10 por página</option>
+                    <option value="15">15 por página</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex justify-content-end gap-2">
+                  <button class="btn btn-outline-primary btn-sm" (click)="irParaPagina(paginaAtual - 1)"
+                    [disabled]="paginaAtual === 0">
+                    <i class="bi bi-chevron-left"></i> Anterior
+                  </button>
+                  <span class="btn btn-outline-dark btn-sm disabled">
+                    Página {{ paginaAtual + 1 }} de {{ totalPaginas }}
+                  </span>
+                  <button class="btn btn-outline-primary btn-sm" (click)="irParaPagina(paginaAtual + 1)"
+                    [disabled]="paginaAtual >= totalPaginas - 1">
+                    Próxima <i class="bi bi-chevron-right"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
 
-      <mat-paginator
-        [length]="totalRegistros"
-        [pageSize]="itensPorPagina"
-        [pageSizeOptions]="[5, 10, 15]"
-        [pageIndex]="paginaAtual"
-        [disabled]="!habilitarPaginacao()"
-        (page)="onPaginar($event)"
-        showFirstLastButtons="true">
-      </mat-paginator>
-
-      <div class="mat-grid-item" style="margin-top: 20px;">
-        <button *ngIf="auth.temPermissao('ROLE_CADASTRAR_LANCAMENTO')"
-          mat-raised-button color="primary" routerLink="/lancamentos/novo">
-          <mat-icon>person_add</mat-icon>
-          Novo Lançamento
-        </button>
+            <div class="row mt-4">
+              <div class="col-12">
+                <button *ngIf="auth.temPermissao('ROLE_CADASTRAR_LANCAMENTO')" class="btn btn-success"
+                  routerLink="/lancamentos/novo">
+                  <i class="bi bi-plus-circle me-1"></i>
+                  Novo Lançamento
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </form>
+  </div>
 </div>

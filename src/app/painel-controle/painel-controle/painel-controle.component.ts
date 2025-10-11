@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { TooltipItem } from 'chart.js';
+import { FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { PainelControleService } from '../painel-controle.service';
 import { Title } from '@angular/platform-browser';
 
@@ -14,16 +15,43 @@ export class PainelControleComponent implements OnInit {
   dadosGraficoPizza: any;
   dadosGraficoLinha: any;
 
-  dataInicio: Date = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-  dataFim: Date = new Date();
+  dataInicioControl = new FormControl('');
+  dataFimControl = new FormControl('');
 
-  opcoes = {
+  opcoesPizza = {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
+      legend: {
+        position: 'bottom' as const,
+        labels: {
+          padding: 20,
+          usePointStyle: true,
+        }
+      },
       tooltip: {
         callbacks: {
-          label: (tooltipItem: TooltipItem<'pie'>) =>
-            this.formatarTooltip(tooltipItem)
+          label: (tooltipItem: any) => this.formatarTooltip(tooltipItem)
         }
+      }
+    }
+  };
+
+  opcoesLinha = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom' as const,
+        labels: {
+          padding: 20,
+          usePointStyle: true,
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true
       }
     }
   };
@@ -35,19 +63,58 @@ export class PainelControleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.atualizarGraficos();
+    // COMEÇA VAZIO - sem datas pré-definidas
+    this.dataInicioControl.setValue('');
+    this.dataFimControl.setValue('');
+
+    this.dataInicioControl.valueChanges.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.atualizarGraficos();
+    });
+
+    this.dataFimControl.valueChanges.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.atualizarGraficos();
+    });
+
+    // Gráficos começam em branco
+    this.dadosGraficoPizza = null;
+    this.dadosGraficoLinha = null;
+    
     this.title.setTitle('Painel de controle');
   }
 
+  public limparDatas(): void {
+    this.dataInicioControl.setValue('');
+    this.dataFimControl.setValue('');
+    this.atualizarGraficos();
+  }
+
   private atualizarGraficos() {
-    if (this.dataInicio && this.dataFim) {
-      this.configurarGraficoPizza();
-      this.configurarGraficoLinha();
+    const dataInicioStr = this.dataInicioControl.value;
+    const dataFimStr = this.dataFimControl.value;
+    
+    if (!dataInicioStr || !dataFimStr) {
+      this.dadosGraficoPizza = null;
+      this.dadosGraficoLinha = null;
+      return;
+    }
+
+    const dataInicio = this.converterStringParaDate(dataInicioStr);
+    const dataFim = this.converterStringParaDate(dataFimStr);
+    
+    if (dataInicio && dataFim) {
+      this.configurarGraficoPizza(dataInicio, dataFim);
+      this.configurarGraficoLinha(dataInicio, dataFim);
     }
   }
 
-  public configurarGraficoPizza() {
-    this.painelControleService.lancamentosPorCategoria(this.dataInicio, this.dataFim)
+  public configurarGraficoPizza(dataInicio: Date, dataFim: Date) {
+    this.painelControleService.lancamentosPorCategoria(dataInicio, dataFim)
       .then(dados => {
         this.dadosGraficoPizza = {
           labels: dados.map(dado => dado.categoria.nome),
@@ -56,18 +123,22 @@ export class PainelControleComponent implements OnInit {
               data: dados.map(dado => dado.total),
               backgroundColor: [
                 '#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6',
-                '#DD4477', '#3366CC', '#DC3912'
-              ]
+                '#DD4477', '#3366CC', '#DC3912', '#66AA00', '#B82E2E',
+                '#316395', '#994499', '#22AA99', '#AAAA11', '#6633CC',
+                '#E67300', '#8B0707', '#329262', '#3B3EAC'
+              ],
+              borderColor: '#fff',
+              borderWidth: 2
             }
           ]
         };
       });
   }
 
-  public configurarGraficoLinha() {
-    this.painelControleService.lancamentosPorDia(this.dataInicio, this.dataFim)
+  public configurarGraficoLinha(dataInicio: Date, dataFim: Date) {
+    this.painelControleService.lancamentosPorDia(dataInicio, dataFim)
       .then(dados => {
-        const diasDoPeriodo = this.configurarDiasPeriodo(this.dataInicio, this.dataFim);
+        const diasDoPeriodo = this.configurarDiasPeriodo(dataInicio, dataFim);
 
         const totaisReceitas = this.totaisPorCadaDia(
           dados.filter(dado => dado.tipo === 'RECEITA'),
@@ -82,11 +153,54 @@ export class PainelControleComponent implements OnInit {
         this.dadosGraficoLinha = {
           labels: diasDoPeriodo.map(d => d.getDate() + '/' + (d.getMonth() + 1)),
           datasets: [
-            { label: 'Receitas', data: totaisReceitas, borderColor: '#3366CC', fill: false },
-            { label: 'Despesas', data: totaisDespesas, borderColor: '#D62B00', fill: false }
+            { 
+              label: 'Receitas', 
+              data: totaisReceitas, 
+              borderColor: '#28a745', 
+              backgroundColor: 'rgba(40, 167, 69, 0.1)',
+              tension: 0.4,
+              fill: true
+            },
+            { 
+              label: 'Despesas', 
+              data: totaisDespesas, 
+              borderColor: '#dc3545', 
+              backgroundColor: 'rgba(220, 53, 69, 0.1)',
+              tension: 0.4,
+              fill: true
+            }
           ]
         };
       });
+  }
+
+  public formatarDataParaInput(data: Date): string {
+    if (!data) return '';
+    return data.toISOString().split('T')[0];
+  }
+
+  private converterStringParaDate(dataString: string | null): Date | null {
+    if (!dataString) return null;
+    try {
+      return new Date(dataString + 'T00:00:00');
+    } catch {
+      return null;
+    }
+  }
+
+  public bloquearDigitacao(event: KeyboardEvent): void {
+    const teclasPermitidas = [
+      'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
+      'Home', 'End', 'Enter', 'Escape', 'Backspace', 'Delete'
+    ];
+    
+    if (event.ctrlKey || event.metaKey) {
+      return;
+    }
+    
+    if (!teclasPermitidas.includes(event.key)) {
+      event.preventDefault();
+    }
   }
 
   private configurarDiasPeriodo(inicio: Date, fim: Date): Date[] {
@@ -111,17 +225,9 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
-  private formatarTooltip(tooltipItem: TooltipItem<'pie'>): string {
-    const dataset = tooltipItem.dataset;
-    const valor = dataset.data[tooltipItem.dataIndex] as number;
-    const label = dataset.label ? dataset.label + ': ' : '';
+  private formatarTooltip(tooltipItem: any): string {
+    const valor = tooltipItem.parsed;
+    const label = tooltipItem.label ? tooltipItem.label + ': ' : '';
     return label + 'R$ ' + this.decimalPipe.transform(valor, '1.2-2');
   }
-
-  public onPeriodoSelecionado() {
-    if (this.dataInicio && this.dataFim) {
-      this.atualizarGraficos();
-    }
-  }
-
 }

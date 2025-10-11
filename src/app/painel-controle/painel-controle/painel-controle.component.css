@@ -1,36 +1,31 @@
-mat-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 8px;
-  margin-bottom: 10px;
+.chart-container {
+  min-height: 300px;
 }
 
-.header {
-  margin-bottom: 24px;
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.painel-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: space-between;
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
 }
 
-.painel {
-  flex: 1 1 45%;
-  min-width: 300px;
-  box-sizing: border-box;
+.card-header.bg-light {
+  border-bottom: 1px solid #dee2e6;
 }
 
-.cabecalho-cinza {
-  background-color: #eeeeee;
-  padding: 12px 16px;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
+@media (max-width: 768px) {
+  .chart-container {
+    height: 250px !important;
+  }
 }
 
-.grafico-pizza {
-  max-width: 300px;
-  margin: 0 auto;
+.badge {
+  font-size: 0.75rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.alert-info {
+  border-left: 4px solid #0dcaf0;
 }

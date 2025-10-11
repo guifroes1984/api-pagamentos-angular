@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';   // <-- Importar aqui
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { NgChartsModule } from 'ng2-charts';
 import { MatCardModule } from '@angular/material/card';
@@ -24,6 +25,7 @@ import { PainelControleComponent } from './painel-controle/painel-controle.compo
   imports: [
     CommonModule, 
     FormsModule, 
+    ReactiveFormsModule,
 
     NgChartsModule, 
     MatCardModule, 

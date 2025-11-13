@@ -60,7 +60,6 @@ label {
   backdrop-filter: blur(2px);
 }
 
-/* Ajuste para mat-form-field com classe bootstrap-size */
 .bootstrap-size .mat-form-field-wrapper {
   padding-bottom: 0 !important;
 }
@@ -88,7 +87,6 @@ label {
   border-width: 1px !important;
 }
 
-/* Foco */
 .bootstrap-size.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
   color: #0d6efd !important;
 }
@@ -100,13 +98,11 @@ label {
   border-width: 1px !important;
 }
 
-/* Texto */
 .bootstrap-size .mat-select-value-text {
   line-height: 1.5 !important;
   font-size: 1rem !important;
 }
 
-/* Label */
 .bootstrap-size .mat-form-field-label {
   top: 50% !important;
   margin-top: -9px !important;

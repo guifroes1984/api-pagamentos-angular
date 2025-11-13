@@ -1,13 +1,59 @@
-.input-group mat-form-field {
-    margin-right: 8px;
-}
-  
-.input-group mat-form-field:last-child {
-    margin-right: 0;
+.date-fields-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.botoes-acao {
+@media (min-width: 768px) {
+  .date-fields-container {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+.date-input-wrapper {
+  flex: 1;
   display: flex;
-  gap: 8px;
-  margin-top: 16px;
+  flex-direction: column;
+}
+
+.date-connector {
+  color: #6c757d;
+  font-weight: 500;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+  margin-top: 1.75rem;
+  min-height: 38px;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .date-connector {
+    display: flex;
+  }
+}
+
+.validation-message {
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.invalid-feedback {
+  display: block;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 767.98px) {
+  .date-input-wrapper {
+    width: 100%;
+  }
+  
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
 }

@@ -9,24 +9,44 @@ import { Title } from '@angular/platform-browser';
 })
 export class RelatorioLancamentosComponent implements OnInit {
 
-  periodoInicio!: Date;
-  periodoFim!: Date;
+  periodoInicio!: string;
+  periodoFim!: string;
+  dataFimInvalida: boolean = false;
 
   constructor(
     private relatorioService: RelatoriosService, 
-    private title:            Title
+    private title: Title
   ) { }
 
   ngOnInit(): void {
     this.title.setTitle('Relatório de lançamentos por pessoa');
   }
 
+  public validarDatas(): void {
+    if (this.periodoInicio && this.periodoFim) {
+      const inicio = new Date(this.periodoInicio);
+      const fim = new Date(this.periodoFim);
+      this.dataFimInvalida = fim < inicio;
+    } else {
+      this.dataFimInvalida = false;
+    }
+  }
+
   public gerar() {
-    this.relatorioService.relatorioLancamentosPorPessoa(this.periodoInicio, this.periodoFim)
+    if (this.dataFimInvalida) {
+      return;
+    }
+
+    const inicio = new Date(this.periodoInicio);
+    const fim = new Date(this.periodoFim);
+    
+    this.relatorioService.relatorioLancamentosPorPessoa(inicio, fim)
       .then(relatorio => {
         const url = window.URL.createObjectURL(relatorio);
-
         window.open(url);
+      })
+      .catch(erro => {
+        console.error('Erro ao gerar relatório:', erro);
       });
   }
 
@@ -34,6 +54,6 @@ export class RelatorioLancamentosComponent implements OnInit {
     form.resetForm(); 
     this.periodoInicio = undefined!;
     this.periodoFim = undefined!;
+    this.dataFimInvalida = false;
   }
-
 }

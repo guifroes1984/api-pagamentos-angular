@@ -1,38 +1,83 @@
-<div class="container">
-  <div class="mat-grid">
-    <div class="mat-grid-item">
-      <h1>Relatório de lançamentos por pessoa</h1>
-    </div>
+<div class="min-vh-100 bg-light pt-5">
+  <div class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-12 col-xl-10">
+        <div class="card shadow-lg border-0 rounded-3">
+          <div class="card-header bg-primary text-white py-3 rounded-top">
+            <div class="row align-items-center">
+              <div class="col">
+                <h1 class="h3 mb-0 fw-bold">
+                  <i class="bi bi-graph-up me-2"></i>
+                  Relatório de Lançamentos por Pessoa
+                </h1>
+              </div>
+              <div class="col-auto">
+                <span class="badge bg-light text-primary fs-6">
+                  <i class="bi bi-file-earmark-text me-1"></i>Relatório
+                </span>
+              </div>
+            </div>
+          </div>
 
-    <form #f="ngForm" (ngSubmit)="gerar()">
-      <div class="mat-grid-item" style="flex-grow: 1;">
-        <div class="input-group">
-            <mat-form-field appearance="outline">
-                <mat-label translate="no">Vencimento</mat-label>
-                <input matInput [matDatepicker]="pickerInicio" placeholder="dd/mm/aaaa" required name="periodoInicio" [(ngModel)]="periodoInicio" readonly>
-                <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
-                <mat-datepicker #pickerInicio></mat-datepicker>
-            </mat-form-field>
+          <div class="card-body p-4">
+            <form #f="ngForm" (ngSubmit)="gerar()">
+              <div class="row mb-4">
+                <div class="col-12">
+                  <label class="form-label fw-semibold mb-3">Período de Vencimento</label>
+                  <div class="date-fields-container">
+                    <div class="date-input-wrapper">
+                      <label class="form-label small">Data Início</label>
+                      <input type="date" class="form-control" 
+                             required name="periodoInicio" [(ngModel)]="periodoInicio"
+                             [ngClass]="{'is-invalid': f.submitted && f.controls['periodoInicio']?.invalid}"
+                             (change)="validarDatas()"
+                             #dataInicioInput>
+                      <div class="invalid-feedback" *ngIf="f.submitted && f.controls['periodoInicio']?.invalid">
+                        Data início é obrigatória
+                      </div>
+                    </div>
+                    
+                    <div class="date-connector d-none d-md-flex">até</div>
 
-            <mat-form-field appearance="outline">
-                <mat-label translate="no">até</mat-label>
-                <input matInput [matDatepicker]="pickerFim" placeholder="dd/mm/aaaa" required name="periodoFim" [(ngModel)]="periodoFim" readonly>
-                <mat-datepicker-toggle matSuffix [for]="pickerFim"></mat-datepicker-toggle>
-                <mat-datepicker #pickerFim></mat-datepicker>
-            </mat-form-field>
+                    <div class="date-input-wrapper">
+                      <label class="form-label small">Data Fim</label>
+                      <input type="date" class="form-control" 
+                             required name="periodoFim" [(ngModel)]="periodoFim"
+                             [ngClass]="{'is-invalid': (f.submitted && f.controls['periodoFim']?.invalid) || dataFimInvalida}"
+                             (change)="validarDatas()"
+                             [min]="periodoInicio"
+                             #dataFimInput>
+                      <div class="invalid-feedback" *ngIf="f.submitted && f.controls['periodoFim']?.invalid">
+                        Data fim é obrigatória
+                      </div>
+                      <div class="validation-message text-danger mt-1" *ngIf="dataFimInvalida && !f.controls['periodoFim']?.invalid">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        Data fim não pode ser menor que data início
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-4">
+                <div class="col-12">
+                  <div class="d-flex gap-2 flex-column flex-md-row border-top pt-4">
+                    <button class="btn btn-primary" type="submit" [disabled]="f.invalid || dataFimInvalida">
+                      <i class="bi bi-file-pdf me-2"></i>
+                      Gerar Relatório
+                    </button>
+                    
+                    <button class="btn btn-outline-danger" type="button" (click)="limpar(f)">
+                      <i class="bi bi-x-circle me-2"></i>
+                      Limpar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-
-      <div class="botoes-acao">
-        <button mat-raised-button color="primary" type="submit" [disabled]="f.invalid">
-          <mat-icon>picture_as_pdf</mat-icon>
-            Gerar relatório
-        </button>
-        <button mat-raised-button color="warn" type="button" (click)="limpar(f)">
-          <mat-icon>clear_all</mat-icon>
-          Limpar
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
 </div>

@@ -1,4 +1,3 @@
-/* Validação de formulário */
 .form-control.ng-invalid.ng-touched {
   border-color: #dc3545;
   box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
@@ -8,7 +7,6 @@
   display: block;
 }
 
-/* Tabela de contatos */
 .table th {
   font-weight: 600;
   text-transform: uppercase;
@@ -16,7 +14,6 @@
   color: #404C51;
 }
 
-/* Ajustes responsivos */
 @media (max-width: 768px) {
   .d-flex.flex-column.flex-md-row {
     flex-direction: column !important;
@@ -32,16 +29,14 @@
   }
 }
 
-/* Loading states */
 .btn:disabled {
   cursor: not-allowed;
   opacity: 0.65;
 }
 
-/* Diminui o tamanho dos mat-select do Estado e Cidade */
 .bootstrap-size .mat-mdc-form-field {
-  --mdc-outlined-text-field-container-height: 36px; /* altura menor */
-  font-size: 0.9rem; /* fonte menor */
+  --mdc-outlined-text-field-container-height: 36px;
+  font-size: 0.9rem;
 }
 
 .bootstrap-size .mat-mdc-select-value-text {

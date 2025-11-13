@@ -1,192 +1,176 @@
-<div class="container">
-  <form [formGroup]="formPessoa" autocomplete="off" (ngSubmit)="salvar()">
-    <div class="mat-grid">
-      <div class="mat-grid-item">
-        <h1>{{ editando ? 'Edição de ' : 'Nova' }} Pessoa</h1>
-      </div>
-    </div>
-
-    <div class="linha" style="display: flex; gap: 16px;">
-      <div style="flex: 1; display: flex; flex-direction: column;">
-        <mat-form-field appearance="outline" class="campo-grande">
-          <mat-label>Nome</mat-label>
-          <input matInput type="text" formControlName="nome" />
-          <mat-error
-            *ngIf="formPessoa.get('nome')?.hasError('required') && !formPessoa.get('nome')?.hasError('tamanhoMinimo')">
-            Informe o nome
-          </mat-error>
-          <mat-error *ngIf="formPessoa.get('nome')?.hasError('tamanhoMinimo')">
-            Mínimo de {{ formPessoa.get('nome')?.errors?.['tamanhoMinimo']?.tamanho }} caracteres
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="linha" style="display: flex; gap: 16px;" formGroupName="endereco">
-      <div style="flex: 3; display: flex; flex-direction: column;">
-        <mat-form-field appearance="outline" class="campo-grande">
-          <mat-label>Logradouro</mat-label>
-          <input matInput type="text" formControlName="logradouro" />
-          <mat-error *ngIf="formPessoa.get('endereco')?.get('logradouro')?.hasError('required')">
-            Informe o logradouro
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <div style="flex: 1; min-width: 150px; display: flex; flex-direction: column;">
-        <mat-form-field appearance="outline" class="campo-pequeno">
-          <mat-label>Número</mat-label>
-          <input matInput type="text" formControlName="numero" />
-          <mat-error *ngIf="formPessoa.get('endereco.numero')?.hasError('required')">
-            Informe o número
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="linha" style="display: flex; gap: 16px;" formGroupName="endereco">
-      <div style="flex: 1; display: flex; flex-direction: column;">
-        <mat-form-field appearance="outline" class="campo-medio">
-          <mat-label>Complemento</mat-label>
-          <input matInput formControlName="complemento" />
-        </mat-form-field>
-      </div>
-
-      <div style="flex: 1; display: flex; flex-direction: column;">
-        <mat-form-field appearance="outline" class="campo-medio">
-          <mat-label>Bairro</mat-label>
-          <input matInput formControlName="bairro" />
-          <mat-error *ngIf="formPessoa.get('endereco.bairro')?.hasError('required')">
-            Informe o bairro
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <div style="flex: 1; display: flex; flex-direction: column;">
-        <mat-form-field appearance="outline" class="campo-medio">
-          <mat-label>CEP</mat-label>
-          <input matInput mask="00000-000" placeholder="00000-000" formControlName="cep" />
-          <mat-error *ngIf="formPessoa.get('endereco.cep')?.hasError('required')">
-            Informe o CEP
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="linha" style="display: flex; gap: 16px;" formGroupName="endereco">
-      <div style="flex: 1; display: flex; flex-direction: column;">
-        <mat-form-field appearance="outline" class="campo-medio pessoa-field">
-          <mat-label>Estado</mat-label>
-          <mat-select #selectEstado formControlName="estado" (selectionChange)="carregarCidades($event.value)">
-            <mat-option [disabled]="true" class="estado-option-filtro">
-              <div class="filtro-container" (click)="$event.stopPropagation()">
-                <div class="filtro-box">
-                  <mat-icon class="filtro-icon">search</mat-icon>
-                  <input #inputFiltroEstado placeholder="Filtrar..." [formControl]="filtroEstadoCtrl" (click)="$event.stopPropagation()"
-                    (keydown)="$event.stopPropagation()" class="filtro-input" />
-                </div>
+<div class="min-vh-100 bg-light pt-5">
+  <div class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-12 col-xl-10">
+        <div class="card shadow-lg border-0 rounded-3">
+          <div class="card-header bg-primary text-white py-3 rounded-top">
+            <div class="row align-items-center">
+              <div class="col">
+                <h1 class="h3 mb-0 fw-bold">
+                  <i class="bi bi-person me-2"></i>
+                  {{ editando ? 'Edição de Pessoa' : 'Nova Pessoa' }}
+                </h1>
               </div>
-            </mat-option>
-            <mat-option *ngFor="let estado of estadosFiltrados" [value]="estado.value">
-              {{ estado.label }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <div style="flex: 1; display: flex; flex-direction: column;">
-        <mat-form-field appearance="outline" class="campo-medio pessoa-field">
-          <mat-label>Cidade</mat-label>
-          <mat-select #selectCidade formControlName="cidade" [disabled]="!cidades.length">
-
-            <mat-option [disabled]="true" class="estado-option-filtro">
-              <div class="filtro-container" (click)="$event.stopPropagation()">
-                <div class="filtro-box">
-                  <mat-icon class="filtro-icon">search</mat-icon>
-                  <input #inputFiltroCidade placeholder="Filtrar..." [formControl]="filtroCidadeCtrl" (click)="$event.stopPropagation()"
-                    (keydown)="$event.stopPropagation()" class="filtro-input" />
-                </div>
-              </div>
-            </mat-option>
-
-            <mat-option *ngFor="let cidade of cidadesFiltradas" [value]="cidade.codigo">
-              {{ cidade.nome }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="contatos-tabela mat-elevation-z2">
-      <div class="contatos-titulo">Contatos</div>
-
-      <div class="botao-novo-contato">
-        <button mat-stroked-button class="botao-secundario" type="button" (click)="prepararNovoContato()">
-          <mat-icon>add</mat-icon>
-          Novo Contato
-        </button>
-      </div>
-
-      <table mat-table [dataSource]="fonteDados" class="mat-elevation-z8 mat-table" matSort>
-
-        <ng-container matColumnDef="nome">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Nome </th>
-          <td mat-cell *matCellDef="let contato" translate="no"> {{ contato.nome }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> E-mail </th>
-          <td mat-cell *matCellDef="let contato" translate="no"> {{ contato.email }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="telefone">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Telefone </th>
-          <td mat-cell *matCellDef="let contato" translate="no"> {{ contato.telefone }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="acoes">
-          <th mat-header-cell *matHeaderCellDef class="col-acoes"> Ações </th>
-          <td mat-cell *matCellDef="let contato; let i = index" translate="no">
-            <div class="acoes-container">
-              <button mat-icon-button color="primary" type="button" matTooltip="Editar" class="botao-acao"
-                (click)="editarContato(i)">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button color="warn" type="button" matTooltip="Excluir" class="botao-acao"
-                (click)="excluirContato(i)">
-                <mat-icon>delete</mat-icon>
-              </button>
             </div>
-          </td>
-        </ng-container>
+          </div>
 
-        <tr mat-header-row *matHeaderRowDef="colunasExibidas" class="mat-header"></tr>
-        <tr mat-row *matRowDef="let row; columns: colunasExibidas;" class="mat-row"></tr>
+          <div class="card-body p-4">
+            <form [formGroup]="formPessoa" autocomplete="off" (ngSubmit)="salvar()">
 
-      </table>
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Nome</label>
+                <input type="text" class="form-control" formControlName="nome"
+                  [ngClass]="{'is-invalid': formPessoa.get('nome')?.invalid && formPessoa.get('nome')?.touched}">
+                <div class="invalid-feedback"
+                  *ngIf="formPessoa.get('nome')?.hasError('required') && formPessoa.get('nome')?.touched">
+                  Informe o nome
+                </div>
+                <div class="invalid-feedback"
+                  *ngIf="formPessoa.get('nome')?.hasError('tamanhoMinimo') && formPessoa.get('nome')?.touched">
+                  Mínimo de {{ formPessoa.get('nome')?.errors?.['tamanhoMinimo']?.tamanho }} caracteres
+                </div>
+              </div>
 
-      <div *ngIf="editando && fonteDados.data.length === 0" class="mensagem-sem-resultados">
-        Nenhum contato encontrado.
-      </div>
-      <div *ngIf="!editando && fonteDados.data.length === 0" class="mensagem-sem-resultados">
-        Nenhum contato adicionado ainda. Use o botão acima para incluir os contatos desta pessoa.
+              <div formGroupName="endereco">
+                <div class="row g-3 mb-3">
+                  <div class="col-md-8">
+                    <label class="form-label fw-semibold">Logradouro</label>
+                    <input type="text" class="form-control" formControlName="logradouro"
+                      [ngClass]="{'is-invalid': formPessoa.get('endereco.logradouro')?.invalid && formPessoa.get('endereco.logradouro')?.touched}">
+                    <div class="invalid-feedback"
+                      *ngIf="formPessoa.get('endereco.logradouro')?.hasError('required') && formPessoa.get('endereco.logradouro')?.touched">
+                      Informe o logradouro
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label class="form-label fw-semibold">Número</label>
+                    <input type="text" class="form-control" formControlName="numero"
+                      [ngClass]="{'is-invalid': formPessoa.get('endereco.numero')?.invalid && formPessoa.get('endereco.numero')?.touched}">
+                    <div class="invalid-feedback"
+                      *ngIf="formPessoa.get('endereco.numero')?.hasError('required') && formPessoa.get('endereco.numero')?.touched">
+                      Informe o número
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+                  <div class="col-md-4">
+                    <label class="form-label fw-semibold">Complemento</label>
+                    <input type="text" class="form-control" formControlName="complemento">
+                  </div>
+
+                  <div class="col-md-4">
+                    <label class="form-label fw-semibold">Bairro</label>
+                    <input type="text" class="form-control" formControlName="bairro"
+                      [ngClass]="{'is-invalid': formPessoa.get('endereco.bairro')?.invalid && formPessoa.get('endereco.bairro')?.touched}">
+                    <div class="invalid-feedback"
+                      *ngIf="formPessoa.get('endereco.bairro')?.hasError('required') && formPessoa.get('endereco.bairro')?.touched">
+                      Informe o bairro
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label class="form-label fw-semibold">CEP</label>
+                    <input type="text" class="form-control" formControlName="cep" placeholder="00000-000"
+                      mask="00000-000"
+                      [ngClass]="{'is-invalid': formPessoa.get('endereco.cep')?.invalid && formPessoa.get('endereco.cep')?.touched}">
+                    <div class="invalid-feedback"
+                      *ngIf="formPessoa.get('endereco.cep')?.hasError('required') && formPessoa.get('endereco.cep')?.touched">
+                      Informe o CEP
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold">Estado</label>
+                    <mat-form-field appearance="outline" class="w-100 bootstrap-size">
+                      <mat-select formControlName="estado" (selectionChange)="carregarCidades($event.value)">
+                        <mat-option *ngFor="let estado of estadosFiltrados" [value]="estado.value">
+                          {{ estado.label }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold">Cidade</label>
+                    <mat-form-field appearance="outline" class="w-100 bootstrap-size">
+                      <mat-select formControlName="cidade">
+                        <mat-option *ngFor="let cidade of cidadesFiltradas" [value]="cidade.codigo">
+                          {{ cidade.nome }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="mb-0 fw-bold text-primary">Contatos</h5>
+                  <button type="button" class="btn btn-outline-primary btn-sm" (click)="prepararNovoContato()">
+                    <i class="bi bi-plus-circle me-1"></i>Novo Contato
+                  </button>
+                </div>
+
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover align-middle">
+                    <thead class="table-light">
+                      <tr>
+                        <th class="text-left">Nome</th>
+                        <th class="text-left">E-mail</th>
+                        <th class="text-center">Telefone</th>
+                        <th class="text-center" style="width: 120px;">Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let contato of fonteDados.data; let i = index">
+                        <td class="text-left">{{ contato.nome }}</td>
+                        <td class="text-left">{{ contato.email }}</td>
+                        <td class="text-center">{{ contato.telefone }}</td>
+                        <td class="text-center">
+                          <div class="d-flex gap-2 justify-content-center">
+                            <button type="button" class="btn btn-outline-primary btn-sm" (click)="editarContato(i)"
+                              title="Editar">
+                              <i class="bi bi-pencil"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm" (click)="excluirContato(i)"
+                              title="Excluir">
+                              <i class="bi bi-trash"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <tr *ngIf="fonteDados.data.length === 0">
+                        <td colspan="4" class="text-center text-muted py-4">
+                          <i class="bi bi-inbox display-6 d-block mb-2"></i>
+                          {{ editando ? 'Nenhum contato encontrado.' : 'Nenhum contato adicionado ainda. Use o botão
+                          acima para incluir.' }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="d-flex gap-2 flex-column flex-md-row mt-4 border-top pt-4">
+                <button class="btn btn-primary" type="submit" [disabled]="formPessoa.invalid">
+                  <i class="bi bi-save me-2"></i>Salvar
+                </button>
+                <button class="btn btn-outline-secondary" type="button" (click)="novo()">
+                  <i class="bi bi-plus-circle me-2"></i>Novo
+                </button>
+                <a class="btn btn-outline-danger ms-auto" routerLink="/pessoas">
+                  <i class="bi bi-arrow-left me-2"></i>Voltar
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="linha linha-botoes acoes-formulario"
-      style="margin-top: 16px; display: flex; gap: 16px; align-items: center;">
-      <button mat-raised-button color="primary" [disabled]="formPessoa.invalid">
-        <mat-icon>save</mat-icon>
-        Salvar
-      </button>
-      <button mat-raised-button color="accent" type="button" (click)="novo()">
-        <mat-icon>add_circle</mat-icon>
-        Novo
-      </button>
-      <a mat-raised-button class="btn-voltar-vermelho" routerLink="/pessoas">
-        <mat-icon>arrow_back</mat-icon>
-        Voltar
-      </a>
-    </div>
-  </form>
+  </div>
 </div>

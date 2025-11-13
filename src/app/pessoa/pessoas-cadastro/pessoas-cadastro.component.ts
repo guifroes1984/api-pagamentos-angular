@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -18,7 +18,8 @@ import { MatSelect } from '@angular/material/select';
 @Component({
   selector: 'app-pessoas-cadastro',
   templateUrl: './pessoas-cadastro.component.html',
-  styleUrls: ['./pessoas-cadastro.component.css']
+  styleUrls: ['./pessoas-cadastro.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class PessoasCadastroComponent implements OnInit, AfterViewInit {
 
@@ -386,11 +387,7 @@ export class PessoasCadastroComponent implements OnInit, AfterViewInit {
     this.formPessoa.markAsPristine();
     this.dadosOriginais = this.formPessoa.getRawValue();
 
-    if (pessoa) {
-      this.router.navigate(['/pessoas', pessoa.codigo]);
-    } else {
-      this.atualizarTituloEdicao();
-    }
+    this.router.navigate(['/pessoas']);
   }
 
   get editando(): boolean {

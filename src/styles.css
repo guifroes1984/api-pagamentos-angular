@@ -59,3 +59,59 @@ label {
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(2px);
 }
+
+/* Ajuste para mat-form-field com classe bootstrap-size */
+.bootstrap-size .mat-form-field-wrapper {
+  padding-bottom: 0 !important;
+}
+
+.bootstrap-size .mat-form-field-flex {
+  height: 38px !important;
+  min-height: 38px !important;
+  align-items: center !important;
+  margin-top: 0 !important;
+}
+
+.bootstrap-size .mat-form-field-infix {
+  padding: 8px 0 !important;
+  border-top: 0.5em solid transparent !important;
+}
+
+.bootstrap-size .mat-form-field-outline {
+  top: 0 !important;
+}
+
+.bootstrap-size .mat-form-field-outline-start,
+.bootstrap-size .mat-form-field-outline-gap,
+.bootstrap-size .mat-form-field-outline-end {
+  border-color: #dee2e6 !important;
+  border-width: 1px !important;
+}
+
+/* Foco */
+.bootstrap-size.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: #0d6efd !important;
+}
+
+.bootstrap-size.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-start,
+.bootstrap-size.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-gap,
+.bootstrap-size.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-end {
+  border-color: #0d6efd !important;
+  border-width: 1px !important;
+}
+
+/* Texto */
+.bootstrap-size .mat-select-value-text {
+  line-height: 1.5 !important;
+  font-size: 1rem !important;
+}
+
+/* Label */
+.bootstrap-size .mat-form-field-label {
+  top: 50% !important;
+  margin-top: -9px !important;
+}
+
+.bootstrap-size.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+  transform: translateY(-1.5em) scale(0.75) !important;
+}

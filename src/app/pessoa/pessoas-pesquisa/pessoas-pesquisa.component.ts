@@ -1,9 +1,9 @@
-import { Component, ErrorHandler, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+
 import { PessoaService } from '../pessoa.service';
 import { NomeFiltro } from 'src/app/core/model/nome-filtro';
-
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
@@ -16,33 +16,29 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./pessoas-pesquisa.component.css']
 })
 export class PessoasPesquisaComponent implements OnInit {
-  fonteDados = new MatTableDataSource<any>();
-  colunasExibidas: string[] = ['pessoa', 'cidade', 'estado', 'status', 'acoes'];
-
+  pessoas: any[] = [];
   totalRegistros = 0;
-  itensPorPagina = 5;
-  paginaAtual = 0;
+  totalPaginas = 0;
 
   filtro = new NomeFiltro();
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private pessoaService: PessoaService,
     private toastr: ToastrService,
     private dialog: MatDialog,
     private errorHandler: ErrorHandlerService,
-    private title: Title
-  ) {}
+    private title: Title,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.title.setTitle('Pesquisa de pessoas');
-    this.pesquisar();
+    this.filtro.pagina = 0;
+    this.pesquisar(0);
   }
 
   public pesquisar(pagina: number = 0): void {
     this.filtro.pagina = pagina;
-    this.filtro.itensPorPagina = this.itensPorPagina;
 
     this.pessoaService.pesquisar(this.filtro)
       .then(resultado => this.atualizarTabela(resultado))
@@ -50,30 +46,21 @@ export class PessoasPesquisaComponent implements OnInit {
   }
 
   private atualizarTabela(resultado: any): void {
-    this.fonteDados.data = resultado.content;
+    this.pessoas = JSON.parse(JSON.stringify(resultado.content));
     this.totalRegistros = resultado.totalElements;
-    this.paginaAtual = resultado.number;
+    this.totalPaginas = resultado.totalPages;
+  }
 
-    if (this.paginator) {
-      this.paginator.pageIndex = this.paginaAtual;
+  public mudarPagina(pagina: number): void {
+    if (pagina >= 0 && pagina < this.totalPaginas) {
+      this.filtro.pagina = pagina;
+      this.pesquisar(pagina);
     }
-  }
-
-  public habilitarPaginacao(): boolean {
-    return this.totalRegistros > this.itensPorPagina;
-  }
-
-  public onPaginar(event: PageEvent): void {
-    this.itensPorPagina = event.pageSize;
-    this.paginaAtual = event.pageIndex;
-    this.pesquisar(this.paginaAtual);
   }
 
   public limpar(): void {
     this.filtro = new NomeFiltro();
-    this.itensPorPagina = 5;
-    this.paginaAtual = 0;
-    this.fonteDados.data = [];
+    this.pessoas = [];
     this.pesquisar();
   }
 
@@ -84,7 +71,7 @@ export class PessoasPesquisaComponent implements OnInit {
       hasBackdrop: true,
       data: {
         titulo: 'Confirmação de exclusão',
-        mensagem: 'Tem certeza que deseja excluir esse item?'
+        mensagem: 'Tem certeza que deseja excluir essa pessoa?'
       }
     });
 
@@ -94,7 +81,7 @@ export class PessoasPesquisaComponent implements OnInit {
       this.pessoaService.excluir(codigo)
         .then(() => {
           this.toastr.success('Pessoa excluída com sucesso!');
-          this.pesquisar(this.paginaAtual);
+          this.pesquisar(this.filtro.pagina);
         })
         .catch(erro => this.errorHandler.handle(erro));
     });

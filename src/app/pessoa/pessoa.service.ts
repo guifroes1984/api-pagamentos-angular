@@ -104,16 +104,11 @@ export class PessoaService {
   }
 
   public listarCidadesPorEstado(codigoEstado: number): Promise<Cidade[]> {
-    const params = { estado: codigoEstado.toString() };
+  const params = new HttpParams().set('estado', codigoEstado.toString());
 
-    return firstValueFrom(
-      this.http.get<Cidade[]>(`${environment.apiUrl}/cidades`, { params })
-    ).then(cidades => {
-      return cidades.map(cidade => ({
-        ...cidade,
-        estado: cidade.estado ?? undefined
-      }));
-    });
-  }
+  return firstValueFrom(
+    this.http.get<Cidade[]>(`${environment.apiUrl}/cidades`, { params })
+  ).then(cidades => cidades || []);
+}
 
 }

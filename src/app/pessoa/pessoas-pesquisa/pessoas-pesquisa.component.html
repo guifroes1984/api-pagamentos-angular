@@ -1,100 +1,144 @@
-<div class="container">
-  <div class="mat-grid">
-    <div class="mat-grid-item">
-      <h1>Pessoas</h1>
-    </div>
-  </div>
-
-  <div class="mat-grid" style="display: flex; justify-content: space-between; align-items: center;">
-    <div class="mat-grid-item" style="flex-grow: 1; margin-right: 10px;">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Nome</mat-label>
-        <input matInput type="text" name="nome" [(ngModel)]="filtro.nome" (keydown.enter)="pesquisar()">
-      </mat-form-field>
-    </div>
-
-    <div class="mat-grid-item" style="flex-shrink: 0;">
-      <button mat-raised-button color="primary" style="margin-right: 10px;" (click)="pesquisar()">
-        <mat-icon>search</mat-icon>
-        Pesquisar
-      </button>
-      <button mat-raised-button color="warn" type="button" (click)="limpar()">
-        <mat-icon>clear_all</mat-icon>
-        Limpar
-      </button>
-    </div>
-  </div>
-
-  <div class="mat-grid" style="margin-top: 20px;">
-    <div class="mat-grid-item">
-      <table mat-table [dataSource]="fonteDados" class="mat-elevation-z8" matSort>
-        <ng-container matColumnDef="pessoa">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-left"> Nome </th>
-          <td mat-cell *matCellDef="let pessoa"> {{ pessoa.nome }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="cidade">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Cidade </th>
-          <td mat-cell *matCellDef="let pessoa" class="text-center"> {{ pessoa.endereco.cidade?.nome }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="estado">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
-          <td mat-cell *matCellDef="let pessoa"> {{ pessoa.endereco.cidade?.estado.nome }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-          <td mat-cell *matCellDef="let pes">
-            <label class="interruptor">
-              <input type="checkbox" [checked]="pes.ativo" (change)="alterarStatus(pes)">
-              <span class="slider"></span>
-            </label>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="acoes">
-          <th mat-header-cell *matHeaderCellDef class="col-acoes"> Ações </th>
-          <td mat-cell *matCellDef="let pessoa">
-            <div class="acoes-container">
-              <button mat-icon-button color="primary" aria-label="Editar" class="botao-acao" matTooltip="Editar"
-                [routerLink]="['/pessoas', pessoa.codigo]">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button color="warn" aria-label="Excluir" class="botao-acao" matTooltip="Excluir"
-                (click)="excluir(pessoa.codigo)">
-                <mat-icon>delete</mat-icon>
-              </button>
+<div class="min-vh-100 bg-light pt-5">
+  <div class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-12 col-xl-10">
+        <div class="card shadow-lg border-0 rounded-3">
+          <div class="card-header bg-primary text-white py-3 rounded-top">
+            <div class="row align-items-center">
+              <div class="col">
+                <h1 class="h3 mb-0 fw-bold">
+                  <i class="bi bi-people me-2"></i>
+                  Pessoas
+                </h1>
+              </div>
             </div>
-          </td>
-        </ng-container>
+          </div>
 
-        <tr mat-header-row *matHeaderRowDef="colunasExibidas" class="mat-header"></tr>
-        <tr mat-row *matRowDef="let row; columns: colunasExibidas;" class="mat-row"></tr>
-      </table>
-    </div>
+          <div class="card-body p-4">
+            <div class="row mb-4">
+              <div class="col-12">
+                <label class="form-label fw-semibold">Nome</label>
+                <div class="d-flex flex-column flex-md-row gap-2">
+                  <input type="text" class="form-control" placeholder="Digite o nome para pesquisar"
+                    [(ngModel)]="filtro.nome" (keydown.enter)="pesquisar()" name="nome">
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-primary btn-rounded" type="button" (click)="pesquisar()">
+                      <i class="bi bi-search me-2"></i>
+                      Pesquisar
+                    </button>
+                    <button class="btn btn-outline-danger" type="button" (click)="limpar()">
+                      <i class="bi bi-x-circle me-1"></i>
+                      Limpar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover table-striped">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col" class="text-left">Nome</th>
+                    <th scope="col" class="text-center">Cidade</th>
+                    <th scope="col" class="text-center">Estado</th>
+                    <th scope="col" class="text-center">Status</th>
+                    <th scope="col" class="text-center">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let pessoa of pessoas">
+                    <td class="text-left">{{ pessoa.nome }}</td>
+                    <td class="text-center">{{ pessoa.endereco?.cidade?.nome || '-' }}</td>
+                    <td class="text-center">{{ pessoa.endereco?.cidade?.estado?.nome || '-' }}</td>
+                    <td class="text-center">
+                      <div class="form-check form-switch d-inline-block">
+                        <input class="form-check-input" type="checkbox" role="switch" [checked]="pessoa.ativo"
+                          (change)="alterarStatus(pessoa)" [id]="'status-' + pessoa.codigo">
+                        <label class="form-check-label" [for]="'status-' + pessoa.codigo">
+                          <span class="small">{{ pessoa.ativo ? 'Ativo' : 'Inativo' }}</span>
+                        </label>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <div class="d-flex gap-2 justify-content-center">
+                        <button type="button" class="btn btn-outline-primary btn-sm"
+                          [routerLink]="['/pessoas', pessoa.codigo]" title="Editar">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-danger btn-sm" (click)="excluir(pessoa.codigo)"
+                          title="Excluir">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="pessoas.length === 0" class="text-center py-4 text-muted">
+              <i class="bi bi-inbox display-4 d-block mb-2"></i>
+              Nenhum resultado encontrado.
+            </div>
+            <div class="row mt-4" *ngIf="totalRegistros > 0">
+              <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="text-muted small">
+                    Mostrando {{ pessoas.length }} de {{ totalRegistros }} registros
+                  </div>
+                  <div class="d-flex gap-2 align-items-center">
+                    <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="filtro.itensPorPagina"
+                      (change)="pesquisar()">
+                      <option [value]="5">5 por página</option>
+                      <option [value]="10">10 por página</option>
+                      <option [value]="15">15 por página</option>
+                    </select>
 
-    <div class="mensagem-sem-resultados" *ngIf="fonteDados.data.length === 0">
-      <mat-card>
-        <mat-card-content>
-          <p>Nenhum resultado encontrado.</p>
-        </mat-card-content>
-      </mat-card>
-    </div>
+                    <nav>
+                      <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item" [class.disabled]="filtro.pagina === 0">
+                          <button class="page-link" (click)="mudarPagina(0)" title="Primeira página">
+                            <i class="bi bi-chevron-double-left"></i>
+                          </button>
+                        </li>
+                        <li class="page-item" [class.disabled]="filtro.pagina === 0">
+                          <button class="page-link" (click)="mudarPagina(filtro.pagina - 1)" title="Página anterior">
+                            <i class="bi bi-chevron-left"></i>
+                          </button>
+                        </li>
 
-    <mat-paginator [length]="totalRegistros" [pageSize]="filtro.itensPorPagina" [pageSizeOptions]="[5, 10, 15]"
-      [disabled]="!habilitarPaginacao()" showFirstLastButtons="true" (page)="onPaginar($event)">
-    </mat-paginator>
+                        <li class="page-item disabled">
+                          <span class="page-link">
+                            Página {{ filtro.pagina + 1 }} de {{ totalPaginas }}
+                          </span>
+                        </li>
 
-    <div class="mat-grid-item" style="margin-top: 20px;">
-      <button mat-raised-button color="primary" routerLink="/pessoas/novo">
-        <mat-icon>person_add</mat-icon>
-        Nova Pessoa
-      </button>
+                        <li class="page-item" [class.disabled]="filtro.pagina >= totalPaginas - 1">
+                          <button class="page-link" (click)="mudarPagina(filtro.pagina + 1)" title="Próxima página">
+                            <i class="bi bi-chevron-right"></i>
+                          </button>
+                        </li>
+                        <li class="page-item" [class.disabled]="filtro.pagina >= totalPaginas - 1">
+                          <button class="page-link" (click)="mudarPagina(totalPaginas - 1)" title="Última página">
+                            <i class="bi bi-chevron-double-right"></i>
+                          </button>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-12">
+                <button class="btn btn-primary" routerLink="/pessoas/novo">
+                  <i class="bi bi-person-plus me-2"></i>
+                  Nova Pessoa
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
-<!-- <body>
-  <input type="checkbox" class="interruptor">
-</body> -->

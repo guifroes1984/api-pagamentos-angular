@@ -14,6 +14,11 @@ export class ConfirmDialogComponent {
     public data: any
   ) {}
 
+  extractContactName(mensagem: string): string {
+    const parts = mensagem.split(':');
+    return parts.length > 1 ? parts[1].replace('?', '').trim() : '';
+  }
+
   confirmar(): void {
     this.dialogRef.close(true);
   }
@@ -21,5 +26,4 @@ export class ConfirmDialogComponent {
   cancelar(): void {
     this.dialogRef.close(false);
   }
-
 }

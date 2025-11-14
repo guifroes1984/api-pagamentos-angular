@@ -22,7 +22,7 @@ export class PendenciasGuard implements CanDeactivate<IFormComPendencias> {
         if (component.podeDesativar()) return true;
 
         const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-            width: '450px',
+            width: '400px',
             disableClose: true, 
             hasBackdrop: true, 
             panelClass: 'custom-dialog-container',

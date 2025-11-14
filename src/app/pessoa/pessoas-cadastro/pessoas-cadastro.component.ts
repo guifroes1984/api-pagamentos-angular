@@ -257,12 +257,15 @@ export class PessoasCadastroComponent implements OnInit, AfterViewInit {
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
+      maxWidth: '95vw',
+      panelClass: 'no-scroll-dialog',
       disableClose: true,
+      hasBackdrop: true,
       data: {
-        titulo: 'Confirmação',
+        titulo: 'Excluir Contato',
         mensagem: `Deseja realmente excluir o contato: ${contatoNome}?`,
         textoConfirmar: 'Excluir',
-        corConfirmar: 'warn'
+        cancelarLabel: 'Cancelar'
       }
     });
 

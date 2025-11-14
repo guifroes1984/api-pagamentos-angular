@@ -1,22 +1,44 @@
 <div class="dialog-container">
-  <h2 mat-dialog-title class="dialog-title">
-    <mat-icon color="warn" class="alert-icon">warning</mat-icon>
-    {{ data.titulo || 'Confirmação' }}
-  </h2>
+  <div class="dialog-header bg-primary text-white py-3 rounded-top">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="h5 mb-0 fw-bold">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          {{ data.titulo || 'Confirmação' }}
+        </h1>
+      </div>
+      <div class="col-auto">
+        <button type="button" class="btn-close btn-close-white" (click)="cancelar()" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
 
-  <mat-dialog-content class="dialog-content">
-    {{ data.mensagem }}
-  </mat-dialog-content>
+  <div class="dialog-body p-4">
+    <div class="confirmation-content">
+      <div class="alert-icon text-center mb-3">
+        <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 2.5rem;"></i>
+      </div>
+      
+      <p class="confirmation-message text-center mb-3">
+        {{ data.mensagem }}
+      </p>
 
-  <mat-dialog-actions align="end" class="dialog-actions">
-    <button mat-raised-button color="primary" (click)="cancelar()">
-      <mat-icon>close</mat-icon>&nbsp;
-      {{ data.cancelarLabel || 'Cancelar' }}
-    </button>
+      <div class="contact-highlight bg-light rounded p-2 mb-3 text-center" *ngIf="data.mensagem.includes('contato')">
+        <strong class="text-danger d-block fs-6">{{ extractContactName(data.mensagem) }}</strong>
+        <small class="text-muted">Será excluído permanentemente</small>
+      </div>
+    </div>
 
-    <button mat-raised-button color="warn" (click)="confirmar()">
-      <mat-icon>check</mat-icon>&nbsp;
-      {{ data.confirmarLabel || 'Confirmar' }}
-    </button>
-  </mat-dialog-actions>
+    <div class="d-flex gap-2 flex-column flex-sm-row border-top pt-3 justify-content-center">
+      <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cancelar()">
+        <i class="bi bi-x-circle me-1"></i>
+        {{ data.cancelarLabel || 'Cancelar' }}
+      </button>
+      
+      <button type="button" class="btn btn-danger btn-sm" (click)="confirmar()">
+        <i class="bi bi-trash me-1"></i>
+        {{ data.textoConfirmar || 'Confirmar' }}
+      </button>
+    </div>
+  </div>
 </div>

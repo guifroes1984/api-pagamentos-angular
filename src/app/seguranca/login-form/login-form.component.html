@@ -1,53 +1,98 @@
-<div class="login-container mat-elevation-z8">
-  <form [formGroup]="formLogin" (ngSubmit)="login()" autocomplete="off">
+<div class="min-vh-100 bg-light d-flex align-items-center justify-content-center py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card shadow-lg border-0 rounded-3">
+          <div class="card-header bg-primary text-white py-4 rounded-top">
+            <div class="text-center">
+              <h1 class="h3 mb-0 fw-bold">
+                <i class="bi bi-person-circle me-2"></i>
+                Login
+              </h1>
+              <p class="mb-0 mt-2 opacity-75">Acesse sua conta</p>
+            </div>
+          </div>
 
-    <h1 class="login-title">Login</h1>
-
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>E-mail</mat-label>
-      <input matInput type="email" formControlName="usuario" placeholder="Digite seu e-mail">
-      <mat-error *ngIf="formLogin.get('usuario')?.invalid">E-mail obrigatório</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Senha</mat-label>
-      <input matInput type="password" formControlName="senha" placeholder="Digite sua senha">
-      <mat-error *ngIf="formLogin.get('senha')?.invalid">Senha obrigatória</mat-error>
-    </mat-form-field>
-
-    <button mat-flat-button color="primary" class="full-width" type="submit" [disabled]="formLogin.invalid || loading">
-      Entrar
-    </button>
-
-    <div class="login-footer">
-      <div class="left">
-        <a routerLink="/login/recuperar-senha">Esqueci minha senha</a>
-      </div>
-      <div class="right">
-        <span>Ainda não tem uma conta?</span>
-        <a routerLink="/login/cadastro-usuario">Cadastre-se</a>
+          <div class="card-body p-4 p-md-5">
+            <form [formGroup]="formLogin" (ngSubmit)="login()" autocomplete="off">
+              <div class="mb-3">
+                <label class="form-label fw-semibold">E-mail</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-envelope"></i>
+                  </span>
+                  <input type="email" class="form-control" formControlName="usuario" 
+                         placeholder="Digite seu e-mail"
+                         [class.is-invalid]="formLogin.get('usuario')?.invalid && formLogin.get('usuario')?.touched">
+                </div>
+                <div class="invalid-feedback d-block" 
+                     *ngIf="formLogin.get('usuario')?.hasError('required') && formLogin.get('usuario')?.touched">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                  E-mail obrigatório
+                </div>
+                <div class="invalid-feedback d-block" 
+                     *ngIf="formLogin.get('usuario')?.hasError('email') && formLogin.get('usuario')?.touched">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                  Informe um e-mail válido
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Senha</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock"></i>
+                  </span>
+                  <input type="password" class="form-control" formControlName="senha" 
+                         placeholder="Digite sua senha"
+                         [class.is-invalid]="formLogin.get('senha')?.invalid && formLogin.get('senha')?.touched">
+                </div>
+                <div class="invalid-feedback d-block" *ngIf="formLogin.get('senha')?.invalid && formLogin.get('senha')?.touched">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                  Senha obrigatória
+                </div>
+              </div>
+              <button class="btn btn-primary w-100 py-2 fw-semibold" type="submit" 
+                      [disabled]="formLogin.invalid || loading">
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+                {{ loading ? 'Entrando...' : 'Entrar' }}
+                <span *ngIf="loading" class="spinner-border spinner-border-sm ms-2"></span>
+              </button>
+              <div class="row mt-4 pt-3 border-top">
+                <div class="col-12 col-sm-6 mb-2 mb-sm-0">
+                  <a routerLink="/login/recuperar-senha" class="btn btn-link text-muted p-0 btn-sm text-decoration-none">
+                    <i class="bi bi-key me-1"></i>
+                    Esqueci minha senha
+                  </a>
+                </div>
+                <div class="col-12 col-sm-6 text-sm-end">
+                  <span class="text-muted me-1 small">Sem conta?</span>
+                  <a routerLink="/login/cadastro-usuario" class="btn btn-link p-0 btn-sm text-decoration-none">
+                    <i class="bi bi-person-plus me-1"></i>
+                    Cadastre-se
+                  </a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <footer class="text-center mt-5">
+          <div class="developer-info mb-3">
+            <span class="text-muted">© 2025 • Desenvolvido por Guilherme Froes ®</span>
+          </div>
+          
+          <div class="social-icons">
+            <a href="https://github.com/guifroes1984" target="_blank" class="text-decoration-none me-3" title="GitHub">
+              <i class="bi bi-github social-icon"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/guilherme-henrique-froes/" target="_blank" class="text-decoration-none me-3" title="LinkedIn">
+              <i class="bi bi-linkedin social-icon"></i>
+            </a>
+            <a href="mailto:guilhermefroes26@gmail.com" class="text-decoration-none" title="E-mail">
+              <i class="bi bi-envelope social-icon"></i>
+            </a>
+          </div>
+        </footer>
       </div>
     </div>
-
-    <div class="overlay" *ngIf="loading">
-      <mat-progress-spinner diameter="80" mode="indeterminate" color="primary"></mat-progress-spinner>
-    </div>
-  </form>
-</div>
-
-<footer class="login-bottom-bar">
-  <span class="developer">
-    © 2025 • Desenvolvido por Guilherme Froes ®
-  </span>
-  <div class="social-icons">
-    <a href="https://github.com/guifroes1984" target="_blank" title="GitHub">
-      <img src="assets/github-icon.svg" alt="GitHub" class="icon">
-    </a>
-    <a href="https://www.linkedin.com/in/guilherme-henrique-froes/" target="_blank" title="LinkedIn">
-      <img src="assets/linkedin-icon.svg" alt="LinkedIn" class="icon">
-    </a>
-    <a href="mailto:guilhermefroes26@gmail.com" title="E-mail">
-      <img src="assets/email-icon.svg" alt="E-mail" class="icon">
-    </a>
   </div>
-</footer>
+</div>

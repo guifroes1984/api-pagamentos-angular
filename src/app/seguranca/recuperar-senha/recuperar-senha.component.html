@@ -1,40 +1,102 @@
-<div class="login-container mat-elevation-z8">
-  <form *ngIf="!emailEnviado" [formGroup]="formRecuperar" (ngSubmit)="enviar()" autocomplete="off">
-    <h1 class="login-title">Recuperar Senha</h1>
+<div class="min-vh-100 bg-light d-flex align-items-center justify-content-center py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card shadow-lg border-0 rounded-3">
+          <div class="card-header bg-primary text-white py-4 rounded-top">
+            <div class="text-center">
+              <h1 class="h3 mb-0 fw-bold">
+                <i class="bi bi-key me-2"></i>
+                Recuperar Senha
+              </h1>
+              <p class="mb-0 mt-2 opacity-75">Redefina sua senha</p>
+            </div>
+          </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>E-mail</mat-label>
-      <input matInput type="email" formControlName="email" placeholder="Digite seu e-mail">
-      <mat-error *ngIf="formRecuperar.get('email')?.hasError('required') && formRecuperar.get('email')?.touched">
-        E-mail obrigatório
-      </mat-error>
-      <mat-error *ngIf="formRecuperar.get('email')?.hasError('email') && formRecuperar.get('email')?.touched">
-        E-mail inválido
-      </mat-error>
-    </mat-form-field>
+          <div class="card-body p-4 p-md-5">
+            <form *ngIf="!emailEnviado" [formGroup]="formRecuperar" (ngSubmit)="enviar()" autocomplete="off">
 
-    <button mat-flat-button color="primary" class="full-width" type="submit"
-      [disabled]="formRecuperar.invalid || loading">
-      Enviar instruções
-    </button>
+              <div class="mb-4">
+                <label class="form-label fw-semibold">E-mail</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-envelope"></i>
+                  </span>
+                  <input type="email" class="form-control" formControlName="email" 
+                         placeholder="Digite seu e-mail"
+                         [class.is-invalid]="formRecuperar.get('email')?.invalid && formRecuperar.get('email')?.touched">
+                </div>
+                <div class="invalid-feedback d-block" 
+                     *ngIf="formRecuperar.get('email')?.hasError('required') && formRecuperar.get('email')?.touched">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                  E-mail obrigatório
+                </div>
+                <div class="invalid-feedback d-block" 
+                     *ngIf="formRecuperar.get('email')?.hasError('email') && formRecuperar.get('email')?.touched">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                  E-mail inválido
+                </div>
+                <div class="form-text">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Enviaremos instruções para redefinir sua senha
+                </div>
+              </div>
 
-    <button mat-stroked-button color="accent" class="full-width" style="margin-top: 16px;" routerLink="/login">
-      <mat-icon>arrow_back</mat-icon>
-      Voltar
-    </button>
+              <button class="btn btn-primary w-100 py-2 fw-semibold mb-3" type="submit" 
+                      [disabled]="formRecuperar.invalid || loading">
+                <i class="bi bi-send me-2"></i>
+                {{ loading ? 'Enviando...' : 'Enviar Instruções' }}
+                <span *ngIf="loading" class="spinner-border spinner-border-sm ms-2"></span>
+              </button>
 
-    <div class="overlay" *ngIf="loading">
-      <mat-progress-spinner diameter="80" mode="indeterminate" color="primary"></mat-progress-spinner>
+              <button class="btn btn-outline-secondary w-100 py-2" type="button" routerLink="/login">
+                <i class="bi bi-arrow-left me-2"></i>
+                Voltar para Login
+              </button>
+            </form>
+
+            <div *ngIf="emailEnviado" class="text-center">
+              <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
+                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                <div>
+                  <strong>E-mail enviado com sucesso!</strong><br>
+                  <small>Verifique sua caixa de entrada</small>
+                </div>
+              </div>
+
+              <div class="confirmation-icon mb-4">
+                <i class="bi bi-envelope-check text-primary" style="font-size: 4rem;"></i>
+              </div>
+
+              <p class="text-muted mb-4">
+                Se o e-mail informado estiver cadastrado, você receberá as instruções para redefinir sua senha em alguns minutos.
+              </p>
+
+              <button class="btn btn-success w-100 py-2 fw-semibold" type="button" routerLink="/login">
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+                Voltar para Login
+              </button>
+            </div>
+          </div>
+        </div>
+        <footer class="text-center mt-5">
+          <div class="developer-info mb-3">
+            <span class="text-muted">© 2025 • Desenvolvido por Guilherme Froes ®</span>
+          </div>
+          
+          <div class="social-icons">
+            <a href="https://github.com/guifroes1984" target="_blank" class="text-decoration-none me-3" title="GitHub">
+              <i class="bi bi-github social-icon"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/guilherme-henrique-froes/" target="_blank" class="text-decoration-none me-3" title="LinkedIn">
+              <i class="bi bi-linkedin social-icon"></i>
+            </a>
+            <a href="mailto:guilhermefroes26@gmail.com" class="text-decoration-none" title="E-mail">
+              <i class="bi bi-envelope social-icon"></i>
+            </a>
+          </div>
+        </footer>
+      </div>
     </div>
-  </form>
-
-  <div *ngIf="emailEnviado" class="email-confirmado">
-    <h1 class="login-title">Verifique seu e-mail</h1>
-    <p>Se o e-mail informado estiver cadastrado, você receberá as instruções para redefinir sua senha.</p>
-
-    <button mat-stroked-button color="accent" class="full-width" routerLink="/login">
-      <mat-icon>arrow_back</mat-icon>
-      Voltar para o login
-    </button>
   </div>
 </div>

@@ -1,26 +1,109 @@
-<div class="login-container mat-elevation-z8">
-  <form [formGroup]="formResetar" (ngSubmit)="enviar()" autocomplete="off">
-    <h1 class="login-title">Redefinir Senha</h1>
+<div class="min-vh-100 bg-light d-flex align-items-center justify-content-center py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card shadow-lg border-0 rounded-3">
+          <div class="card-header bg-primary text-white py-4 rounded-top">
+            <div class="text-center">
+              <h1 class="h3 mb-0 fw-bold">
+                <i class="bi bi-shield-lock me-2"></i>
+                Redefinir Senha
+              </h1>
+              <p class="mb-0 mt-2 opacity-75">Crie uma nova senha</p>
+            </div>
+          </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Nova Senha</mat-label>
-      <input matInput type="password" formControlName="novaSenha">
-      <mat-error *ngIf="formResetar.get('novaSenha')?.hasError('required')">Campo obrigatório</mat-error>
-    </mat-form-field>
+          <div class="card-body p-4 p-md-5">
+            <form [formGroup]="formResetar" (ngSubmit)="enviar()" autocomplete="off">
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Confirmar Senha</mat-label>
-      <input matInput type="password" formControlName="confirmarSenha">
-      <mat-error *ngIf="formResetar.get('confirmarSenha')?.hasError('required')">Campo obrigatório</mat-error>
-      <mat-error *ngIf="formResetar.errors?.['senhasDiferentes']">Senhas não coincidem</mat-error>
-    </mat-form-field>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Nova Senha</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock"></i>
+                  </span>
+                  <input type="password" class="form-control" formControlName="novaSenha" 
+                         placeholder="Digite a nova senha"
+                         [class.is-invalid]="formResetar.get('novaSenha')?.invalid && formResetar.get('novaSenha')?.touched">
+                </div>
+                <div class="invalid-feedback d-block" 
+                     *ngIf="formResetar.get('novaSenha')?.hasError('required') && formResetar.get('novaSenha')?.touched">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                  Nova senha é obrigatória
+                </div>
+              </div>
 
-    <button mat-flat-button color="primary" type="submit" [disabled]="formResetar.invalid || loading" class="full-width">
-      Redefinir
-    </button>
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Confirmar Senha</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock-fill"></i>
+                  </span>
+                  <input type="password" class="form-control" formControlName="confirmarSenha" 
+                         placeholder="Confirme a nova senha"
+                         [class.is-invalid]="(formResetar.get('confirmarSenha')?.invalid && formResetar.get('confirmarSenha')?.touched) || formResetar.errors?.['senhasDiferentes']">
+                </div>
+                <div class="invalid-feedback d-block" 
+                     *ngIf="formResetar.get('confirmarSenha')?.hasError('required') && formResetar.get('confirmarSenha')?.touched">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                  Confirmação de senha é obrigatória
+                </div>
+                <div class="invalid-feedback d-block" 
+                     *ngIf="formResetar.errors?.['senhasDiferentes'] && (formResetar.get('confirmarSenha')?.touched || formResetar.get('novaSenha')?.touched)">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                  As senhas não são iguais
+                </div>
+                <div class="form-text">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Digite a mesma senha nos dois campos
+                </div>
 
-    <div class="overlay" *ngIf="loading">
-      <mat-progress-spinner diameter="80" mode="indeterminate" color="primary"></mat-progress-spinner>
+                <div class="mt-2" *ngIf="formResetar.get('novaSenha')?.value && formResetar.get('confirmarSenha')?.value">
+                  <div class="d-flex align-items-center" [class.text-success]="!formResetar.errors?.['senhasDiferentes']" 
+                                                       [class.text-danger]="formResetar.errors?.['senhasDiferentes']">
+                    <i class="bi" [class.bi-check-circle]="!formResetar.errors?.['senhasDiferentes']" 
+                                [class.bi-x-circle]="formResetar.errors?.['senhasDiferentes']"
+                                [class.text-success]="!formResetar.errors?.['senhasDiferentes']" 
+                                [class.text-danger]="formResetar.errors?.['senhasDiferentes']"></i>
+                    <span class="ms-2 small">
+                      {{ formResetar.errors?.['senhasDiferentes'] ? 'As senhas não coincidem' : 'As senhas coincidem' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn btn-primary w-100 py-2 fw-semibold mb-3" type="submit" 
+                      [disabled]="formResetar.invalid || loading">
+                <i class="bi bi-check-circle me-2"></i>
+                {{ loading ? 'Redefinindo...' : 'Redefinir Senha' }}
+                <span *ngIf="loading" class="spinner-border spinner-border-sm ms-2"></span>
+              </button>
+
+              <button class="btn btn-outline-secondary w-100 py-2" type="button" routerLink="/login">
+                <i class="bi bi-arrow-left me-2"></i>
+                Voltar para Login
+              </button>
+            </form>
+          </div>
+        </div>
+        <footer class="text-center mt-5">
+          <div class="developer-info mb-3">
+            <span class="text-muted">© 2025 • Desenvolvido por Guilherme Froes ®</span>
+          </div>
+          
+          <div class="social-icons">
+            <a href="https://github.com/guifroes1984" target="_blank" class="text-decoration-none me-3" title="GitHub">
+              <i class="bi bi-github social-icon"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/guilherme-henrique-froes/" target="_blank" class="text-decoration-none me-3" title="LinkedIn">
+              <i class="bi bi-linkedin social-icon"></i>
+            </a>
+            <a href="mailto:guilhermefroes26@gmail.com" class="text-decoration-none" title="E-mail">
+              <i class="bi bi-envelope social-icon"></i>
+            </a>
+          </div>
+        </footer>
+      </div>
     </div>
-  </form>
+  </div>
 </div>

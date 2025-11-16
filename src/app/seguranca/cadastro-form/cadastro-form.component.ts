@@ -13,6 +13,8 @@ import { Title } from '@angular/platform-browser';
 export class CadastroFormComponent implements OnInit {
 
   formCadastro: FormGroup;
+  loading = false;
+  cadastroSucesso = false;
 
   constructor(
     private fb:              FormBuilder,
@@ -35,14 +37,17 @@ export class CadastroFormComponent implements OnInit {
   public cadastrarUsuario() {
     if (this.formCadastro.invalid) return;
 
+    this.loading = true;
     const dados = this.formCadastro.value;
 
     this.cadastroService.cadastrarUsuario(dados)
     .then(() => {
+      this.loading = false;
+      this.cadastroSucesso = true;
       this.toastr.success('Cadastro realizado com sucesso!');
-      this.router.navigate(['/login']);
     })
     .catch(erro => {
+      this.loading = false;
       const msg = erro.error?.[0].mensagemUsuario || 'Erro ao realizar cadastro.';
       this.toastr.error(msg);
     });
@@ -56,5 +61,4 @@ export class CadastroFormComponent implements OnInit {
       event.preventDefault();
     }
   }
-
 }

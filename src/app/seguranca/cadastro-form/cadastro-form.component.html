@@ -1,39 +1,138 @@
-<div class="cadastro-container mat-elevation-z8">
-  <form [formGroup]="formCadastro" (ngSubmit)="cadastrarUsuario()" autocomplete="off">
+<div class="min-vh-100 bg-light d-flex align-items-center justify-content-center py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card shadow-lg border-0 rounded-3">
+          <div class="card-header bg-primary text-white py-4 rounded-top">
+            <div class="text-center">
+              <h1 class="h3 mb-0 fw-bold">
+                <i class="bi bi-person-plus me-2"></i>
+                Cadastro
+              </h1>
+              <p class="mb-0 mt-2 opacity-75">Crie sua conta</p>
+            </div>
+          </div>
 
-    <h1 class="cadastro-title">Cadastro</h1>
+          <div class="card-body p-4 p-md-5">
+            <div class="alert alert-success d-flex align-items-center" role="alert" *ngIf="cadastroSucesso">
+              <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+              <div>
+                <strong>Cadastro realizado com sucesso!</strong><br>
+                <small>Agora você pode fazer login no sistema.</small>
+              </div>
+            </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Nome</mat-label>
-      <input matInput type="text" formControlName="nome" placeholder="Digite seu nome"
-        (keypress)="permitirSomenteLetras($event)">
-      <mat-error *ngIf="formCadastro.get('nome')?.hasError('required')">Nome é obrigatório</mat-error>
-      <mat-error *ngIf="formCadastro.get('nome')?.hasError('minlength')">Nome deve ter no mínimo 3
-        caracteres</mat-error>
-    </mat-form-field>
+            <form [formGroup]="formCadastro" (ngSubmit)="cadastrarUsuario()" autocomplete="off"
+              *ngIf="!cadastroSucesso">
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>E-mail</mat-label>
-      <input matInput type="email" formControlName="email" placeholder="Digite seu e-mail">
-      <mat-error *ngIf="formCadastro.get('email')?.hasError('required')">E-mail é obrigatório</mat-error>
-      <mat-error *ngIf="formCadastro.get('email')?.hasError('email')">E-mail inválido</mat-error>
-    </mat-form-field>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Nome</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-person"></i>
+                  </span>
+                  <input type="text" class="form-control" formControlName="nome" placeholder="Digite seu nome"
+                    (keypress)="permitirSomenteLetras($event)"
+                    [class.is-invalid]="formCadastro.get('nome')?.invalid && formCadastro.get('nome')?.touched">
+                </div>
+                <div class="invalid-feedback d-block"
+                  *ngIf="formCadastro.get('nome')?.hasError('required') && formCadastro.get('nome')?.touched">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                  Nome é obrigatório
+                </div>
+                <div class="invalid-feedback d-block"
+                  *ngIf="formCadastro.get('nome')?.hasError('minlength') && formCadastro.get('nome')?.touched">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                  Nome deve ter no mínimo 3 caracteres
+                </div>
+                <div class="invalid-feedback d-block"
+                  *ngIf="formCadastro.get('nome')?.hasError('pattern') && formCadastro.get('nome')?.touched">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                  Nome deve conter apenas letras
+                </div>
+              </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Senha</mat-label>
-      <input matInput type="password" formControlName="senha" placeholder="Digite sua senha">
-      <mat-error *ngIf="formCadastro.get('senha')?.hasError('required')">Senha é obrigatória</mat-error>
-      <mat-error *ngIf="formCadastro.get('senha')?.hasError('minlength')">Senha deve ter no mínimo 6
-        caracteres</mat-error>
-    </mat-form-field>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">E-mail</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-envelope"></i>
+                  </span>
+                  <input type="email" class="form-control" formControlName="email" placeholder="Digite seu e-mail"
+                    [class.is-invalid]="formCadastro.get('email')?.invalid && formCadastro.get('email')?.touched">
+                </div>
+                <div class="invalid-feedback d-block"
+                  *ngIf="formCadastro.get('email')?.hasError('required') && formCadastro.get('email')?.touched">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                  E-mail é obrigatório
+                </div>
+                <div class="invalid-feedback d-block"
+                  *ngIf="formCadastro.get('email')?.hasError('email') && formCadastro.get('email')?.touched">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                  E-mail inválido
+                </div>
+              </div>
 
-    <button mat-flat-button color="primary" class="full-width" type="submit" [disabled]="formCadastro.invalid">
-      Cadastrar
-    </button>
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Senha</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-lock"></i>
+                  </span>
+                  <input type="password" class="form-control" formControlName="senha" placeholder="Digite sua senha"
+                    [class.is-invalid]="formCadastro.get('senha')?.invalid && formCadastro.get('senha')?.touched">
+                </div>
+                <div class="invalid-feedback d-block"
+                  *ngIf="formCadastro.get('senha')?.hasError('required') && formCadastro.get('senha')?.touched">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                  Senha é obrigatória
+                </div>
+                <div class="form-text">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Use uma senha segura com letras, números e caracteres especiais
+                </div>
+              </div>
 
-    <button mat-stroked-button color="accent" class="full-width" style="margin-top: 8px;" routerLink="/login">
-      <mat-icon>arrow_back</mat-icon>
-      Voltar
-    </button>
-  </form>
+              <button class="btn btn-primary w-100 py-2 fw-semibold mb-3" type="submit"
+                [disabled]="formCadastro.invalid || loading">
+                <i class="bi bi-person-plus me-2"></i>
+                {{ loading ? 'Cadastrando...' : 'Cadastrar' }}
+                <span *ngIf="loading" class="spinner-border spinner-border-sm ms-2"></span>
+              </button>
+
+              <button class="btn btn-outline-secondary w-100 py-2" type="button" routerLink="/login">
+                <i class="bi bi-arrow-left me-2"></i>
+                Voltar para Login
+              </button>
+            </form>
+
+            <div *ngIf="cadastroSucesso">
+              <button class="btn btn-success w-100 py-2 fw-semibold" type="button" routerLink="/login">
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+                Voltar para Login
+              </button>
+            </div>
+          </div>
+        </div>
+        <footer class="text-center mt-5">
+          <div class="developer-info mb-3">
+            <span class="text-muted">© 2025 • Desenvolvido por Guilherme Froes ®</span>
+          </div>
+
+          <div class="social-icons">
+            <a href="https://github.com/guifroes1984" target="_blank" class="text-decoration-none me-3" title="GitHub">
+              <i class="bi bi-github social-icon"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/guilherme-henrique-froes/" target="_blank"
+              class="text-decoration-none me-3" title="LinkedIn">
+              <i class="bi bi-linkedin social-icon"></i>
+            </a>
+            <a href="mailto:guilhermefroes26@gmail.com" class="text-decoration-none" title="E-mail">
+              <i class="bi bi-envelope social-icon"></i>
+            </a>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </div>
 </div>

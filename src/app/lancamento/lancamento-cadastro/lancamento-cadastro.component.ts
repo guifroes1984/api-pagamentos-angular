@@ -5,7 +5,7 @@ import { Title } from '@angular/platform-browser';
 
 import { ToastrService } from 'ngx-toastr';
 
-import { CategoriaService } from 'src/app/categorias/categoria.service';
+import { CategoriaService } from 'src/app/categoria/categoria.service';
 import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 import { PessoaService } from 'src/app/pessoa/pessoa.service';
 import { LancamentoService } from '../lancamento.service';

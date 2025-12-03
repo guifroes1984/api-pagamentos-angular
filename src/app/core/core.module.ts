@@ -14,7 +14,7 @@ import { ErrorHandlerService } from './error-handler.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LancamentoService } from '../lancamento/lancamento.service';
 import { PessoaService } from '../pessoa/pessoa.service';
-import { CategoriaService } from '../categorias/categoria.service';
+import { CategoriaService } from '../categoria/categoria.service';
 import { AuthService } from '../seguranca/auth.service';
 import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
 import { PainelControleService } from '../painel-controle/painel-controle.service';

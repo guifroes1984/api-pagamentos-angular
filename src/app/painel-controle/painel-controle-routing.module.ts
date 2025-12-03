@@ -7,7 +7,8 @@ const routes: Routes = [
   { path: '', 
     component: PainelControleComponent, 
     canActivate: [AuthGuard], 
-    data: { roles: ['ROLE_PESQUISAR_LANCAMENTO'] }
+    data: { roles: ['ROLE_PESQUISAR_LANCAMENTO'] }, 
+    title: 'Painel de Controle'
   }
 ];
 

@@ -1,0 +1,46 @@
+/* Estilos específicos para melhorar a aparência */
+.btn-rounded {
+  border-radius: 20px;
+}
+
+.table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: #495057;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+/* Ajuste para os botões de ação */
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+/* Espaçamento para os ícones */
+.bi {
+  vertical-align: -0.125em;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .d-flex.flex-column.flex-md-row {
+    flex-direction: column !important;
+  }
+  
+  .d-flex.flex-column.flex-md-row .d-flex.gap-2 {
+    margin-top: 0.5rem;
+  }
+  
+  .table-responsive {
+    font-size: 0.9rem;
+  }
+  
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}

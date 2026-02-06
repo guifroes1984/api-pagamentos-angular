@@ -3,11 +3,10 @@ import { inject } from '@angular/core';
 import { AuthService } from './auth.service';
 
 export const AuthGuard: CanActivateFn = (route, state) => { 
-
   const auth = inject(AuthService);
   const router = inject(Router);
 
-   const roles = route.data?.['roles'] as string[];
+  const roles = route.data?.['roles'] as string[];
 
   if (auth.isAccessTokenInvalido()) {
     console.log('Navegação com access token inválido. Obtendo novo token...');
@@ -20,7 +19,19 @@ export const AuthGuard: CanActivateFn = (route, state) => {
         }
         return true;
       });
-  } else if (roles && !auth.temQualquerPermissao(roles)) {
+  } 
+  
+  // VERIFICAÇÃO ESPECIAL PARA ADMIN (pelo nome)
+  if (roles && roles.includes('ROLE_ADMIN')) {
+    // Usa o método isAdmin() que verifica pelo nome
+    if (!auth.isAdmin()) {
+      console.warn('Acesso negado: Usuário não é administrador');
+      router.navigate(['/pagina-nao-autorizado']);
+      return false;
+    }
+  } 
+  // Verificação normal para outras roles
+  else if (roles && !auth.temQualquerPermissao(roles)) {
     router.navigate(['/pagina-nao-autorizado']);
     return false;
   }

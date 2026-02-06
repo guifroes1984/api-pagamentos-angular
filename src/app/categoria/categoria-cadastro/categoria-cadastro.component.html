@@ -1,1 +1,126 @@
-<p>categoria-cadastro works!</p>
+<div class="min-vh-100 bg-light pt-5">
+  <div class="container py-4">
+
+    <div *ngIf="temPermissaoCadastro" class="row justify-content-center">
+      <div class="col-12 col-xl-10">
+
+        <div class="card shadow-lg border-0 rounded-3">
+          <div class="card-header bg-primary text-white py-3 rounded-top">
+            <div class="row align-items-center">
+              <div class="col">
+                <h1 class="h3 mb-0 fw-bold">
+                  <i class="bi bi-tags me-2"></i>
+                  {{ editando ? 'Edição de Categoria' : 'Nova Categoria' }}
+                </h1>
+              </div>
+              <div class="col-auto">
+                <span class="badge bg-light text-primary fs-6">
+                  <i class="bi bi-tag me-1"></i>
+                  {{ editando ? 'Editar' : 'Cadastro' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body p-4">
+            <div class="alert alert-info mb-4" *ngIf="!editando && formCategoria.pristine">
+              <i class="bi bi-info-circle me-2"></i>
+              Preencha os dados abaixo para cadastrar uma nova categoria.
+            </div>
+
+            <form [formGroup]="formCategoria" autocomplete="off" (ngSubmit)="salvar()">
+
+              <div class="mb-4">
+                <label class="form-label fw-semibold">
+                  Nome da Categoria 
+                  <span class="text-danger">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  formControlName="nome"
+                  placeholder="Digite o nome da categoria (3 a 20 caracteres)"
+                  [ngClass]="{'is-invalid': nome?.invalid && (nome?.dirty || nome?.touched)}"
+                  [disabled]="carregando"
+                >
+
+                <div class="invalid-feedback" 
+                  *ngIf="nome?.hasError('required') && (nome?.dirty || nome?.touched)">
+                  Informe o nome da categoria
+                </div>
+                <div class="invalid-feedback" 
+                  *ngIf="nome?.hasError('minlength') && (nome?.dirty || nome?.touched)">
+                  Mínimo de 3 caracteres
+                </div>
+                <div class="invalid-feedback" 
+                  *ngIf="nome?.hasError('maxlength') && (nome?.dirty || nome?.touched)">
+                  Máximo de 20 caracteres
+                </div>
+                
+                <small class="text-muted mt-1 d-block">
+                  <i class="bi bi-info-circle me-1"></i>
+                  O nome deve ter entre 3 e 20 caracteres
+                </small>
+              </div>
+
+              <div class="d-flex gap-2 flex-column flex-md-row mt-4 border-top pt-4">
+                <button 
+                  class="btn btn-primary" 
+                  type="submit" 
+                  [disabled]="formCategoria.invalid || carregando"
+                >
+                  <i class="bi bi-save me-2"></i>
+                  {{ carregando ? 'Salvando...' : (editando ? 'Atualizar' : 'Salvar') }}
+                </button>
+                
+                <button 
+                  class="btn btn-outline-secondary" 
+                  type="button" 
+                  (click)="novo()"
+                  [disabled]="carregando || (!editando && formCategoria.pristine)"
+                >
+                  <i class="bi bi-plus-circle me-2"></i>
+                  Novo
+                </button>
+                
+                <a 
+                  class="btn btn-outline-danger ms-auto" 
+                  routerLink="/categorias"
+                  [class.disabled]="carregando"
+                >
+                  <i class="bi bi-arrow-left me-2"></i>
+                  Voltar
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!temPermissaoCadastro" class="row justify-content-center">
+      <div class="col-12 col-xl-10">
+        <div class="card shadow-lg border-0 rounded-3">
+          <div class="card-header bg-danger text-white py-3 rounded-top">
+            <h1 class="h3 mb-0 fw-bold">
+              <i class="bi bi-shield-lock me-2"></i>
+              Acesso Restrito
+            </h1>
+          </div>
+          <div class="card-body p-4 text-center">
+            <i class="bi bi-shield-x display-1 text-danger mb-3"></i>
+            <h3 class="text-danger mb-3">Permissão Insuficiente</h3>
+            <p class="mb-4">
+              Você não possui permissão para acessar esta funcionalidade.
+              Apenas usuários com perfil <strong>ADMIN</strong> podem cadastrar categorias.
+            </p>
+            <a routerLink="/categorias" class="btn btn-outline-danger">
+              <i class="bi bi-arrow-left me-2"></i>
+              Voltar para Listagem
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

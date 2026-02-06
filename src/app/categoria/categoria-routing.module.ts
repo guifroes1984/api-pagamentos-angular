@@ -10,25 +10,30 @@ const routes: Routes = [
     path: '',
     component: CategoriaListagemComponent,
     canActivate: [AuthGuard], 
-    canDeactivate: [PendenciasGuard],
-    data: { roles: ['ROLE_PESQUISAR_CATEGORIA'], 
-    title: 'Categorias' }  
+    data: { 
+      roles: ['ROLE_ADMIN'], // AGORA USA isAdmin() NO GUARD
+      title: 'Categorias'  
+    }  
   }, 
   {
     path: 'nova',
     component: CategoriaCadastroComponent,
-    canActivate: [AuthGuard],
-    canDeactivate: [PendenciasGuard],
-    data: { roles: ['ROLE_CADASTRAR_CATEGORIA'],
-    title: 'Nova Categoria' }
+    canActivate: [AuthGuard], 
+    //canDeactivate: [PendenciasGuard],
+    data: { 
+      roles: ['ROLE_ADMIN'],
+      title: 'Nova Categoria' 
+    }
   }, 
   {
     path: ':codigo',
     component: CategoriaCadastroComponent,
     canActivate: [AuthGuard], 
-    canDeactivate: [PendenciasGuard],
-    data: { roles: ['ROLE_CADASTRAR_CATEGORIA'],
-    title: 'Editar Categoria' }
+    //canDeactivate: [PendenciasGuard],
+    data: { 
+      roles: ['ROLE_ADMIN'],
+      title: 'Editar Categoria' 
+    }
   }
 ];
 

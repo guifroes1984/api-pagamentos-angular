@@ -1,1 +1,159 @@
-<p>categoria-listagem works!</p>
+<div class="min-vh-100 bg-light pt-5">
+  <div class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-12 col-xl-10">
+        <div class="card shadow-lg border-0 rounded-3">
+          <div class="card-header bg-primary text-white py-3 rounded-top">
+            <div class="row align-items-center">
+              <div class="col">
+                <h1 class="h3 mb-0 fw-bold">
+                  <i class="bi bi-tags me-2"></i>
+                  Categorias
+                </h1>
+              </div>
+              <div class="col-auto">
+                <span class="badge bg-light text-primary fs-6">
+                  {{ categoriasFiltradas.length }} registros
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body p-4">
+            <div class="row mb-4">
+              <div class="col-12">
+                <div class="d-flex flex-column flex-md-row gap-2 align-items-md-end">
+                  <div class="flex-grow-1">
+                    <label class="form-label fw-semibold">Pesquisar</label>
+                    <input type="text" class="form-control" placeholder="Digite código ou nome da categoria"
+                      [(ngModel)]="filtro" (keydown.enter)="carregarCategorias()" name="filtro">
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-primary" type="button" (click)="carregarCategorias()">
+                      <i class="bi bi-search me-2"></i>
+                      Pesquisar
+                    </button>
+                    <button class="btn btn-outline-danger" type="button" (click)="limparFiltro()">
+                      <i class="bi bi-x-circle me-1"></i>
+                      Limpar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-hover table-striped">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col" class="text-left">Código</th>
+                    <th scope="col" class="text-left">Nome</th>
+                    <th scope="col" class="text-center">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let categoria of categoriasPaginadas">
+                    <td class="text-left">{{ getCodigoSeguro(categoria) }}</td>
+                    <td class="text-left">{{ categoria.nome || '-' }}</td>
+                    <td class="text-center">
+                      <div class="d-flex gap-2 justify-content-center">
+                        <button type="button" class="btn btn-outline-primary btn-sm"
+                          [routerLink]="['/categorias', categoria.codigo]" title="Editar"
+                          [disabled]="!podeEditarExcluir(categoria)">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-danger btn-sm" 
+                          (click)="excluir(categoria)" title="Excluir"
+                          [disabled]="!podeEditarExcluir(categoria) || !podeExcluir">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div *ngIf="categoriasFiltradas.length === 0 && !carregando" class="text-center py-4 text-muted">
+              <i class="bi bi-inbox display-4 d-block mb-2"></i>
+              Nenhum resultado encontrado.
+            </div>
+
+            <div *ngIf="carregando" class="text-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Carregando...</span>
+              </div>
+              <p class="text-muted mt-2">Carregando categorias...</p>
+            </div>
+
+            <div *ngIf="!podePesquisar" class="text-center py-4 text-danger">
+              <i class="bi bi-lock display-4 d-block mb-2"></i>
+              <h5>Acesso Restrito</h5>
+              <p>Você não tem permissão para visualizar categorias</p>
+            </div>
+
+            <div class="row mt-4" *ngIf="categoriasFiltradas.length > 0 && podePesquisar">
+              <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="text-muted small">
+                    Mostrando {{ calcularExibicao() }} de {{ categoriasFiltradas.length }} registros
+                  </div>
+                  <div class="d-flex gap-2 align-items-center">
+                    <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="itensPorPagina"
+                      (change)="mudarPagina(1)">
+                      <option [value]="5">5 por página</option>
+                      <option [value]="10">10 por página</option>
+                      <option [value]="15">15 por página</option>
+                      <option [value]="20">20 por página</option>
+                    </select>
+
+                    <nav>
+                      <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item" [class.disabled]="paginaAtual === 1">
+                          <button class="page-link" (click)="mudarPagina(1)" title="Primeira página">
+                            <i class="bi bi-chevron-double-left"></i>
+                          </button>
+                        </li>
+                        <li class="page-item" [class.disabled]="paginaAtual === 1">
+                          <button class="page-link" (click)="mudarPagina(paginaAtual - 1)" title="Página anterior">
+                            <i class="bi bi-chevron-left"></i>
+                          </button>
+                        </li>
+
+                        <li class="page-item disabled">
+                          <span class="page-link">
+                            Página {{ paginaAtual }} de {{ totalPaginas }}
+                          </span>
+                        </li>
+
+                        <li class="page-item" [class.disabled]="paginaAtual >= totalPaginas">
+                          <button class="page-link" (click)="mudarPagina(paginaAtual + 1)" title="Próxima página">
+                            <i class="bi bi-chevron-right"></i>
+                          </button>
+                        </li>
+                        <li class="page-item" [class.disabled]="paginaAtual >= totalPaginas">
+                          <button class="page-link" (click)="mudarPagina(totalPaginas)" title="Última página">
+                            <i class="bi bi-chevron-double-right"></i>
+                          </button>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-4" *ngIf="podeCadastrar">
+              <div class="col-12">
+                <button class="btn btn-primary" [routerLink]="['/categorias/nova']">
+                  <i class="bi bi-plus-circle me-2"></i>
+                  Nova Categoria
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

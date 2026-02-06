@@ -1,0 +1,125 @@
+/* categoria-cadastro.component.css */
+
+/* Herda todos os seus estilos do formulário de Pessoa */
+.form-control.ng-invalid.ng-touched {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.invalid-feedback {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .d-flex.flex-column.flex-md-row {
+    flex-direction: column !important;
+  }
+  
+  .d-flex.gap-2 {
+    gap: 0.5rem !important;
+  }
+  
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+/* Estilos específicos para categoria */
+.min-vh-100 {
+  min-height: 100vh;
+}
+
+.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+.pt-5 {
+  padding-top: 3rem !important;
+}
+
+.card {
+  border: none;
+}
+
+.shadow-lg {
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+.rounded-3 {
+  border-radius: 0.75rem !important;
+}
+
+.bg-primary {
+  background-color: #0d6efd !important;
+}
+
+.text-white {
+  color: #fff !important;
+}
+
+.rounded-top {
+  border-top-left-radius: 0.75rem !important;
+  border-top-right-radius: 0.75rem !important;
+}
+
+/* Ajustes para ícones */
+.bi-tags::before,
+.bi-tag::before {
+  vertical-align: -0.125em;
+}
+
+/* Placeholder mais visível */
+.form-control::placeholder {
+  color: #6c757d;
+  opacity: 0.7;
+}
+
+/* Foco no campo */
+.form-control:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* categoria-cadastro.component.css */
+/* Mantenha seus estilos anteriores e adicione: */
+
+/* Estilo para campos inválidos */
+.form-control.is-invalid:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+/* Estilo para campos válidos quando tocados */
+.form-control.ng-valid.ng-touched {
+  border-color: #198754;
+}
+
+.form-control.ng-valid.ng-touched:focus {
+  border-color: #198754;
+  box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}
+
+/* Botões com loading */
+.btn-primary:disabled {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  opacity: 0.65;
+}
+
+/* Badge ADMIN */
+.badge.bg-warning {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  vertical-align: middle;
+}
+
+/* Alert informativo */
+.alert-info {
+  border-left: 4px solid #0dcaf0;
+}

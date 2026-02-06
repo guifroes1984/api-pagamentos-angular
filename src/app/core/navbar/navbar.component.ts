@@ -14,11 +14,14 @@ export class NavbarComponent implements OnInit {
   exibindoMenu: boolean = false;
   rotaAtual: string = '';
 
+  // PROPRIEDADE PARA CONTROLAR VISIBILIDADE DO MENU CATEGORIAS
+  mostrarMenuCategorias: boolean = false;
+
   constructor(
-    public auth:           AuthService, 
-    private logoutService: LogoutService, 
-    private errorHandler:  ErrorHandler, 
-    private router:        Router
+    public auth: AuthService,
+    private logoutService: LogoutService,
+    private errorHandler: ErrorHandler,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -27,6 +30,9 @@ export class NavbarComponent implements OnInit {
       .subscribe((event: any) => {
         this.rotaAtual = event.urlAfterRedirects;
       });
+
+    // VERIFICA SE USUÁRIO É ADMIN PARA MOSTRAR MENU CATEGORIAS
+    this.verificarPermissaoCategorias();
   }
 
   alternarMenu(): void {
@@ -47,10 +53,14 @@ export class NavbarComponent implements OnInit {
 
   rotaAtualEhLoginOuCadastro(): boolean {
     const url = this.router.url;
-    return url === '/login' || 
-           url === '/login/cadastro-usuario' || 
-           url === '/login/recuperar-senha' || 
-           url.startsWith('/resetar-senha/');
+    return url === '/login' ||
+      url === '/login/cadastro-usuario' ||
+      url === '/login/recuperar-senha' ||
+      url.startsWith('/resetar-senha/');
   }
 
+  private verificarPermissaoCategorias(): void {
+    // APENAS ADMIN (nome = "Administrador") VÊ MENU CATEGORIAS
+    this.mostrarMenuCategorias = this.auth.isAdmin();
+  }
 }

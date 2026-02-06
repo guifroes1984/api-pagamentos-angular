@@ -39,6 +39,12 @@ const routes: Routes = [
       import('./seguranca/seguranca.module').then(m => m.SegurancaModule)
   },
 
+  {
+    path: 'categorias',
+    loadChildren: () =>
+      import('./categoria/categoria.module').then(m => m.CategoriaModule)
+  },
+
   { path: 'resetar-senha/:token', component: ResetarSenhaComponent },
 
   { path: 'pagina-nao-encontrada', component: PaginaNaoEncontradaComponent },

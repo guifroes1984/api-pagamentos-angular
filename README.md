@@ -1,27 +1,83 @@
-# ApiPagamentosFrontNovo
+# 💳 API de Pagamentos - Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4.
+Interface desenvolvida em Angular para consumir a API de Pagamentos.
 
-## Development server
+Projeto totalmente funcional e responsivo (web e mobile).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+---
 
-## Code scaffolding
+## 🚀 Tecnologias
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Angular 16
+- TypeScript
+- Bootstrap / Angular Material
+- JWT Authentication
+- HTTP Client
 
-## Build
+---
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## 🎯 Funcionalidades
 
-## Running unit tests
+- Login com autenticação JWT
+- Cadastro de usuários
+- Listagem de pagamentos
+- Registro de novos pagamentos
+- Dashboard com gráficos
+- Controle de acesso por perfil
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+---
 
-## Running end-to-end tests
+## 🔐 Autenticação
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Após realizar login, o token JWT é armazenado e enviado automaticamente no header das requisições:
 
-## Further help
+Authorization: Bearer {token}
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+---
+
+## 📱 Responsividade
+
+A aplicação foi desenvolvida para funcionar corretamente em:
+
+- 💻 Desktop
+- 📱 Smartphones
+- 📟 Tablets
+
+---
+
+## ▶️ Como rodar o projeto
+
+1. Clonar repositório:
+git clone https://github.com/guifroes1984/api-pagamentos-angular.git
+
+
+2. Entrar na pasta:
+cd api-pagamentos-angular
+
+
+3. Instalar dependências:
+npm install
+
+
+4. Rodar aplicação:
+ng serve
+
+
+A aplicação ficará disponível em:
+http://localhost:4200
+
+
+---
+
+## 🔗 Integração com Backend
+
+Certifique-se de que a API esteja rodando em:
+
+http://localhost:8080
+
+
+---
+
+## 👨‍💻 Autor
+
+Guilherme Fróes

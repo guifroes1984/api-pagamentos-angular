@@ -232,8 +232,15 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
 
   public adicionarLancamento(): Promise<void> {
     return new Promise((resolve, reject) => {
+
       this.lancamentoService.adicionarLancamento(this.formLancamento.value)
+
         .then(lancamentoAdicionado => {
+
+          this.formLancamento.markAsPristine();
+
+          this.dadosOriginais = this.formLancamento.value;
+
           try {
             this.toastr.success('Lançamento adicionado com sucesso!');
           } catch (e) {
@@ -242,8 +249,10 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
           }
 
           this.router.navigate(['/lancamentos', lancamentoAdicionado.codigo]);
+
           resolve();
         })
+
         .catch(erro => {
           this.errorHandler.handle(erro);
           reject(erro);
@@ -288,11 +297,33 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
   public carregarPessoas() {
     return this.pessoaService.listarTodasPessoas()
       .then((resposta: any) => {
+
         const pessoas = resposta.content || [];
-        this.pessoas = pessoas.map((p: any) => ({
-          label: p.nome,
-          value: p.codigo
-        }));
+
+        const token = localStorage.getItem('token');
+
+        if (token) {
+
+          const payload = JSON.parse(atob(token.split('.')[1]));
+
+          const nomeUsuario = payload.nome;
+
+          const pessoaUsuario = pessoas.find(
+            (p: any) =>
+              p.nome?.trim().toLowerCase() === nomeUsuario?.trim().toLowerCase()
+          );
+
+          if (pessoaUsuario) {
+
+            this.pessoas = [{
+              label: pessoaUsuario.nome,
+              value: pessoaUsuario.codigo
+            }];
+
+          } else {
+            this.pessoas = [];
+          }
+        }
       })
       .catch(erro => this.errorHandler.handle(erro));
   }

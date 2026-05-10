@@ -103,15 +103,14 @@
                     Informe uma categoria
                   </div>
                 </div>
-
+                
                 <div class="col-12 col-md-6">
                   <label class="form-label fw-semibold">Pessoa *</label>
                   <select class="form-select" [value]="formLancamento.get('pessoa.codigo')?.value"
-                    (change)="onPessoaChange($any($event).target.value)" [class.is-invalid]="formLancamento.get('pessoa.codigo')?.invalid && 
-                                             formLancamento.get('pessoa.codigo')?.touched">
+                    (change)="onPessoaChange($any($event).target.value)" [class.is-invalid]="formLancamento.get('pessoa.codigo')?.invalid &&
+                        formLancamento.get('pessoa.codigo')?.touched">
                     <option value="">Selecione uma pessoa</option>
-                    <option *ngFor="let pessoa of pessoas" [value]="pessoa.value"
-                      [selected]="pessoa.value === formLancamento.get('pessoa.codigo')?.value">
+                    <option *ngFor="let pessoa of pessoas" [value]="pessoa.value">
                       {{ pessoa.label }}
                     </option>
                   </select>
@@ -120,7 +119,6 @@
                   </div>
                 </div>
               </div>
-
               <div class="row mb-4">
                 <div class="col-12">
                   <label class="form-label fw-semibold">Observação</label>

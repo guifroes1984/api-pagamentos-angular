@@ -11,7 +11,7 @@ const routes: Routes = [
     component: CategoriaListagemComponent,
     canActivate: [AuthGuard], 
     data: { 
-      roles: ['ROLE_ADMIN'], // AGORA USA isAdmin() NO GUARD
+      //roles: ['ROLE_ADMIN'], 
       title: 'Categorias'  
     }  
   }, 
@@ -21,7 +21,7 @@ const routes: Routes = [
     canActivate: [AuthGuard], 
     //canDeactivate: [PendenciasGuard],
     data: { 
-      roles: ['ROLE_ADMIN'],
+      //roles: ['ROLE_ADMIN'],
       title: 'Nova Categoria' 
     }
   }, 
@@ -31,7 +31,7 @@ const routes: Routes = [
     canActivate: [AuthGuard], 
     //canDeactivate: [PendenciasGuard],
     data: { 
-      roles: ['ROLE_ADMIN'],
+      //roles: ['ROLE_ADMIN'],
       title: 'Editar Categoria' 
     }
   }

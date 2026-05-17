@@ -20,12 +20,10 @@ export class CategoriaListagemComponent implements OnInit {
   carregando = false;
   filtro: string = '';
 
-  // Permissões
   podeCadastrar = false;
   podePesquisar = false;
   podeExcluir = false;
 
-  // Paginação
   paginaAtual = 1;
   itensPorPagina = 5;
   totalItens = 0;
@@ -50,9 +48,9 @@ export class CategoriaListagemComponent implements OnInit {
   }
 
   private verificarPermissoes(): void {
-    this.podeCadastrar = this.authService.temPermissao('ROLE_CADASTRAR_CATEGORIA');
-    this.podePesquisar = this.authService.temPermissao('ROLE_PESQUISAR_CATEGORIA');
-    this.podeExcluir = this.authService.temPermissao('ROLE_CADASTRAR_CATEGORIA');
+    this.podePesquisar = !!this.authService.jwtPayload;
+    this.podeCadastrar = !!this.authService.jwtPayload;
+    this.podeExcluir = !!this.authService.jwtPayload;
   }
 
   carregarCategorias(): void {
@@ -84,7 +82,6 @@ export class CategoriaListagemComponent implements OnInit {
     this.router.navigate(['/categorias', codigo]);
   }
 
-  // Filtro
   get categoriasFiltradas(): Categoria[] {
     if (!this.filtro.trim()) {
       return this.categorias;
@@ -99,7 +96,6 @@ export class CategoriaListagemComponent implements OnInit {
     });
   }
 
-  // Paginação
   get categoriasPaginadas(): Categoria[] {
     const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
     const fim = inicio + this.itensPorPagina;
@@ -121,12 +117,10 @@ export class CategoriaListagemComponent implements OnInit {
     this.carregarCategorias();
   }
 
-  // Helper para exibir código seguro
   getCodigoSeguro(categoria: Categoria): string {
     return categoria.codigo?.toString() || 'N/A';
   }
 
-  // Helper para verificar se pode editar/excluir
   podeEditarExcluir(categoria: Categoria): boolean {
     return this.podeCadastrar && !!categoria.codigo;
   }
@@ -178,7 +172,6 @@ export class CategoriaListagemComponent implements OnInit {
     });
   }
 
-  // Método para calcular exibição
   calcularExibicao(): string {
     if (this.categoriasFiltradas.length === 0) {
       return '0';

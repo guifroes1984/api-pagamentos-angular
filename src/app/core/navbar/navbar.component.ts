@@ -14,7 +14,6 @@ export class NavbarComponent implements OnInit {
   exibindoMenu: boolean = false;
   rotaAtual: string = '';
 
-  // PROPRIEDADE PARA CONTROLAR VISIBILIDADE DO MENU CATEGORIAS
   mostrarMenuCategorias: boolean = false;
 
   constructor(
@@ -31,7 +30,6 @@ export class NavbarComponent implements OnInit {
         this.rotaAtual = event.urlAfterRedirects;
       });
 
-    // VERIFICA SE USUÁRIO É ADMIN PARA MOSTRAR MENU CATEGORIAS
     this.verificarPermissaoCategorias();
   }
 
@@ -60,7 +58,6 @@ export class NavbarComponent implements OnInit {
   }
 
   private verificarPermissaoCategorias(): void {
-    // APENAS ADMIN (nome = "Administrador") VÊ MENU CATEGORIAS
-    this.mostrarMenuCategorias = this.auth.isAdmin();
+    this.mostrarMenuCategorias = !!this.auth.jwtPayload;
   }
 }

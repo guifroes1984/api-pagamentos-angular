@@ -26,27 +26,29 @@ export class CategoriaCadastroComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private toastr: ToastrService, 
+    private toastr: ToastrService,
     private title: Title
   ) { }
 
   ngOnInit(): void {
     this.verificarPermissao();
-    if (this.temPermissaoCadastro) {
-      this.configurarFormulario();
-      this.carregarDadosEdicao();
-    } else {
+    this.configurarFormulario();
+    this.carregarDadosEdicao();
+
+    if (!this.temPermissaoCadastro) {
+      this.formCategoria.disable();
       this.toastr.warning(
-        'Apenas administradores podem cadastrar categorias',
+        'Você não tem permissão para cadastrar ou editar categorias',
         'Acesso Restrito',
         { timeOut: 4000, positionClass: 'toast-top-center' }
       );
     }
+
     this.title.setTitle('Cadastro de Categoria');
   }
 
   private verificarPermissao(): void {
-    this.temPermissaoCadastro = this.authService.temPermissao('ROLE_CADASTRAR_CATEGORIA');
+    this.temPermissaoCadastro = !!this.authService.jwtPayload;
   }
 
   private configurarFormulario(): void {
@@ -88,6 +90,11 @@ export class CategoriaCadastroComponent implements OnInit {
   }
 
   salvar(): void {
+    if (!this.temPermissaoCadastro) {
+      this.toastr.error('Você não tem permissão para esta ação', 'Acesso Negado');
+      return;
+    }
+
     if (this.formCategoria.invalid) {
       this.marcarCamposComoTouch();
 
@@ -113,7 +120,7 @@ export class CategoriaCadastroComponent implements OnInit {
       .then(() => {
         if (this.editando) {
           this.toastr.success('Categoria atualizada com sucesso!', 'Sucesso', {
-            timeOut: 3000,
+            timeOut: 2000,
             progressBar: true,
             closeButton: true
           });
@@ -123,14 +130,14 @@ export class CategoriaCadastroComponent implements OnInit {
           }, 2000);
         } else {
           this.toastr.success('Categoria cadastrada com sucesso!', 'Sucesso', {
-            timeOut: 3000,
+            timeOut: 2000,
             progressBar: true,
             closeButton: true
           });
 
           setTimeout(() => {
-            this.limparFormulario();
-          }, 500);
+            this.router.navigate(['/categorias']);
+          }, 2000);
         }
       })
       .catch(erro => {
@@ -155,7 +162,9 @@ export class CategoriaCadastroComponent implements OnInit {
   }
 
   public atualizarTituloEdicao() {
-    this.title.setTitle(`Edição de lançamento: ${this.formCategoria.get('nome')?.value}`);
+    if (this.formCategoria && this.formCategoria.get('nome')) {
+      this.title.setTitle(`Edição de lançamento: ${this.formCategoria.get('nome')?.value}`);
+    }
   }
 
   private limparFormulario(): void {
@@ -183,6 +192,6 @@ export class CategoriaCadastroComponent implements OnInit {
   }
 
   get nome() {
-    return this.formCategoria.get('nome');
+    return this.formCategoria?.get('nome');
   }
 }

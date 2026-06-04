@@ -53,20 +53,19 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
     private formBuilder: FormBuilder
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.configurarFormulario();
     const codigoLancamento = this.route.snapshot.params['codigo'];
 
     this.title.setTitle('Novo lançamento');
+
+    await Promise.all([this.carregarCategorias(), this.carregarPessoas()]);
 
     if (codigoLancamento) {
       this.carregarLancamentos(codigoLancamento);
     } else {
       this.dadosOriginais = this.formLancamento.value;
     }
-
-    this.carregarCategorias();
-    this.carregarPessoas();
 
     this.formLancamento.valueChanges.subscribe(() => {
       if (this.formLancamento.pristine) {
@@ -205,7 +204,7 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
           setTimeout(() => this.mostrarSucesso = false, 5000);
         }
 
-        this.router.navigate(['/lancamentos', lancamentoSalvo.codigo]);
+        this.router.navigate(['/lancamentos']);
 
       } else {
         await this.adicionarLancamento();
@@ -248,7 +247,7 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
             setTimeout(() => this.mostrarSucesso = false, 5000);
           }
 
-          this.router.navigate(['/lancamentos', lancamentoAdicionado.codigo]);
+          this.router.navigate(['/lancamentos']);
 
           resolve();
         })
@@ -297,33 +296,10 @@ export class LancamentoCadastroComponent implements OnInit, IFormComPendencias {
   public carregarPessoas() {
     return this.pessoaService.listarTodasPessoas()
       .then((resposta: any) => {
-
-        const pessoas = resposta.content || [];
-
-        const token = localStorage.getItem('token');
-
-        if (token) {
-
-          const payload = JSON.parse(atob(token.split('.')[1]));
-
-          const nomeUsuario = payload.nome;
-
-          const pessoaUsuario = pessoas.find(
-            (p: any) =>
-              p.nome?.trim().toLowerCase() === nomeUsuario?.trim().toLowerCase()
-          );
-
-          if (pessoaUsuario) {
-
-            this.pessoas = [{
-              label: pessoaUsuario.nome,
-              value: pessoaUsuario.codigo
-            }];
-
-          } else {
-            this.pessoas = [];
-          }
-        }
+        const pessoas: any[] = resposta.content || [];
+        this.pessoas = pessoas
+          .filter((p: any) => p.ativo)
+          .map((p: any) => ({ label: p.nome, value: p.codigo }));
       })
       .catch(erro => this.errorHandler.handle(erro));
   }

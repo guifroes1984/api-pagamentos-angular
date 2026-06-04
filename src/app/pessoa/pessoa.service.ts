@@ -54,10 +54,11 @@ export class PessoaService {
     );
   }
 
-  public listarTodasPessoas(): Promise<any[]> {
-
+  public listarTodasPessoas(): Promise<any> {
+    const params = new HttpParams().set('size', '1000');
     return firstValueFrom(
-      this.http.get<any[]>(this.pessoasUrl));
+      this.http.get<any>(this.pessoasUrl, { params })
+    );
   }
 
   public adicionarPessoa(pessoa: Pessoa): Promise<Pessoa> {

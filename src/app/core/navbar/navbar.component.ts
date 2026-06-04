@@ -15,6 +15,7 @@ export class NavbarComponent implements OnInit {
   rotaAtual: string = '';
 
   mostrarMenuCategorias: boolean = false;
+  mostrarMenuPessoas: boolean = false;
 
   constructor(
     public auth: AuthService,
@@ -31,6 +32,7 @@ export class NavbarComponent implements OnInit {
       });
 
     this.verificarPermissaoCategorias();
+    this.verificarPermissaoPessoas();
   }
 
   alternarMenu(): void {
@@ -59,5 +61,9 @@ export class NavbarComponent implements OnInit {
 
   private verificarPermissaoCategorias(): void {
     this.mostrarMenuCategorias = !!this.auth.jwtPayload;
+  }
+
+  private verificarPermissaoPessoas(): void {
+    this.mostrarMenuPessoas = !!this.auth.jwtPayload;
   }
 }

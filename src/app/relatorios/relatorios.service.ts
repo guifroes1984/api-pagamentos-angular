@@ -27,4 +27,12 @@ export class RelatoriosService {
     })) as Promise<Blob>;
   }
 
+  public relatorioFinanceiro(inicio: Date, fim: Date): Promise<any> {
+    const params = new HttpParams()
+      .set('inicio', moment(inicio).format('YYYY-MM-DD'))
+      .set('fim', moment(fim).format('YYYY-MM-DD'));
+
+    return firstValueFrom(this.http.get<any>(`${this.lancamentosUrl}/relatorios/financeiro`, { params }));
+  }
+
 }

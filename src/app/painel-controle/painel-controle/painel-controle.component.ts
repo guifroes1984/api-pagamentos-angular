@@ -63,9 +63,9 @@ export class PainelControleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // COMEÇA VAZIO - sem datas pré-definidas
-    this.dataInicioControl.setValue('');
-    this.dataFimControl.setValue('');
+    const hoje = new Date();
+    const primeiroDia = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+    const ultimoDia = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
 
     this.dataInicioControl.valueChanges.pipe(
       debounceTime(500),
@@ -81,10 +81,9 @@ export class PainelControleComponent implements OnInit {
       this.atualizarGraficos();
     });
 
-    // Gráficos começam em branco
-    this.dadosGraficoPizza = null;
-    this.dadosGraficoLinha = null;
-    
+    this.dataInicioControl.setValue(this.formatarDataParaInput(primeiroDia));
+    this.dataFimControl.setValue(this.formatarDataParaInput(ultimoDia));
+
     this.title.setTitle('Painel de controle');
   }
 

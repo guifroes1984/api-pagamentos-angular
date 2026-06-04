@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm fixed-top" 
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm fixed-top"
      *ngIf="!rotaAtualEhLoginOuCadastro()">
   <div class="container-fluid">
     <a class="navbar-brand fw-bold" href="#">
@@ -15,11 +15,11 @@
       </span>
     </div>
 
-    <button class="navbar-toggler" 
-            type="button" 
+    <button class="navbar-toggler"
+            type="button"
             (click)="alternarMenu()"
-            aria-controls="navbarContent" 
-            aria-expanded="false" 
+            aria-controls="navbarContent"
+            aria-expanded="false"
             aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -27,18 +27,9 @@
     <div class="collapse navbar-collapse" [class.show]="exibindoMenu" id="navbarContent">
       <ul class="navbar-nav ms-auto">
 
-        <li class="nav-item" *ngIf="mostrarMenuCategorias">
-          <a class="nav-link d-flex align-items-center" 
-             routerLink="/categorias" 
-             routerLinkActive="active">
-            <i class="bi bi-tags me-1"></i>
-            <span class="d-none d-sm-block">Categorias</span>
-          </a>
-        </li>
-
         <li class="nav-item" *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')">
-          <a class="nav-link d-flex align-items-center" 
-             routerLink="/painel-controle" 
+          <a class="nav-link d-flex align-items-center"
+             routerLink="/painel-controle"
              routerLinkActive="active">
              <i class="bi bi-graph-up me-1"></i>
             <span class="d-none d-sm-block">Painel</span>
@@ -46,26 +37,35 @@
         </li>
 
         <li class="nav-item" *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')">
-          <a class="nav-link d-flex align-items-center" 
-             routerLink="/lancamentos" 
+          <a class="nav-link d-flex align-items-center"
+             routerLink="/lancamentos"
              routerLinkActive="active">
             <i class="bi bi-arrow-left-right me-1"></i>
             <span class="d-none d-sm-block">Lançamentos</span>
           </a>
         </li>
 
-        <li class="nav-item" *ngIf="auth.isAdmin()">
-          <a class="nav-link d-flex align-items-center" 
-             routerLink="/pessoas" 
+        <li class="nav-item" *ngIf="mostrarMenuPessoas">
+          <a class="nav-link d-flex align-items-center"
+             routerLink="/pessoas"
              routerLinkActive="active">
             <i class="bi bi-person-badge me-1"></i>
             <span class="d-none d-sm-block">Pessoas</span>
           </a>
         </li>
 
+        <li class="nav-item" *ngIf="mostrarMenuCategorias">
+          <a class="nav-link d-flex align-items-center"
+             routerLink="/categorias"
+             routerLinkActive="active">
+            <i class="bi bi-tags me-1"></i>
+            <span class="d-none d-sm-block">Categorias</span>
+          </a>
+        </li>
+
         <li class="nav-item" *ngIf="auth.temPermissao('ROLE_PESQUISAR_LANCAMENTO')">
-          <a class="nav-link d-flex align-items-center" 
-             routerLink="/relatorios/lancamentos" 
+          <a class="nav-link d-flex align-items-center"
+             routerLink="/relatorios/lancamentos"
              routerLinkActive="active">
             <i class="bi bi-bar-chart me-1"></i>
             <span class="d-none d-sm-block">Relatórios</span>
@@ -73,8 +73,8 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link d-flex align-items-center text-warning" 
-             href="javascript:;" 
+          <a class="nav-link d-flex align-items-center text-warning"
+             href="javascript:;"
              (click)="logout()">
             <i class="bi bi-power me-1"></i>
             <span class="d-none d-sm-block">Sair</span>

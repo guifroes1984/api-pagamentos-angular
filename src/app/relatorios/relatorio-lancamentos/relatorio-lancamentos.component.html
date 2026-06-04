@@ -2,13 +2,15 @@
   <div class="container py-4">
     <div class="row justify-content-center">
       <div class="col-12 col-xl-10">
-        <div class="card shadow-lg border-0 rounded-3">
+
+        <!-- Filtros (ocultos na impressão) -->
+        <div class="card shadow-lg border-0 rounded-3 no-print">
           <div class="card-header bg-primary text-white py-3 rounded-top">
             <div class="row align-items-center">
               <div class="col">
                 <h1 class="h3 mb-0 fw-bold">
-                  <i class="bi bi-graph-up me-2"></i>
-                  Relatório de Lançamentos por Pessoa
+                  <i class="bi bi-bar-chart me-2"></i>
+                  Relatório Financeiro
                 </h1>
               </div>
               <div class="col-auto">
@@ -24,33 +26,31 @@
               <div class="row mb-4">
                 <div class="col-12">
                   <label class="form-label fw-semibold mb-3">Período de Vencimento</label>
-                  <div class="date-fields-container">
-                    <div class="date-input-wrapper">
+                  <div class="d-flex flex-column flex-md-row gap-3 align-items-start">
+                    <div>
                       <label class="form-label small">Data Início</label>
-                      <input type="date" class="form-control" 
+                      <input type="date" class="form-control"
                              required name="periodoInicio" [(ngModel)]="periodoInicio"
-                             [ngClass]="{'is-invalid': f.submitted && f.controls['periodoInicio'].invalid}"
-                             (change)="validarDatas()"
-                             #dataInicioInput>
+                             [ngClass]="{'is-invalid': f.submitted && f.controls['periodoInicio']?.invalid}"
+                             (change)="validarDatas()">
                       <div class="invalid-feedback" *ngIf="f.submitted && f.controls['periodoInicio']?.invalid">
                         Data início é obrigatória
                       </div>
                     </div>
-                    
-                    <div class="date-connector d-none d-md-flex">até</div>
 
-                    <div class="date-input-wrapper">
+                    <div class="d-none d-md-flex align-items-end pb-1 text-muted">até</div>
+
+                    <div>
                       <label class="form-label small">Data Fim</label>
-                      <input type="date" class="form-control" 
+                      <input type="date" class="form-control"
                              required name="periodoFim" [(ngModel)]="periodoFim"
-                             [ngClass]="{'is-invalid': (f.submitted && f.controls['periodoFim'].invalid) || dataFimInvalida}"
+                             [ngClass]="{'is-invalid': (f.submitted && f.controls['periodoFim']?.invalid) || dataFimInvalida}"
                              (change)="validarDatas()"
-                             [min]="periodoInicio"
-                             #dataFimInput>
+                             [min]="periodoInicio">
                       <div class="invalid-feedback" *ngIf="f.submitted && f.controls['periodoFim']?.invalid">
                         Data fim é obrigatória
                       </div>
-                      <div class="validation-message text-danger mt-1" *ngIf="dataFimInvalida && !f.controls['periodoFim']?.invalid">
+                      <div class="text-danger small mt-1" *ngIf="dataFimInvalida">
                         <i class="bi bi-exclamation-triangle-fill me-1"></i>
                         Data fim não pode ser menor que data início
                       </div>
@@ -59,24 +59,176 @@
                 </div>
               </div>
 
-              <div class="row mt-4">
-                <div class="col-12">
-                  <div class="d-flex gap-2 flex-column flex-md-row border-top pt-4">
-                    <button class="btn btn-primary" type="submit" [disabled]="f.invalid || dataFimInvalida">
-                      <i class="bi bi-file-pdf me-2"></i>
-                      Gerar Relatório
-                    </button>
-                    
-                    <button class="btn btn-outline-danger" type="button" (click)="limpar(f)">
-                      <i class="bi bi-x-circle me-2"></i>
-                      Limpar
-                    </button>
+              <div class="d-flex gap-2 border-top pt-4">
+                <button class="btn btn-primary" type="submit"
+                        [disabled]="f.invalid || dataFimInvalida || carregando">
+                  <span *ngIf="carregando" class="spinner-border spinner-border-sm me-2"></span>
+                  <i *ngIf="!carregando" class="bi bi-search me-2"></i>
+                  {{ carregando ? 'Gerando...' : 'Gerar Relatório' }}
+                </button>
+                <button class="btn btn-outline-danger" type="button" (click)="limpar(f)">
+                  <i class="bi bi-x-circle me-2"></i>Limpar
+                </button>
+              </div>
+            </form>
+
+            <div *ngIf="erro" class="alert alert-danger mt-3">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ erro }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Relatório -->
+        <div *ngIf="relatorio" class="relatorio-container mt-4" id="relatorio-impressao">
+
+          <!-- Cabeçalho do relatório -->
+          <div class="text-center mb-4">
+            <h2 class="fw-bold">Relatório Financeiro</h2>
+            <p class="text-muted mb-0">
+              Período: {{ relatorio.dataInicio | date:'dd/MM/yyyy' }} a {{ relatorio.dataFim | date:'dd/MM/yyyy' }}
+            </p>
+          </div>
+
+          <!-- RECEITAS -->
+          <div class="mb-4">
+            <h5 class="text-success fw-bold border-bottom border-success pb-2">
+              <i class="bi bi-arrow-up-circle me-2"></i>Receitas
+            </h5>
+            <div *ngIf="relatorio.receitas?.length > 0; else semReceitas">
+              <table class="table table-sm table-bordered table-hover">
+                <thead class="table-success">
+                  <tr>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Pessoa</th>
+                    <th class="text-end">Valor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of relatorio.receitas">
+                    <td><span class="badge bg-success">{{ item.tipo }}</span></td>
+                    <td>{{ item.descricao }}</td>
+                    <td>{{ item.pessoa }}</td>
+                    <td class="text-end text-success fw-semibold">
+                      {{ item.valor | currency:'BRL':'symbol':'1.2-2' }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ng-template #semReceitas>
+              <p class="text-muted fst-italic">Nenhuma receita no período.</p>
+            </ng-template>
+          </div>
+
+          <!-- DESPESAS -->
+          <div class="mb-4">
+            <h5 class="text-danger fw-bold border-bottom border-danger pb-2">
+              <i class="bi bi-arrow-down-circle me-2"></i>Despesas
+            </h5>
+            <div *ngIf="relatorio.despesas?.length > 0; else semDespesas">
+              <table class="table table-sm table-bordered table-hover">
+                <thead class="table-danger">
+                  <tr>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Pessoa</th>
+                    <th class="text-end">Valor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of relatorio.despesas">
+                    <td><span class="badge bg-danger">{{ item.tipo }}</span></td>
+                    <td>{{ item.descricao }}</td>
+                    <td>{{ item.pessoa }}</td>
+                    <td class="text-end text-danger fw-semibold">
+                      {{ item.valor | currency:'BRL':'symbol':'1.2-2' }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ng-template #semDespesas>
+              <p class="text-muted fst-italic">Nenhuma despesa no período.</p>
+            </ng-template>
+          </div>
+
+          <!-- TOTAL POR PESSOA -->
+          <div class="mb-4" *ngIf="relatorio.totaisPorPessoa?.length > 0">
+            <h5 class="fw-bold border-bottom pb-2">
+              <i class="bi bi-people me-2"></i>Total por Pessoa
+            </h5>
+            <table class="table table-sm table-bordered">
+              <thead class="table-light">
+                <tr>
+                  <th>Pessoa</th>
+                  <th class="text-end text-success">Receitas</th>
+                  <th class="text-end text-danger">Despesas</th>
+                  <th class="text-end">Saldo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let t of relatorio.totaisPorPessoa">
+                  <td class="fw-semibold">{{ t.pessoa }}</td>
+                  <td class="text-end text-success">{{ t.totalReceitas | currency:'BRL':'symbol':'1.2-2' }}</td>
+                  <td class="text-end text-danger">{{ t.totalDespesas | currency:'BRL':'symbol':'1.2-2' }}</td>
+                  <td class="text-end fw-bold"
+                      [class.text-success]="t.saldo >= 0"
+                      [class.text-danger]="t.saldo < 0">
+                    {{ t.saldo | currency:'BRL':'symbol':'1.2-2' }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- TOTAL GERAL -->
+          <div class="card border-2 mb-4"
+               [class.border-success]="relatorio.saldo >= 0"
+               [class.border-danger]="relatorio.saldo < 0">
+            <div class="card-header fw-bold">
+              <i class="bi bi-calculator me-2"></i>Total Geral
+            </div>
+            <div class="card-body">
+              <div class="row text-center">
+                <div class="col-md-4">
+                  <div class="text-muted small">Total Receitas</div>
+                  <div class="fs-5 fw-bold text-success">
+                    {{ relatorio.totalReceitas | currency:'BRL':'symbol':'1.2-2' }}
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="text-muted small">Total Despesas</div>
+                  <div class="fs-5 fw-bold text-danger">
+                    {{ relatorio.totalDespesas | currency:'BRL':'symbol':'1.2-2' }}
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="text-muted small">Saldo</div>
+                  <div class="fs-5 fw-bold"
+                       [class.text-success]="relatorio.saldo >= 0"
+                       [class.text-danger]="relatorio.saldo < 0">
+                    {{ relatorio.saldo | currency:'BRL':'symbol':'1.2-2' }}
                   </div>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
+
+          <!-- Botão imprimir (oculto na impressão) -->
+          <div class="mt-3 no-print">
+            <button class="btn btn-outline-secondary" (click)="imprimir()">
+              <i class="bi bi-printer me-2"></i>Imprimir / Salvar PDF
+            </button>
+          </div>
+
         </div>
+
+        <div *ngIf="!relatorio && !carregando && !erro" class="text-center text-muted mt-5 no-print">
+          <i class="bi bi-bar-chart display-4 d-block mb-2"></i>
+          <p>Selecione o período e clique em <strong>Gerar Relatório</strong></p>
+        </div>
+
       </div>
     </div>
   </div>

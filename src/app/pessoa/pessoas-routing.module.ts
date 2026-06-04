@@ -7,22 +7,22 @@ import { AuthGuard } from "../seguranca/auth.guard";
 import { PendenciasGuard } from "../core/guards/FormComPendencias";
 
 const routes: Routes = [
-    { path: '', 
-      component: PessoasPesquisaComponent, 
-      canActivate: [AuthGuard], 
-      data: { roles: ['ROLE_PESQUISAR_PESSOA'] }
-    }, 
-    { path: 'novo', 
-      component: PessoasCadastroComponent, 
-      canActivate: [AuthGuard], 
-      canDeactivate: [PendenciasGuard], 
-      data: { roles: ['ROLE_CADASTRAR_PESSOA'] }
-    }, 
+    { path: '',
+      component: PessoasPesquisaComponent,
+      canActivate: [AuthGuard],
+      data: { title: 'Pessoas' }
+    },
+    { path: 'novo',
+      component: PessoasCadastroComponent,
+      canActivate: [AuthGuard],
+      canDeactivate: [PendenciasGuard],
+      data: { title: 'Nova Pessoa' }
+    },
     { path: ':codigo',
-      component: PessoasCadastroComponent, 
-      canActivate: [AuthGuard], 
-      canDeactivate: [PendenciasGuard], 
-      data: { roles: ['ROLE_CADASTRAR_PESSOA'] }
+      component: PessoasCadastroComponent,
+      canActivate: [AuthGuard],
+      canDeactivate: [PendenciasGuard],
+      data: { title: 'Editar Pessoa' }
     }
 ]
 

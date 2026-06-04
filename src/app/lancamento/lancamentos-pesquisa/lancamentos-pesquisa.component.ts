@@ -41,6 +41,9 @@ export class LancamentosPesquisaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    const hoje = new Date();
+    this.filtro.dataVencimentoInicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+    this.filtro.dataVencimentoFim = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
     this.pesquisar();
     this.title.setTitle('Pesquisa de lançamentos');
   }

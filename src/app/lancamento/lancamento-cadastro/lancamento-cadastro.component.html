@@ -110,7 +110,8 @@
                     (change)="onPessoaChange($any($event).target.value)" [class.is-invalid]="formLancamento.get('pessoa.codigo')?.invalid &&
                         formLancamento.get('pessoa.codigo')?.touched">
                     <option value="">Selecione uma pessoa</option>
-                    <option *ngFor="let pessoa of pessoas" [value]="pessoa.value">
+                    <option *ngFor="let pessoa of pessoas" [value]="pessoa.value"
+                      [selected]="pessoa.value === formLancamento.get('pessoa.codigo')?.value">
                       {{ pessoa.label }}
                     </option>
                   </select>

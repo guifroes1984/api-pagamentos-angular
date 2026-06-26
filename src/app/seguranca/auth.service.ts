@@ -54,9 +54,9 @@ export class AuthService {
         localStorage.setItem('refresh_token', response.refresh_token);
       }
       console.log('Novo access token criado!');
-    }).catch(response => {
-      console.error('Erro ao renovar token', response);
-      return Promise.resolve();
+    }).catch(error => {
+      this.limparAccessToken();
+      return Promise.reject(error);
     });
   }
 
